@@ -19,6 +19,7 @@ app.controller('ServiceCtrl', function ($scope, $interval, serviceAPI, $routePar
 
     var url = $cookieStore.get('URL') + "/api/v1/components/services/";
 
+
     $scope.alerts = [];
     $scope.closeAlert = function (index) {
         $scope.alerts.splice(index, 1);
@@ -26,9 +27,10 @@ app.controller('ServiceCtrl', function ($scope, $interval, serviceAPI, $routePar
 
     loadTable();
 
+
     $scope.serviceObj = {
         'name': '',
-        'roles':[]
+        'roles': []
     };
 
     /* -- multiple delete functions Start -- */
@@ -110,7 +112,7 @@ app.controller('ServiceCtrl', function ($scope, $interval, serviceAPI, $routePar
 
 
     $scope.save = function () {
-        console.log($scope.serviceObj);
+        console.log("" + $scope.serviceObj);
         var customHeader = {};
         customHeader['Content-type'] = 'application/json';
         customHeader['Accept'] = 'application/octet-stream';
@@ -178,6 +180,12 @@ app.controller('ServiceCtrl', function ($scope, $interval, serviceAPI, $routePar
                 });
         }
 
+        if ($scope.projectChoice === undefined) {
+            $scope.projectChoice = [];
+            $scope.projectChoice = $scope.projects;
+            if ($scope.projectChoice !== undefined)
+                $scope.projectChoice.push({"name": "*"})
+        }
     }
 
     function showError(data, status) {
@@ -216,11 +224,15 @@ app.controller('ServiceCtrl', function ($scope, $interval, serviceAPI, $routePar
     }
 
     $scope.addRole = function () {
-        console.log($scope.projects[0]);
-        var newRole = {
-            "role": "USER",
-            "project": $scope.projects[0].name
-        };
-        $scope.serviceObj.roles.push(newRole);
+        console.log($scope.projects);
+
+        $scope.projectChoice = [];
+        angular.forEach($scope.projects, function (value, key) {
+            $scope.projectChoice.push(value.name)
+        });
+        $scope.projectChoice.push("*")
+
+        $scope.serviceObj.roles.push("");
     };
+
 });

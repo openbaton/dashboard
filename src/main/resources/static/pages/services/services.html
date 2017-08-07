@@ -109,14 +109,15 @@
                         <li class="fa fa-plus-square"></li>
                     </a>
                     </h3>
-                    <div class="form-group" ng-repeat="role in serviceObj.roles track by $index">
+                    <div class="form-group" ng-repeat="pj in serviceObj.roles track by $index">
 
                         <label for="action" class="col-sm-2 control-label">Project</label>
                         <div class="col-sm-3">
+
                             <select name="typeSelect" class="form-control modal-select" id="action"
                                     ng-model="serviceObj.roles[$index]"
-                                    ng-options="project.name as project.name for project in projects"
-                                    ng-change="">
+                                    ng-options="project for project in projectChoice">
+                                <!--<option value="">*</option>-->
                             </select>
                         </div>
 
