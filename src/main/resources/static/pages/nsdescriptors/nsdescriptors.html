@@ -1478,7 +1478,6 @@
                         <!--</a></h3>-->
                     </form>
                 </tab>
-
                 <tab heading="Configuration parameters">
                     <div class="container-fluid">
                         <p>
@@ -1602,6 +1601,11 @@
 <button type="button" class="btn btn-primary" ng-click="addConftoLaunch()">Add Parameter</button-->
 
                     </div>
+                </tab>
+                <tab heading="Monitoring IP">
+                    <br>
+                    <b>Monitoring IP: &nbsp;</b>
+                    <input style="width: 50%;display: inline;" class="form-control" type="text" ng-change="changeIp(monitoringIp)" ng-model="monitoringIp">
                 </tab>
             </tabset>
             <div class="modal-footer">
