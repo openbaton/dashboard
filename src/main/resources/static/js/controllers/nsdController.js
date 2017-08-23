@@ -953,10 +953,18 @@ app.controller('NsdCtrl', function ($scope, $compile, $cookieStore, $routeParams
             });
         }
         else if (status === 400) {
-            $scope.alerts.push({
-                type: 'danger',
-                msg: 'Something is wrong with your NSD. Common error: you have specified your vim as a string and not as an array in VNFD'
-            });
+            if (data != undefined){
+                $scope.alerts.push({
+                    type: 'danger',
+                    msg: "Bad request: " + data.message
+                });
+            } else {
+                console.log(data)
+                $scope.alerts.push({
+                    type: 'danger',
+                    msg: "Error while uploading NSD, no message available... sorry :("
+                });
+            }
         }
 
         else {
