@@ -113,7 +113,6 @@ app.controller('LoginController', function ($scope, AuthService, Session, $rootS
 app.controller('IndexCtrl', function ($document, $scope, $compile, $routeParams, serviceAPI, $interval, $cookieStore, $location, AuthService, http, $rootScope, $window, $route) {
     $('#side-menu').metisMenu();
 
-
     $scope.adminRole = "ADMIN";
     $scope.superProject = "*";
     $scope.numberNSR = 0;
@@ -141,7 +140,7 @@ app.controller('IndexCtrl', function ($document, $scope, $compile, $routeParams,
         list = document.getElementById("id01");
         switching = true;
         /*Make a loop that will continue until
-        no switching has been done:*/
+         no switching has been done:*/
         while (switching) {
             //start by saying: no switching is done:
             switching = false;
@@ -151,17 +150,17 @@ app.controller('IndexCtrl', function ($document, $scope, $compile, $routeParams,
                 //start by saying there should be no switching:
                 shouldSwitch = false;
                 /*check if the next item should
-                switch place with the current item:*/
+                 switch place with the current item:*/
                 if (b[i].innerHTML.toLowerCase() > b[i + 1].innerHTML.toLowerCase()) {
                     /*if next item is alphabetically lower than current item,
-                    mark as a switch and break the loop:*/
+                     mark as a switch and break the loop:*/
                     shouldSwitch = true;
                     break;
                 }
             }
             if (shouldSwitch) {
                 /*If a switch has been marked, make the switch
-                and mark the switch as done:*/
+                 and mark the switch as done:*/
                 b[i].parentNode.insertBefore(b[i + 1], b[i]);
                 switching = true;
             }
@@ -189,7 +188,7 @@ app.controller('IndexCtrl', function ($document, $scope, $compile, $routeParams,
             .error(function (response, status) {
                 showError(response, status);
             });
-    };
+    }
 
     function getConfig() {
 
@@ -200,7 +199,7 @@ app.controller('IndexCtrl', function ($document, $scope, $compile, $routeParams,
                     if (conf.name === "system") {
                         $scope.config = conf;
                     }
-                })
+                });
             });
     }
 
@@ -217,7 +216,7 @@ app.controller('IndexCtrl', function ($document, $scope, $compile, $routeParams,
 
     function stop() {
         $interval.cancel(promise);
-    };
+    }
 
     function loadNumbers() {
         http.syncGet(url + '/ns-descriptors/').then(function (data) {
@@ -274,7 +273,7 @@ app.controller('IndexCtrl', function ($document, $scope, $compile, $routeParams,
         else if (!angular.isUndefined(newValue) && angular.isUndefined(oldValue)) {
             $cookieStore.put('project', newValue);
             loadNumbers();
-            console
+
             if (window.location.href.indexOf('main') > -1) {
                 if (!$cookieStore.get('QUOTA')) {
                     console.log("No quota information stored");
@@ -292,39 +291,54 @@ app.controller('IndexCtrl', function ($document, $scope, $compile, $routeParams,
 
     });
 
-
     console.log($rootScope.projects);
     console.log($rootScope.projectSelected);
 
     $scope.changeProject = function (project) {
+        var lastProject = angular.fromJson(localStorage.getItem('LastProject'));
+        console.log(lastProject);
         if (arguments.length === 0) {
             http.syncGet(url + '/projects/')
                 .then(function (response) {
                     if (response === 401) {
-                        console.log(status + ' Status unauthorized')
+                        console.log(status + ' Status unauthorized');
                         AuthService.logout();
                     }
-                    if (angular.isUndefined($cookieStore.get('project')) || $cookieStore.get('project').id == '') {
+                    if (!angular.isUndefined(lastProject) && lastProject !== null) {
+                        if (!angular.isUndefined(lastProject.id)) {
+                            $rootScope.projectSelected = lastProject;
+                            $cookieStore.put('project', lastProject);
+                        } else { // This should nevere happen but i don't know how to program in js
+                            $rootScope.projectSelected = response[0];
+                            $cookieStore.put('project', response[0]);
+                        }
+                    }
+                    else if (angular.isUndefined($cookieStore.get('project')) || $cookieStore.get('project').id === '') {
                         $rootScope.projectSelected = response[0];
-                        $cookieStore.put('project', response[0])
+                        $cookieStore.put('project', response[0]);
+                        localStorage.setItem('LastProject', angular.toJson(response[0]));
                     } else {
                         $rootScope.projectSelected = $cookieStore.get('project');
                     }
                     $rootScope.projects = response;
-                })
 
+                });
         }
         else {
             $rootScope.projectSelected = project;
             console.log(project);
             $cookieStore.put('project', project);
+            if (typeof(Storage) !== "undefined") {
+                // Store
+                localStorage.setItem("LastProject", JSON.stringify(project));
+                // Retrieve
+                document.getElementById("result").innerHTML = localStorage.getItem("LastProject");
+            } else {
+                document.getElementById("result").innerHTML = "Sorry, your browser does not support Web Storage...";
+            }
             $window.location.reload();
         }
-
-
     };
-
-
     $scope.saveSetting = function (config) {
         //console.log(config);
         $('.modal').modal('hide');
@@ -761,5 +775,6 @@ app.controller('IndexCtrl', function ($document, $scope, $compile, $routeParams,
             $("#pwmatch").css("color", "#FF0004");
         }
     });
+
 
 });
