@@ -726,6 +726,12 @@ var app = angular.module('app').controller('NsrCtrl', function ($scope, $http, $
         else
             $scope.lst.splice($scope.lst.indexOf(vimInstancesList.name), 1);
     };
-
+// to Store current page into local storage
+    if (typeof(Storage) !== "undefined") {
+        // Store
+        localStorage.setItem("LastURL", location.href);
+    } else {
+        document.getElementById("result").innerHTML = "Sorry, your browser does not support Web Storage...";
+    }
 
 });

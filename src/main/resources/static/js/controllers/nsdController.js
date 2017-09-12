@@ -953,7 +953,7 @@ app.controller('NsdCtrl', function ($scope, $compile, $cookieStore, $routeParams
             });
         }
         else if (status === 400) {
-            if (data != undefined){
+            if (data != undefined) {
                 $scope.alerts.push({
                     type: 'danger',
                     msg: "Bad request: " + data.message
@@ -1213,4 +1213,11 @@ app.controller('NsdCtrl', function ($scope, $compile, $cookieStore, $routeParams
         jsonDiv.childNodes[0].remove();
 
     });
+    // to Store current page into local storage
+    if (typeof(Storage) !== "undefined") {
+        // Store
+        localStorage.setItem("LastURL", location.href);
+    } else {
+        document.getElementById("result").innerHTML = "Sorry, your browser does not support Web Storage...";
+    }
 });

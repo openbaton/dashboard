@@ -16,7 +16,7 @@
 
 var app = angular.module('app').controller('marketCtrl', function ($scope, serviceAPI, $routeParams, $http, $cookieStore, AuthService, $window, $interval, http) {
 
-    
+
     var url = $cookieStore.get('URL');
     //var defaultUrl = "lore:8082"
     var defaultUrl = "marketplace.openbaton.org:8082";
@@ -234,30 +234,30 @@ var app = angular.module('app').controller('marketCtrl', function ($scope, servi
     };
 
 
-   function showOk(msg) {
+    function showOk(msg) {
         $scope.alerts.push({type: 'success', msg: msg});
-         window.setTimeout(function() { 
-        for (i = 0; i < $scope.alerts.length; i++) {
-        if ($scope.alerts[i].type == 'success') {
-            $scope.alerts.splice(i, 1);
-        }
-    }
-    }, 5000);
+        window.setTimeout(function () {
+            for (i = 0; i < $scope.alerts.length; i++) {
+                if ($scope.alerts[i].type == 'success') {
+                    $scope.alerts.splice(i, 1);
+                }
+            }
+        }, 5000);
         $('.modal').modal('hide');
     }
 
-     function showError(data, status) {
+    function showError(data, status) {
         if (status === 500) {
             $scope.alerts.push({
-            type: 'danger',
-            msg: 'An error occured and could not be handled properly, please, report to us and we will fix it as soon as possible'
-        });
+                type: 'danger',
+                msg: 'An error occured and could not be handled properly, please, report to us and we will fix it as soon as possible'
+            });
         } else {
-        console.log('Status: ' + status + ' Data: ' + JSON.stringify(data));
-        $scope.alerts.push({
-            type: 'danger',
-            msg:  data.message + " Code: " + status
-        });
+            console.log('Status: ' + status + ' Data: ' + JSON.stringify(data));
+            $scope.alerts.push({
+                type: 'danger',
+                msg: data.message + " Code: " + status
+            });
         }
 
         $('.modal').modal('hide');
@@ -270,5 +270,12 @@ var app = angular.module('app').controller('marketCtrl', function ($scope, servi
     $scope.closeAlert = function (index) {
         $scope.alerts.splice(index, 1);
     };
+    // to Store current page into local storage
+    if (typeof(Storage) !== "undefined") {
+        // Store
+        localStorage.setItem("LastURL", location.href);
+    } else {
+        document.getElementById("result").innerHTML = "Sorry, your browser does not support Web Storage...";
+    }
 
 });

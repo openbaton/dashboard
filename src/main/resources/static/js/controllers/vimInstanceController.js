@@ -22,7 +22,7 @@ angular.module('app').controller('vimInstanceCtrl', function ($scope, $routePara
     $scope.datacenter = {};
     $scope.file = '';
     $scope.showPass = false;
-    $scope.newvim = { type: "openstack", securityGroups: [] };
+    $scope.newvim = {type: "openstack", securityGroups: []};
     $scope.driversinstalled = [];
     $scope.installed = [];
     var formInput = true;
@@ -92,6 +92,7 @@ angular.module('app').controller('vimInstanceCtrl', function ($scope, $routePara
             delete $scope.newvim.keyPair;
         }
     }
+
     $scope.setFile = function (element) {
         $scope.$apply(function ($scope) {
 
@@ -122,7 +123,7 @@ angular.module('app').controller('vimInstanceCtrl', function ($scope, $routePara
                 })
                 .error(function (data, status) {
                     if (status === 400)
-                        showError({message:"Something went wrong"}, status);
+                        showError({message: "Something went wrong"}, status);
                     else
                         showError(data, status);
 
@@ -275,7 +276,7 @@ angular.module('app').controller('vimInstanceCtrl', function ($scope, $routePara
         }
     }
 
-    $scope.loadVIM = function() {
+    $scope.loadVIM = function () {
         if (!angular.isUndefined($routeParams.vimInstanceId))
             http.get(url + $routeParams.vimInstanceId)
                 .success(function (response, status) {
@@ -297,19 +298,19 @@ angular.module('app').controller('vimInstanceCtrl', function ($scope, $routePara
         }
     }
     var promise = $interval($scope.loadVIM, 10000);
-    $scope.$on('$destroy',function(){
-        if(promise)
+    $scope.$on('$destroy', function () {
+        if (promise)
             $interval.cancel(promise);
     });
 
-    $scope.ActiveVIM = function(status) {
-        if(status === 'ACTIVE') {
+    $scope.ActiveVIM = function (status) {
+        if (status === 'ACTIVE') {
             return true;
         }
         return false;
     };
-    $scope.PendingVIM = function(status) {
-        if(status != 'ACTIVE') {
+    $scope.PendingVIM = function (status) {
+        if (status != 'ACTIVE') {
             return true;
         }
         return false;
@@ -320,7 +321,7 @@ angular.module('app').controller('vimInstanceCtrl', function ($scope, $routePara
             $scope.driversinstalled = response;
             response.map(function (pl) {
                 l1 = pl.split(".");
-                $scope.installed.push({ name: l1[2], type: l1[1] });
+                $scope.installed.push({name: l1[2], type: l1[1]});
 
             })
             console.log($scope.installed);
@@ -344,7 +345,7 @@ angular.module('app').controller('vimInstanceCtrl', function ($scope, $routePara
             console.log('Status: ' + status + ' Data: ' + JSON.stringify(data));
             $scope.alerts.push({
                 type: 'danger',
-                msg:  data.message + " Code: " + status
+                msg: data.message + " Code: " + status
             });
         }
 
@@ -356,7 +357,7 @@ angular.module('app').controller('vimInstanceCtrl', function ($scope, $routePara
     }
 
     function showOk(msg) {
-        $scope.alerts.push({ type: 'success', msg: msg });
+        $scope.alerts.push({type: 'success', msg: msg});
         window.setTimeout(function () {
             for (i = 0; i < $scope.alerts.length; i++) {
                 if ($scope.alerts[i].type == 'success') {
@@ -386,6 +387,12 @@ angular.module('app').controller('vimInstanceCtrl', function ($scope, $routePara
         jsonDiv.childNodes[0].remove();
     });
 // vim JSON Starts
-
+// to Store current page into local storage
+    if (typeof(Storage) !== "undefined") {
+        // Store
+        localStorage.setItem("LastURL", location.href);
+    } else {
+        document.getElementById("result").innerHTML = "Sorry, your browser does not support Web Storage...";
+    }
 
 });

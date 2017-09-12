@@ -75,15 +75,12 @@ app.controller('UserCtrl', function ($scope, serviceAPI, $routeParams, http, $co
     };
 
 
-
     $scope.userObj = {
         "username": "",
         "password": "",
         "email": "",
         "enabled": true,
-        "roles": [
-
-        ]
+        "roles": []
     };
     $scope.adminRole = {
         "role": "ADMIN",
@@ -113,7 +110,7 @@ app.controller('UserCtrl', function ($scope, serviceAPI, $routeParams, http, $co
 
     };
 
-    $scope.main = { checkbox: false };
+    $scope.main = {checkbox: false};
     $scope.$watch('main', function (newValue, oldValue) {
         ////console.log(newValue.checkbox);
         ////console.log($scope.selection.ids);
@@ -206,7 +203,8 @@ app.controller('UserCtrl', function ($scope, serviceAPI, $routeParams, http, $co
     };
 
     $scope.update = function (data) {
-        $scope.userUpdate = JSON.parse(JSON.stringify(data));;
+        $scope.userUpdate = JSON.parse(JSON.stringify(data));
+        ;
         //console.log(data);
     };
 
@@ -247,8 +245,8 @@ app.controller('UserCtrl', function ($scope, serviceAPI, $routeParams, http, $co
                     $scope.userJSON = JSON.stringify(response, undefined, 4);
 
                 }).error(function (data, status) {
-                    showError(data, status);
-                });
+                showError(data, status);
+            });
         else {
             http.get(url)
                 .success(function (response) {
@@ -292,7 +290,7 @@ app.controller('UserCtrl', function ($scope, serviceAPI, $routeParams, http, $co
     }
 
     function showOk(msg) {
-        $scope.alerts.push({ type: 'success', msg: msg });
+        $scope.alerts.push({type: 'success', msg: msg});
         loadTable();
         window.setTimeout(function () {
             for (i = 0; i < $scope.alerts.length; i++) {
@@ -306,14 +304,14 @@ app.controller('UserCtrl', function ($scope, serviceAPI, $routeParams, http, $co
 
     $scope.$watch("userObj.password", function (newValue, oldValue) {
         if ($scope.userObj.password.length < 1) {
-            $scope.passstyle = { 'background-color': 'white' };
+            $scope.passstyle = {'background-color': 'white'};
             return;
         }
         if ($scope.userObj.password.length < 8 || !(/[a-z]/.test($scope.userObj.password)) || !(/[A-Z]/.test($scope.userObj.password)) || !(/[0-9]/.test($scope.userObj.password))) {
-            $scope.passstyle = { 'background-color': 'pink' };
+            $scope.passstyle = {'background-color': 'pink'};
             $scope.passwordStrong = false;
         } else {
-            $scope.passstyle = { 'background-color': 'white' };
+            $scope.passstyle = {'background-color': 'white'};
             $scope.passwordStrong = true;
         }
     }, true);
@@ -321,22 +319,22 @@ app.controller('UserCtrl', function ($scope, serviceAPI, $routeParams, http, $co
     $scope.newUserPassword2 = '';
     $scope.newPasswordStrong = false;
     $scope.newPasswordSame = false;
-    $scope.newPasswordStyle = { 'background-color': 'pink' };
-    $scope.newPasswordRepeat = { 'background-color': 'pink' };
+    $scope.newPasswordStyle = {'background-color': 'pink'};
+    $scope.newPasswordRepeat = {'background-color': 'pink'};
     $scope.$watchGroup(["newUserPassword1", "newUserPassword2"], function (newValue, oldValue) {
         if ($scope.newUserPassword1.length < 8 || !(/[a-z]/.test($scope.newUserPassword1)) || !(/[A-Z]/.test($scope.newUserPassword1)) || !(/[0-9]/.test($scope.newUserPassword1))) {
-            $scope.newPasswordStyle = { 'background-color': 'pink' };
+            $scope.newPasswordStyle = {'background-color': 'pink'};
             $scope.newPasswordStrong = false;
         } else {
-            $scope.newPasswordStyle = { 'background-color': 'white' };
+            $scope.newPasswordStyle = {'background-color': 'white'};
             $scope.newPasswordStrong = true;
         }
 
         if ($scope.newUserPassword1 !== $scope.newUserPassword2) {
-            $scope.newPasswordRepeat = { 'background-color': 'pink' };
+            $scope.newPasswordRepeat = {'background-color': 'pink'};
             $scope.newPasswordSame = false;
         } else {
-            $scope.newPasswordRepeat = { 'background-color': 'white' };
+            $scope.newPasswordRepeat = {'background-color': 'white'};
             $scope.newPasswordSame = true;
         }
     }, true);
@@ -352,7 +350,7 @@ app.controller('UserCtrl', function ($scope, serviceAPI, $routeParams, http, $co
     };
 
     $scope.postNewPassword = function () {
-        var newPass = { "new_pwd": $scope.newUserPassword1 };
+        var newPass = {"new_pwd": $scope.newUserPassword1};
         http.put(url + "changepwd/" + changingPasswordData.username, newPass)
             .success(function (response) {
                 showOk('User: ' + changingPasswordData.username + ' updated.');
@@ -366,39 +364,37 @@ app.controller('UserCtrl', function ($scope, serviceAPI, $routeParams, http, $co
     };
 
 
-
-
     $scope.$watch("userObj.email", function (newValue, oldValue) {
         var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
         if (re.test($scope.userObj.email)) {
-            $scope.emailstyle = { 'background-color': 'white' };
+            $scope.emailstyle = {'background-color': 'white'};
             $scope.emailValid = true;
         } else {
-            $scope.emailstyle = { 'background-color': 'pink' };
+            $scope.emailstyle = {'background-color': 'pink'};
             $scope.emailValid = false;
         }
     }, true);
 
 
     $scope.$watchGroup(["userObj.password", "newpassword", "userObj.username"], function (newValue, oldValue) {
-       
+
         if ($scope.userObj.password !== $scope.newpassword) {
             $scope.passwordSame = false;
-            $scope.checkstyle = { 'background-color': 'pink' };
+            $scope.checkstyle = {'background-color': 'pink'};
         } else {
-            $scope.checkstyle = { 'background-color': 'white' };
+            $scope.checkstyle = {'background-color': 'white'};
             $scope.passwordSame = true;
         }
-        
-        
+
+
     }, true);
 
     function updateAsUser() {
         //console.log($scope.userUpdate);
         /*if ($scope.userUpdate.password !== $scope.newpassword) {
-          alert("New passwords are not the same");
-          return;
-        }*/
+         alert("New passwords are not the same");
+         return;
+         }*/
         updateObj = {};
         updateObj.username = $scope.userUpdate.username;
         //updateObj.password = $scope.userUpdate.password;
@@ -430,9 +426,9 @@ app.controller('UserCtrl', function ($scope, serviceAPI, $routeParams, http, $co
     function updateAsAdmin() {
         //console.log($scope.userUpdate);
         /*if ($scope.userUpdate.password !== $scope.newpassword) {
-          alert("New passwords are not the same");
-          return;
-        }*/
+         alert("New passwords are not the same");
+         return;
+         }*/
         updateObj = {};
         updateObj.username = $scope.userUpdate.username;
         updateObj.id = $scope.userUpdate.id;
@@ -455,8 +451,15 @@ app.controller('UserCtrl', function ($scope, serviceAPI, $routeParams, http, $co
         delete $scope.userUpdate;
     };
     $scope.update = function (data) {
-        $scope.userUpdate = JSON.parse(JSON.stringify(data));;
+        $scope.userUpdate = JSON.parse(JSON.stringify(data));
+        ;
         //console.log(data);
     };
-
+// to Store current page into local storage
+    if (typeof(Storage) !== "undefined") {
+        // Store
+        localStorage.setItem("LastURL", location.href);
+    } else {
+        document.getElementById("result").innerHTML = "Sorry, your browser does not support Web Storage...";
+    }
 });

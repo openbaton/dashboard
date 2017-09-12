@@ -234,5 +234,11 @@ app.controller('ServiceCtrl', function ($scope, $interval, serviceAPI, $routePar
 
         $scope.serviceObj.roles.push("");
     };
-
+// to Store current page into local storage
+    if (typeof(Storage) !== "undefined") {
+        // Store
+        localStorage.setItem("LastURL", location.href);
+    } else {
+        document.getElementById("result").innerHTML = "Sorry, your browser does not support Web Storage...";
+    }
 });

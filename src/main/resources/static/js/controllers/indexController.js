@@ -23,12 +23,13 @@ var app = angular.module('app');
  *
  */
 
-app.controller('LoginController', function ($scope, AuthService, Session, $rootScope, $location, $cookieStore, $http) {
+app.controller('LoginController', function ($scope, AuthService, Session, $rootScope, $location, $cookieStore, $http, http) {
     $scope.currentUser = null;
     // $scope.URL = 'http://localhost:8080';
     $scope.URL = '';
     $scope.alerts = [];
     $scope.NFVOVersion = "";
+    $scope.oldUrl = localStorage.LastURL;
     $scope.credential = {
         "username": '',
         "password": '',
@@ -41,10 +42,32 @@ app.controller('LoginController', function ($scope, AuthService, Session, $rootS
     }
 
     else if ($cookieStore.get('logged')) {
-        $scope.logged = $cookieStore.get('logged');
-        $rootScope.logged = $cookieStore.get('logged');
+        if ($scope.oldUrl == undefined || $scope.oldUrl == null) {
+            $scope.logged = $cookieStore.get('logged');
+            $rootScope.logged = $cookieStore.get('logged')
+        }
+        else {
+            http.syncGet($cookieStore.get('URL') + '/api/v1/projects/')
+                .then(function (response) {
+                    if (response === 401) {
+                        console.log(status + ' Status unauthorized');
+                        AuthService.logout();
+                    }
+                    else {
+                        $cookieStore.put('project', localStorage.LastProject);
+                    }
+                });
+            // console.log(localStorage.LastProject);
+            // console.log($cookieStore.get('project'));
+            $scope.logged = $cookieStore.get('logged');
+            $rootScope.logged = $cookieStore.get('logged');
+            // console.log("redirecting to " + $scope.oldUrl);
+            window.location.href = $scope.oldUrl;
+
+        }
+
     }
-    $location.replace();
+    // $location.replace();
     //console.log($scope.logged);
     $scope.loggedF = function () {
 
@@ -134,6 +157,7 @@ app.controller('IndexCtrl', function ($document, $scope, $compile, $routeParams,
         window.location.href = window.location.href.substring(0, window.location.href.length - 'login'.length) + 'main';
 
     }
+
 
     function sortList() {
         var list, i, switching, b, shouldSwitch;
@@ -293,6 +317,7 @@ app.controller('IndexCtrl', function ($document, $scope, $compile, $routeParams,
 
     console.log($rootScope.projects);
     console.log($rootScope.projectSelected);
+
 
     $scope.changeProject = function (project) {
         var lastProject = angular.fromJson(localStorage.getItem('LastProject'));
@@ -775,6 +800,14 @@ app.controller('IndexCtrl', function ($document, $scope, $compile, $routeParams,
             $("#pwmatch").css("color", "#FF0004");
         }
     });
+
+    // to Store current page into local storage
+    if (typeof(Storage) !== "undefined") {
+        // Store
+        localStorage.setItem("LastURL", location.href);
+    } else {
+        document.getElementById("result").innerHTML = "Sorry, your browser does not support Web Storage...";
+    }
 
 
 });

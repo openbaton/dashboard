@@ -59,7 +59,7 @@ app.controller('EventCtrl', function ($scope, $interval, serviceAPI, $routeParam
 
     };
 
-    $scope.main = { checkbox: false };
+    $scope.main = {checkbox: false};
     $scope.$watch('main', function (newValue, oldValue) {
         ////console.log(newValue.checkbox);
         ////console.log($scope.selection.ids);
@@ -132,8 +132,8 @@ app.controller('EventCtrl', function ($scope, $interval, serviceAPI, $routeParam
                     $scope.eventJSON = JSON.stringify(response, undefined, 4);
 
                 }).error(function (data, status) {
-                    showError(data, status);
-                });
+                showError(data, status);
+            });
         else {
             http.get(url)
                 .success(function (response) {
@@ -177,7 +177,7 @@ app.controller('EventCtrl', function ($scope, $interval, serviceAPI, $routeParam
     }
 
     function showOk(msg) {
-        $scope.alerts.push({ type: 'success', msg: msg });
+        $scope.alerts.push({type: 'success', msg: msg});
         window.setTimeout(function () {
             for (i = 0; i < $scope.alerts.length; i++) {
                 if ($scope.alerts[i].type == 'success') {
@@ -187,6 +187,14 @@ app.controller('EventCtrl', function ($scope, $interval, serviceAPI, $routeParam
         }, 5000);
         loadTable();
         $('.modal').modal('hide');
+    }
+
+    // to Store current page into local storage
+    if (typeof(Storage) !== "undefined") {
+        // Store
+        localStorage.setItem("LastURL", location.href);
+    } else {
+        document.getElementById("result").innerHTML = "Sorry, your browser does not support Web Storage...";
     }
 
 });

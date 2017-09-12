@@ -45,7 +45,7 @@ angular.module('app').factory('AuthService', function ($http, Session, $location
                     return false;
                 });
         };
-        return { loginRes: loginRes };
+        return {loginRes: loginRes};
     };
 
     authService.loginGuest = function (URL) {
@@ -95,8 +95,9 @@ angular.module('app').factory('AuthService', function ($http, Session, $location
         $cookieStore.put('userName', userName);
         $cookieStore.put('token', token);
         $cookieStore.put('URL', URL);
-        $cookieStore.put('project', {name: 'default', id: ''});
-
+        if (!$cookieStore.get('project')) {
+            $cookieStore.put('project', {name: 'default', id: ''});
+        }
 
 //        console.log($cookieStore.get('token'));
 
@@ -110,7 +111,7 @@ angular.module('app').factory('AuthService', function ($http, Session, $location
         $cookieStore.remove('userName');
         $cookieStore.remove('token');
         $cookieStore.remove('URL');
-        $cookieStore.remove('project');
+        //$cookieStore.remove('project');
     };
     return this;
 });

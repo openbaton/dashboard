@@ -67,7 +67,7 @@ app.controller('ProjectCtrl', function ($scope, serviceAPI, $routeParams, http, 
 
     };
 
-    $scope.main = { checkbox: false };
+    $scope.main = {checkbox: false};
     $scope.$watch('main', function (newValue, oldValue) {
         ////console.log(newValue.checkbox);
         ////console.log($scope.selection.ids);
@@ -174,7 +174,7 @@ app.controller('ProjectCtrl', function ($scope, serviceAPI, $routeParams, http, 
                     }
                     $rootScope.projects = response;
                 })
-               
+
         }
         else {
             $rootScope.projectSelected = project;
@@ -206,8 +206,9 @@ app.controller('ProjectCtrl', function ($scope, serviceAPI, $routeParams, http, 
             AuthService.logout();
         }
     }
+
     function showOk(msg) {
-        $scope.alerts.push({ type: 'success', msg: msg });
+        $scope.alerts.push({type: 'success', msg: msg});
         window.setTimeout(function () {
             for (i = 0; i < $scope.alerts.length; i++) {
                 if ($scope.alerts[i].type == 'success') {
@@ -228,5 +229,11 @@ app.controller('ProjectCtrl', function ($scope, serviceAPI, $routeParams, http, 
             return false;
         }
     };
-
+// to Store current page into local storage
+    if (typeof(Storage) !== "undefined") {
+        // Store
+        localStorage.setItem("LastURL", location.href);
+    } else {
+        document.getElementById("result").innerHTML = "Sorry, your browser does not support Web Storage...";
+    }
 });
