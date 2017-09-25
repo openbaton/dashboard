@@ -168,7 +168,8 @@ app.controller('ProjectCtrl', function ($scope, serviceAPI, $routeParams, http, 
                     }
                     if (angular.isUndefined($cookieStore.get('project')) || $cookieStore.get('project').id == '') {
                         $rootScope.projectSelected = response[0];
-                        $cookieStore.put('project', response[0])
+                        $cookieStore.put('project', response[0]);
+                        localStorage.setItem("LastProject", JSON.stringify(response[0]));
                     } else {
                         $rootScope.projectSelected = $cookieStore.get('project');
                     }
@@ -180,6 +181,7 @@ app.controller('ProjectCtrl', function ($scope, serviceAPI, $routeParams, http, 
             $rootScope.projectSelected = project;
             console.log(project);
             $cookieStore.put('project', project);
+            localStorage.setItem("LastProject", JSON.stringify(project));
             $window.location.reload();
         }
 

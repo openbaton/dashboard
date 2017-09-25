@@ -53,9 +53,6 @@ app.controller('LoginController', function ($scope, AuthService, Session, $rootS
                         console.log(status + ' Status unauthorized');
                         AuthService.logout();
                     }
-                    else {
-                        $cookieStore.put('project', localStorage.LastProject);
-                    }
                 });
             // console.log(localStorage.LastProject);
             // console.log($cookieStore.get('project'));
@@ -63,9 +60,7 @@ app.controller('LoginController', function ($scope, AuthService, Session, $rootS
             $rootScope.logged = $cookieStore.get('logged');
             // console.log("redirecting to " + $scope.oldUrl);
             window.location.href = $scope.oldUrl;
-
         }
-
     }
     // $location.replace();
     //console.log($scope.logged);
@@ -73,8 +68,6 @@ app.controller('LoginController', function ($scope, AuthService, Session, $rootS
 
         return $scope.logged;
     };
-
-
     $scope.checkSecurity = function () {
         //console.log($scope.URL + "/api/v1/security");
         AuthService.removeSession();
@@ -135,7 +128,6 @@ app.controller('LoginController', function ($scope, AuthService, Session, $rootS
 
 app.controller('IndexCtrl', function ($document, $scope, $compile, $routeParams, serviceAPI, $interval, $cookieStore, $location, AuthService, http, $rootScope, $window, $route) {
     $('#side-menu').metisMenu();
-
     $scope.adminRole = "ADMIN";
     $scope.superProject = "*";
     $scope.numberNSR = 0;
@@ -157,7 +149,6 @@ app.controller('IndexCtrl', function ($document, $scope, $compile, $routeParams,
         window.location.href = window.location.href.substring(0, window.location.href.length - 'login'.length) + 'main';
 
     }
-
 
     function sortList() {
         var list, i, switching, b, shouldSwitch;
@@ -278,6 +269,7 @@ app.controller('IndexCtrl', function ($document, $scope, $compile, $routeParams,
         console.log(newValue);
         if (!angular.isUndefined(newValue) && !angular.isUndefined(oldValue)) {
             $cookieStore.put('project', newValue);
+            localStorage.setItem("LastProject", JSON.stringify(newValue));
             loadNumbers();
             if (window.location.href.indexOf('main') > -1) {
                 if (!$cookieStore.get('QUOTA')) {
@@ -296,8 +288,8 @@ app.controller('IndexCtrl', function ($document, $scope, $compile, $routeParams,
         }
         else if (!angular.isUndefined(newValue) && angular.isUndefined(oldValue)) {
             $cookieStore.put('project', newValue);
+            localStorage.setItem("LastProject", JSON.stringify(newValue));
             loadNumbers();
-
             if (window.location.href.indexOf('main') > -1) {
                 if (!$cookieStore.get('QUOTA')) {
                     console.log("No quota information stored");
@@ -315,55 +307,58 @@ app.controller('IndexCtrl', function ($document, $scope, $compile, $routeParams,
 
     });
 
+
     console.log($rootScope.projects);
     console.log($rootScope.projectSelected);
 
-
     $scope.changeProject = function (project) {
+
         var lastProject = angular.fromJson(localStorage.getItem('LastProject'));
-        console.log(lastProject);
+        if (lastProject && !angular.isUndefined(lastProject.id)) {
+            $rootScope.projectSelected = lastProject;
+            $cookieStore.put('project', lastProject);
+
+        }
         if (arguments.length === 0) {
             http.syncGet(url + '/projects/')
                 .then(function (response) {
                     if (response === 401) {
-                        console.log(status + ' Status unauthorized');
+                        console.log(status + ' Status unauthorized')
                         AuthService.logout();
                     }
-                    if (!angular.isUndefined(lastProject) && lastProject !== null) {
-                        if (!angular.isUndefined(lastProject.id)) {
-                            $rootScope.projectSelected = lastProject;
-                            $cookieStore.put('project', lastProject);
-                        } else { // This should nevere happen but i don't know how to program in js
-                            $rootScope.projectSelected = response[0];
-                            $cookieStore.put('project', response[0]);
-                        }
-                    }
-                    else if (angular.isUndefined($cookieStore.get('project')) || $cookieStore.get('project').id === '') {
+                    if (!lastProject || response.filter(function (f) {
+                            return f.id == lastProject.id
+                        }).length <= 0) {
                         $rootScope.projectSelected = response[0];
                         $cookieStore.put('project', response[0]);
-                        localStorage.setItem('LastProject', angular.toJson(response[0]));
+                        localStorage.setItem("LastProject", JSON.stringify(response[0]));
+                        if (lastProject) {
+                            window.location.reload();
+                        }
+                    }
+                    else if (angular.isUndefined($cookieStore.get('project')) || $cookieStore.get('project').id == '') {
+                        $rootScope.projectSelected = response[0];
+                        $cookieStore.put('project', response[0]);
+                        localStorage.setItem("LastProject", JSON.stringify(response[0]));
                     } else {
                         $rootScope.projectSelected = $cookieStore.get('project');
                     }
                     $rootScope.projects = response;
+                })
 
-                });
         }
         else {
             $rootScope.projectSelected = project;
             console.log(project);
             $cookieStore.put('project', project);
-            if (typeof(Storage) !== "undefined") {
-                // Store
-                localStorage.setItem("LastProject", JSON.stringify(project));
-                // Retrieve
-                document.getElementById("result").innerHTML = localStorage.getItem("LastProject");
-            } else {
-                document.getElementById("result").innerHTML = "Sorry, your browser does not support Web Storage...";
-            }
+            localStorage.setItem("LastProject", JSON.stringify(project));
             $window.location.reload();
         }
+
+
     };
+
+
     $scope.saveSetting = function (config) {
         //console.log(config);
         $('.modal').modal('hide');
@@ -800,7 +795,6 @@ app.controller('IndexCtrl', function ($document, $scope, $compile, $routeParams,
             $("#pwmatch").css("color", "#FF0004");
         }
     });
-
     // to Store current page into local storage
     if (typeof(Storage) !== "undefined") {
         // Store

@@ -16,7 +16,7 @@
 
 var app = angular.module('app')
 
-app.controller('NsdCtrl', function ($scope, $compile, $cookieStore, $routeParams, $filter, http, serviceAPI, $window, $route, $interval, $http, topologiesAPI, AuthService, NgTableParams) {
+app.controller('NsdCtrl', function ($scope, $compile, $cookieStore, $routeParams, $filter, http, serviceAPI, $window, $route, $interval, $http, topologiesAPI, AuthService, NgTableParams, http) {
     var baseURL = $cookieStore.get('URL') + "/api/v1";
     var monitoringIp = [];
     var url = baseURL + '/ns-descriptors/';
