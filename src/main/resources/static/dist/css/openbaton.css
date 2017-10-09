@@ -956,3 +956,10 @@ td p {
     border: 1px #5cb85c solid;
     border-radius: 4px;
 }
+/* Rotating glyphicon when expanding/collapsing */
+.collapse-chevron .glyphicon {
+    transition: .3s transform ease-in-out;
+}
+.collapse-chevron .collapsed .glyphicon {
+    transform: rotate(-90deg);
+}
