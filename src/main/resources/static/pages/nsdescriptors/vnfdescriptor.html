@@ -259,7 +259,7 @@
 											</th>
 											<th ng-show='vl.extId' ng-click="predicate = 'extId'; reverse = !reverse">External ID <i class="fa fa-sort"></i>
 											</th>
-											<th ng-show='vl.qos' ng-click="predicate = 'qos'; reverse = !reverse">QoS <i class="fa fa-sort"></i>
+											<th ng-click="predicate = 'qos'; reverse = !reverse">QoS <i class="fa fa-sort"></i>
 											</th>
 
 										</tr>
@@ -269,7 +269,7 @@
 											<td>{{vl.id}}</td>
 											<td>{{vl.name}}</td>
 											<td ng-show='vl.extId'>{{vl.extId}}</td>
-											<td ng-show='vl.qos'>{{vl.qos}}</td>
+											<td >{{vl.qos}}</td>
 
 										</tr>
 									</tbody>
