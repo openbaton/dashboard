@@ -59,13 +59,17 @@ app.controller('LoginController', function ($scope, AuthService, Session, $rootS
             $scope.logged = $cookieStore.get('logged');
             $rootScope.logged = $cookieStore.get('logged');
             // console.log("redirecting to " + $scope.oldUrl);
-            window.location.href = $scope.oldUrl;
+            //  window.location.href = $scope.oldUrl;
+            $scope.redirectionVar = $cookieStore.get('redirection');
+            if ($scope.redirectionVar === true) {
+                window.location.href = $scope.oldUrl;
+                $cookieStore.put('redirection', false);
+            }
         }
     }
     // $location.replace();
-    //console.log($scope.logged);
+    // console.log($scope.logged);
     $scope.loggedF = function () {
-
         return $scope.logged;
     };
     $scope.checkSecurity = function () {
@@ -143,6 +147,7 @@ app.controller('IndexCtrl', function ($document, $scope, $compile, $routeParams,
     $scope.config = {};
     $scope.userLogged;
     $location.replace();
+
 
     //this is here for mozilla browser to redirect user to main overview after login, mozilla does not do it automatically
     if ($cookieStore.get('logged') && (window.location.href.substring(window.location.href.length - 'login'.length) === 'login')) {

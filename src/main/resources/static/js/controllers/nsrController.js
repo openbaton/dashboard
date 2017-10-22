@@ -580,6 +580,7 @@ var app = angular.module('app').controller('NsrCtrl', function ($scope, $http, $
                 .success(function (response, status) {
                     $scope.nsrecords = response;
                     console.log(response);
+                    refreshFn();
                 })
                 .error(function (data, status) {
                     showError(data, status);
@@ -600,9 +601,7 @@ var app = angular.module('app').controller('NsrCtrl', function ($scope, $http, $
                     //$window.location.href = destinationUrl;
                 });
 
-
     }
-
 
     $scope.loadTable = function () {
         if (angular.isUndefined($routeParams.nsrecordId))
@@ -610,6 +609,7 @@ var app = angular.module('app').controller('NsrCtrl', function ($scope, $http, $
                 .success(function (response, status) {
                     $scope.nsrecords = response;
                     console.log(response);
+
                 })
                 .error(function (data, status) {
                     showError(data, status);
@@ -630,6 +630,7 @@ var app = angular.module('app').controller('NsrCtrl', function ($scope, $http, $
                     //$window.location.href = destinationUrl;
                 });
     }
+
     $scope.ActiveNSrecords = function (status) {
         if (status === 'ACTIVE') {
             return true;
@@ -639,9 +640,18 @@ var app = angular.module('app').controller('NsrCtrl', function ($scope, $http, $
     $scope.PendingNSrecords = function (status) {
         if (status != 'ACTIVE') {
             return true;
+
         }
         return false;
     };
+    function refreshFn () {
+
+            var promise = $interval($scope.loadTable, 10000);
+            $scope.$on('$destroy',function(){
+                if(promise)
+                    $interval.cancel(promise);
+            });
+    }
     $scope.vnfrjsonname = "";
     $scope.vnfrJSON = "";
     $scope.copyJson = function (vnfr) {

@@ -83,7 +83,7 @@ app.controller('NsdCtrl', function ($scope, $compile, $cookieStore, $routeParams
                 $scope.tableParamsFilteredLaunchKeys.total(filteredLaunchKeys.length);
                 filteredLaunchKeys = filteredLaunchKeys.slice((params.page() - 1) * params.count(), params.page() * params.count());
                 for (i = filteredLaunchKeys.length; i < params.count(); i++) {
-                    filteredLaunchKeys.push({'name': ""})
+                    // filteredLaunchKeys.push({'name': ""})
                 }
                 return filteredLaunchKeys;
             }
@@ -108,7 +108,7 @@ app.controller('NsdCtrl', function ($scope, $compile, $cookieStore, $routeParams
                 $scope.tableParamsFilteredKeys.total(filteredKeys.length);
                 filteredKeys = filteredKeys.slice((params.page() - 1) * params.count(), params.page() * params.count());
                 for (i = filteredKeys.length; i < params.count(); i++) {
-                    filteredKeys.push({'name': ""})
+                    // filteredKeys.push({'name': ""})
                 }
                 return filteredKeys;
             }
@@ -155,7 +155,7 @@ app.controller('NsdCtrl', function ($scope, $compile, $cookieStore, $routeParams
                 $scope.tableParamsFilteredPops.total(filteredPops.length);
                 filteredPops = filteredPops.slice((params.page() - 1) * params.count(), params.page() * params.count());
                 for (i = filteredPops.length; i < params.count(); i++) {
-                    filteredPops.push({'name': ""})
+                    // filteredPops.push({'name': ""})
                 }
                 return filteredPops;
             }
@@ -181,7 +181,7 @@ app.controller('NsdCtrl', function ($scope, $compile, $cookieStore, $routeParams
                 $scope.tableParamsFilteredLaunchPops.total(filteredLaunchPops.length);
                 filteredLaunchPops = filteredLaunchPops.slice((params.page() - 1) * params.count(), params.page() * params.count());
                 for (i = filteredLaunchPops.length; i < params.count(); i++) {
-                    filteredLaunchPops.push({'name': ""})
+                    // filteredLaunchPops.push({'name': ""})
                 }
                 return filteredLaunchPops;
             }
@@ -1205,9 +1205,7 @@ app.controller('NsdCtrl', function ($scope, $compile, $cookieStore, $routeParams
         jsonDiv.append(
             renderjson($scope.vnfdJSON)
         );
-    }
-
-
+    };
     $('#jsonInfoVNFD').on('hidden.bs.modal', function () {
         var jsonDiv = document.querySelector("#jsonvnfd");
         jsonDiv.childNodes[0].remove();
@@ -1219,5 +1217,15 @@ app.controller('NsdCtrl', function ($scope, $compile, $cookieStore, $routeParams
         localStorage.setItem("LastURL", location.href);
     } else {
         document.getElementById("result").innerHTML = "Sorry, your browser does not support Web Storage...";
-    }
+    };
+    $('.btnNext').click(function(){
+        $('.nav-pills > .active').next('li').find('a').trigger('click');
+    });
+
+    $('.btnPrevious').click(function(){
+        $('.nav-pills > .active').prev('li').find('a').trigger('click');
+    });
+
+
+
 });

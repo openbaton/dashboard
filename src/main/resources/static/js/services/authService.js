@@ -40,6 +40,7 @@ angular.module('app').factory('AuthService', function ($http, Session, $location
                     Session.create(URL, res.data.value, credentials.username, true);
                     $location.path("/main");
                     $window.location.reload();
+                    $cookieStore.put('redirection', true);
                     return true;
                 }, function (res) {
                     return false;
