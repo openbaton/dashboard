@@ -1392,15 +1392,14 @@
                                             <br> The following list shows all the Keys that are available to put into
                                             the VNF Component Instances.
                                         </p>
-
-                                        <div ng-init="keys.expanded=true">
+                                        <div ng-init="keys_exp.expanded=true">
                                             <p style="font-size:20px">
-                                                <a href="" ng-if="keys.expanded" ng-click="keys.expanded = false">-</a>
-                                                <a href="" ng-if="!keys.expanded" ng-click="keys.expanded = true">+</a>
+                                                <a href="" ng-if="keys_exp.expanded" ng-click="keys_exp.expanded = false">-</a>
+                                                <a href="" ng-if="!keys_exp.expanded" ng-click="keys_exp.expanded = true">+</a>
                                                 Available
                                                 ({{keys.length}})
                                             </p>
-                                            <div ng-if="keys.expanded">
+                                            <div ng-if="keys_exp.expanded">
                                                 <table style="text-align: left;" ng-table="tableParamsFilteredKeys"
                                                        class="table table-bordered table-striped">
                                                     <!--<tr ng-init="key.expanded=false" ng-repeat-start="key in $data">-->
@@ -1410,7 +1409,7 @@
                                                             sortable="'name'"><b>Name</b></td>
                                                     </tr>
                                                     </thead>
-                                                    <tr ng-repeat="key in $data">
+                                                    <tr ng-repeat="key in keys">
                                                         <!--<td>-->
                                                         <!--<a href="" ng-if="key.expanded"-->
                                                         <!--ng-click="key.expanded = false">-</a>-->
@@ -1431,7 +1430,7 @@
                                                             </a>
                                                         </td>
                                                     </tr>
-                                                    <tr ng-show="!$data.length">
+                                                    <tr ng-show="!keys.length">
                                                         <td>No more keys are available.
                                                         </td>
                                                     </tr>
@@ -1470,7 +1469,7 @@
                                             <br> The following list shows all the Keys that will be imported to the VNF
                                             Component Instances.<br> <br>
                                         </p>
-                                        <div ng-init="list.expanded=false">
+                                        <div ng-init="list.expanded=true">
                                             <p style="font-size:20px">
                                                 <a href="" ng-if="list.expanded" ng-click="list.expanded = false">-</a>
                                                 <a href="" ng-if="!list.expanded" ng-click="list.expanded = true">+</a>

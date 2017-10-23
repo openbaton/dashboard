@@ -26,7 +26,8 @@ app.controller('NsdCtrl', function ($scope, $compile, $cookieStore, $routeParams
     var dropzoneUrl = baseURL + '/csar-nsd/';
     var basicConf = {description: "", confKey: "", value: ""};
     $scope.selectedVNFD = "";
-    $scope.list = {}
+    $scope.list = {};
+    $scope.keys_exp = {};
     $scope.nsdToSend = {};
     $scope.textTopologyJson = '';
     $scope.file = '';
@@ -79,7 +80,7 @@ app.controller('NsdCtrl', function ($scope, $compile, $cookieStore, $routeParams
             total: filteredLaunchKeys.length,
             getData: function (params) {
                 filteredLaunchKeys = params.sorting() ? $filter('orderBy')($scope.launchKeys, params.orderBy()) : $scope.launchKeys;
-                //filteredLaunchKeys = params.filter() ? $filter('filter')(filteredLaunchKeys, params.filter()) : filteredLaunchKeys;
+                // filteredLaunchKeys = params.filter() ? $filter('filter')(filteredLaunchKeys, params.filter()) : filteredLaunchKeys;
                 $scope.tableParamsFilteredLaunchKeys.total(filteredLaunchKeys.length);
                 filteredLaunchKeys = filteredLaunchKeys.slice((params.page() - 1) * params.count(), params.page() * params.count());
                 for (i = filteredLaunchKeys.length; i < params.count(); i++) {
