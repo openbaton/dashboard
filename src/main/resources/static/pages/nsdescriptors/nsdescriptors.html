@@ -1378,15 +1378,77 @@
                                     existing
                                     key pair,
                                     import a key pair, or generate a new key pair.</p>
-                                <div class="row">
-                                    <div class="col-lg-12">
-                                        <button href="#" class="btn btn-primary" title="Add a new key pair"
-                                                data-toggle="modal" data-target="#addKey">Import key
-                                        </button>
-                                        <button href="#" class="btn btn-primary" title="Add a new key pair"
-                                                data-toggle="modal" data-target="#createKey">Create key
-                                        </button>
+                                <div class="panel-group" id="accordion">
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading" style="padding: 5px 15px;">
+                                            <h4 class="panel-title">
+                                                <a style="font-size: 14px;" class="accordion-toggle"
+                                                   data-toggle="collapse" data-parent="#accordion" href="#addKey">
+                                                    Import Key
+                                                </a>
+                                            </h4>
+                                        </div>
+                                        <div id="addKey" class="panel-collapse collapse">
+                                            <div class="panel-body" ng-controller="keyPairsCtrl">
+                                                <form role="form" class="form-horizontal">
+                                                    <div class="form-group">
+                                                        <label for="keyName" class="col-sm-2 control-label">Key
+                                                            Name</label>
+
+                                                        <div class="col-sm-10">
+                                                            <input type="text" class="form-control" id="keyName"
+                                                                   name="importKeyName"
+                                                                   ng-model="keyName"/>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="Pub key" class="col-sm-2 control-label">Public
+                                                            key</label>
+                                                        <div class="col-sm-10">
+                            <textarea name="Pub key" ng-model="pubKey" id="Pub key"
+                                      class="form-control" rows="5" cols="50">
+                        </textarea>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                                <button type="button" class="btn btn-primary right"
+                                                        ng-click="importKey(keyName, pubKey)">Save
+                                                </button>
+                                            </div>
+                                        </div>
                                     </div>
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading" style="padding: 5px 15px;">
+                                            <h4 class="panel-title">
+                                                <a style="font-size: 14px;" class="accordion-toggle"
+                                                   data-toggle="collapse" data-parent="#accordion" href="#createKey">
+                                                    Create key
+                                                </a>
+                                            </h4>
+                                        </div>
+                                        <div id="createKey" class="panel-collapse collapse">
+                                            <div class="panel-body" ng-controller="keyPairsCtrl">
+                                                <form role="form" class="form-horizontal">
+
+                                                    <div class="form-group">
+                                                        <label for="generateKeyName" class="col-sm-2 text-left">Key
+                                                            Name</label>
+
+                                                        <div class="col-sm-10">
+                                                            <input type="text" class="form-control" id="generateKeyName"
+                                                                   name="generateKeyName"
+                                                                   ng-model="generateKeyName"/>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                                <button class="btn btn-primary right"
+                                                        ng-click="generateKey(generateKeyName)">Generate
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
                                     <div class="col-md-6">
                                         <p>
                                             <br> The following list shows all the Keys that are available to put into
@@ -1394,8 +1456,10 @@
                                         </p>
                                         <div ng-init="keys_exp.expanded=true">
                                             <p style="font-size:20px">
-                                                <a href="" ng-if="keys_exp.expanded" ng-click="keys_exp.expanded = false">-</a>
-                                                <a href="" ng-if="!keys_exp.expanded" ng-click="keys_exp.expanded = true">+</a>
+                                                <a href="" ng-if="keys_exp.expanded"
+                                                   ng-click="keys_exp.expanded = false">-</a>
+                                                <a href="" ng-if="!keys_exp.expanded"
+                                                   ng-click="keys_exp.expanded = true">+</a>
                                                 Available
                                                 ({{keys.length}})
                                             </p>
@@ -1690,80 +1754,6 @@
         </div>
     </div>
 </div>
-<!-- /.modal -->
-<div class="modal fade" tabindex="-1" role="dialog" id="addKey" ng-controller="keyPairsCtrl">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                        aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">Add a new key pair</h4>
-            </div>
-            <div class="modal-body">
-                <form role="form" class="form-horizontal">
-                    <div class="form-group">
-                        <label for="keyName" class="col-sm-4 control-label">Key Name</label>
-
-                        <div class="col-sm-6">
-                            <input type="text" class="form-control" id="keyName" name="importKeyName"
-                                   ng-model="keyName"/>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="Pub key" class="col-sm-4 control-label">Public key</label>
-                        <div class="col-sm-6">
-                            <textarea style="width:350px;" name="Pub key" ng-model="pubKey" id="Pub key"
-                                      class="form-control" rows="5" cols="50">
-                        </textarea>
-                        </div>
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" data-dismiss="modal"
-                        ng-click="importKey(keyName, pubKey)">Save
-                </button>
-            </div>
-        </div>
-        <!-- /.modal-content -->
-    </div>
-    <!-- /.modal-dialog -->
-</div>
-<!-- /.modal -->
-<div class="modal fade" tabindex="-1" role="dialog" id="createKey" ng-controller="keyPairsCtrl">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                        aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">Provide the name of the key</h4>
-            </div>
-            <div class="modal-body">
-                <form role="form" class="form-horizontal">
-
-                    <div class="form-group">
-                        <label for="generateKeyName" class="col-sm-4 control-label">Key Name</label>
-
-                        <div class="col-sm-6">
-                            <input type="text" class="form-control" id="generateKeyName" name="generateKeyName"
-                                   ng-model="generateKeyName"/>
-                        </div>
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" data-dismiss="modal"
-                        ng-click="generateKey(generateKeyName)">Generate
-                </button>
-            </div>
-        </div>
-        <!-- /.modal-content -->
-    </div>
-    <!-- /.modal-dialog -->
-</div>
-<!-- /.modal -->
 <div class="modal fade" id="modalFileCSAR" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
