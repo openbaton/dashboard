@@ -754,7 +754,7 @@ app.controller('NsdCtrl', function ($scope, $compile, $cookieStore, $routeParams
         http.get($cookieStore.get('URL') + '/env')
             .success(function (response) {
                 // console.log(response);
-                monitoringIp = response['applicationConfig: [file:/etc/openbaton/openbaton.properties]']['nfvo.monitoring.ip'];
+                monitoringIp = response['applicationConfig: [file:/etc/openbaton/openbaton-nfvo.properties]']['nfvo.monitoring.ip'];
                 // console.log(monitoringIp);
                 $scope.monitoringIp = monitoringIp;
             })
