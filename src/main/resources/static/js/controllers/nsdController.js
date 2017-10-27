@@ -47,7 +47,7 @@ app.controller('NsdCtrl', function ($scope, $compile, $cookieStore, $routeParams
     $scope.tmpVnfd = [];
     $scope.elementName = "";
     $scope.basicConfiguration = {name: "", config: {name: "", configurationParameters: []}};
-
+    $scope.LastTabNSDLaunch = '';
     loadTable();
     loadKeys();
     loadVIMs();
@@ -301,6 +301,7 @@ app.controller('NsdCtrl', function ($scope, $compile, $cookieStore, $routeParams
 
 
     $scope.saveDependency = function () {
+
         //console.log($scope.dependency);
         $scope.nsdCreateTmp.vnf_dependency.push(angular.copy($scope.dependency));
         //console.log($scope.nsdCreateTmp.vnf_dependency);
@@ -432,6 +433,30 @@ app.controller('NsdCtrl', function ($scope, $compile, $cookieStore, $routeParams
 
     };
 
+    $scope.loadVNFDUploadNSD = function () {
+        $scope.nsdCreateTmp = {};
+        $scope.nsdCreateTmp.name = '';
+        $scope.nsdCreateTmp.vendor = '';
+        $scope.nsdCreateTmp.version = '';
+        $scope.nsdCreateTmp.vnfd = [];
+        $scope.nsdCreateTmp.vnf_dependency = [];
+        $scope.nsdCreateTmp.vld = [];
+        $scope.tmpVnfd = [];
+
+        http.get(urlVNFD)
+            .success(function (response, status) {
+                $scope.vnfdList = response;
+                //console.log(response);
+                $('#modalCreateNSDUploadjson').modal('show');
+                $scope.selectedVNFD = $scope.vnfdList[0];
+            })
+            .error(function (data, status) {
+                showError(data, status);
+            });
+
+
+    };
+
     $scope.toggleSelection = function toggleSelection(image) {
         var idx = $scope.selection.indexOf(image);
         if (idx > -1) {
@@ -545,10 +570,9 @@ app.controller('NsdCtrl', function ($scope, $compile, $cookieStore, $routeParams
             if (postNSD.charAt(0) === '<')
                 type = 'definitions';
         }
-
         else if (textTopologyJson !== '') {
-
             postNSD = textTopologyJson;
+
         }
 
         else {
@@ -566,8 +590,8 @@ app.controller('NsdCtrl', function ($scope, $compile, $cookieStore, $routeParams
                 http.post(url, postNSD)
                     .success(function (response) {
                         showOk('Network Service Descriptors stored!');
+                        location.reload();
                         loadTable();
-
                         //                        window.setTimeout($scope.cleanModal(), 3000);
                     })
                     .error(function (data, status) {
@@ -1043,6 +1067,9 @@ app.controller('NsdCtrl', function ($scope, $compile, $cookieStore, $routeParams
         $scope.tableParamsFilteredLaunchPops.reload();
         $scope.tableParamsFilteredPops.reload();
     }
+
+
+
     $scope.vnfdJSON = "";
     $scope.vnfdJSONname = "";
     $scope.copyJSON = function (vnfd) {
@@ -1226,7 +1253,14 @@ app.controller('NsdCtrl', function ($scope, $compile, $cookieStore, $routeParams
     $('.btnPrevious').click(function(){
         $('.nav-pills > .active').prev('li').find('a').trigger('click');
     });
-
-
+    $(document).ready(function(){
+        $(".nav-pills a").click(function(){
+            $(this).tab('show');
+        });
+        $('.nav-pills a').on('shown.bs.tab', function(event){
+            $scope.LastTabNSDLaunch = $(event.target).text();         // active tab
+            console.log($scope.LastTabNSDLaunch);
+        });
+    });
 
 });
