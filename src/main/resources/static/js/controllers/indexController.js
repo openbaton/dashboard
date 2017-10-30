@@ -84,7 +84,7 @@ app.controller('LoginController', function ($scope, AuthService, Session, $rootS
                 }
             })
             .error(function (data, status) {
-                if (status == 404) {
+                if (status === 404 || status === 400) {
                     return;
                 }
                 console.info(('status != 404'));
@@ -328,11 +328,11 @@ app.controller('IndexCtrl', function ($document, $scope, $compile, $routeParams,
             http.syncGet(url + '/projects/')
                 .then(function (response) {
                     if (response === 401) {
-                        console.log(status + ' Status unauthorized')
+                        console.log(status + ' Status unauthorized');
                         AuthService.logout();
                     }
                     if (!lastProject || response.filter(function (f) {
-                            return f.id == lastProject.id
+                            return f.id === lastProject.id
                         }).length <= 0) {
                         $rootScope.projectSelected = response[0];
                         $cookieStore.put('project', response[0]);
@@ -341,7 +341,7 @@ app.controller('IndexCtrl', function ($document, $scope, $compile, $routeParams,
                             window.location.reload();
                         }
                     }
-                    else if (angular.isUndefined($cookieStore.get('project')) || $cookieStore.get('project').id == '') {
+                    else if (angular.isUndefined($cookieStore.get('project')) || $cookieStore.get('project').id === '') {
                         $rootScope.projectSelected = response[0];
                         $cookieStore.put('project', response[0]);
                         localStorage.setItem("LastProject", JSON.stringify(response[0]));

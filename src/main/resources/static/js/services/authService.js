@@ -37,7 +37,13 @@ angular.module('app').factory('AuthService', function ($http, Session, $location
 
                 .then(function (res) {
                     console.log(res);
-                    Session.create(URL, res.data.value, credentials.username, true);
+                    if (res.data.value === undefined) {
+                        _token = res.data.access_token
+                    } else {
+                        _token = res.data.value
+                    }
+
+                    Session.create(URL, _token, credentials.username, true);
                     $location.path("/main");
                     $window.location.reload();
                     $cookieStore.put('redirection', true);
