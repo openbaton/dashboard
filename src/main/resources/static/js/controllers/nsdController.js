@@ -48,6 +48,7 @@ app.controller('NsdCtrl', function ($scope, $compile, $cookieStore, $routeParams
     $scope.elementName = "";
     $scope.basicConfiguration = {name: "", config: {name: "", configurationParameters: []}};
     $scope.LastTabNSDLaunch = '';
+    $scope.basicConf = {description: "", confKey: "", value: ""};
     loadTable();
     loadKeys();
     loadVIMs();
@@ -671,7 +672,23 @@ app.controller('NsdCtrl', function ($scope, $compile, $cookieStore, $routeParams
             confKey: "",
             value: ""
         });
+
+
     };
+
+    $scope.addConftoLaunchTmp = function (vnfdname, conf) {
+
+        $scope.launchConfiguration.configurations[vnfdname].configurationParameters.push({
+            description: conf.description,
+            confKey: conf.confKey,
+            value: conf.value
+        });
+        $scope.basicConf = {description: "", confKey: "", value: ""};
+
+    };
+
+
+
     $scope.removeConf = function (index, vnfdname) {
         $scope.launchConfiguration.configurations[vnfdname].configurationParameters.splice(index, 1);
     };
@@ -1262,5 +1279,4 @@ app.controller('NsdCtrl', function ($scope, $compile, $cookieStore, $routeParams
             console.log($scope.LastTabNSDLaunch);
         });
     });
-
 });

@@ -1693,232 +1693,126 @@
                                 </p>
                                 <tabset>
                                     <tab ng-repeat="vnfdname in vnfdnames track by $index" heading={{vnfdname}}>
-                                        <form class="form-inline">
-                                            <div class="form-group col-md-12">
-                                                <div class="form row col-md-12">
-                                                    <div class="form-group row">
-                                                        <table>
-                                                            <tr>
-                                                                <td style="border: none !important;"><label
-                                                                        for="ConfigurationName"> Configuration
-                                                                    Name</label></td>
-                                                                <td style="border: none !important;">
-                                                                    <input ng-disabled="launchConfiguration.configurations[vnfdname].id.length > 0 && launchConfiguration.configurations[vnfdname].name.length > 0"
-                                                                           type="text" class="form-control"
-                                                                           id="Configuration Name"
-                                                                           ng-model="launchConfiguration.configurations[vnfdname].name"/>
-                                                                </td>
-                                                                <td style="border: none !important;">
-                                                                    <a style="color: black;" data-toggle="tooltip"
-                                                                       title="Configuration Name"><i
-                                                                            class="fa fa-question-circle fa-2x"
-                                                                            aria-hidden="true"></i></a>
-                                                                </td>
-                                                            </tr>
-                                                        </table>
+                                        <br>
+                                        <table class="col-md-12">
+                                            <tr ng-repeat="conf in launchConfiguration.configurations[vnfdname].configurationParameters track by $index">
+                                                <td class="row"
+                                                    style="padding: 7px !important; border-top: none !important; border-bottom: none !important; border-right: none !important; border-left: none !important;">
+
+                                                    <div class="col-md-10 row">
+                                                        <b for="keyName">{{conf.confKey}}
+                                                            <a style="color: black;" data-toggle="tooltip"
+                                                               title="{{conf.description}}"><i
+                                                                    class="fa fa-question-circle"
+                                                                    aria-hidden="true"></i></a>:
+                                                        </b>
+                                                        <input style="border: 1px solid #ccc; border-radius: 3px; padding: 5px;"
+                                                               id="Configuration Name"
+                                                               ng-model="conf.value"
+                                                        />
                                                     </div>
-                                                </div>
-                                            </div>
-                                        </form>
+                                                    <div class="col-md-2">
+                                                        <button data-toggle="tooltip" title='Delete'
+                                                                class="btn btn-danger right"
+                                                                ng-hide="conf.id.length > 0" type="button"
+                                                                ng-click="removeConf($index, vnfdname)">
+                                                            -
+                                                        </button>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </table>
                                         <table class="table table-bordered"
                                                id="vduTabletable">
                                             <tbody>
-                                            <tr ng-repeat="conf in launchConfiguration.configurations[vnfdname].configurationParameters track by $index">
-                                                <td>
-                                                    <table class="col-md-12">
-                                                        <tr>
-                                                            <td style="padding-top: 0px !important; border: none !important; padding-bottom: 0px !important;">
-                                                                <table class="col-md-12">
-                                                                    <tr>
-                                                                        <td class="col-md-4"
-                                                                            style="padding-top: 0px !important; border: none !important; padding-bottom: 0px !important;">
-                                                                            <label>Configuration Key</label>
-                                                                        </td>
-                                                                        <td class="col-md-8"
-                                                                            style="padding-top: 0px !important; border: none !important; padding-bottom: 0px !important;">
-                                                                            <input
-                                                                                    ng-disabled="conf.id.length > 0"
-                                                                                    type="text"
-                                                                                    class="form-control"
-                                                                                    id="Configuration Name"
-                                                                                    ng-model="conf.confKey"
-                                                                            /></td>
-                                                                        <td class="col-md-2"
-                                                                            style="border: none !important;">
-                                                                            <a style="color: black;"
-                                                                               data-toggle="tooltip"
-                                                                               title="Configuration Key"><i
-                                                                                    class="fa fa-question-circle fa-2x"
-                                                                                    aria-hidden="true"></i></a>
-                                                                        </td>
-                                                                    </tr>
-                                                                </table>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td style="border: none !important;">
-                                                                <table>
-                                                                    <tr>
-                                                                        <td class="col-md-4"
-                                                                            style="padding-top: 0px !important; border: none !important; padding-bottom: 0px !important;">
-                                                                            <label>Configuration Key Value</label>
-                                                                        </td>
-                                                                        <td class="col-md-8"
-                                                                            style="padding-top: 0px !important; border: none !important; padding-bottom: 0px !important;">
-                                                                            <input
-                                                                                    class="form-control"
-                                                                                    id="Configuration Name"
-                                                                                    ng-model="conf.value"
-                                                                            />
-                                                                        </td>
-                                                                        <td class="col-md-2"
-                                                                            style="padding-top: 0px !important; border: none !important; padding-bottom: 0px !important;">
-                                                                            <a style="color: black;"
-                                                                               data-toggle="tooltip"
-                                                                               title="Configuration Key Value"><i
-                                                                                    class="fa fa-question-circle fa-2x"
-                                                                                    aria-hidden="true"></i></a>
-                                                                        </td>
-                                                                    </tr>
-                                                                </table>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td style="border: none !important;padding-left: 20px !important;padding-right: 20px !important;">
-                                                                <label>Description <a style="color: black;"
-                                                                                      data-toggle="tooltip"
-                                                                                      title="Configuration parameter description"><i
-                                                                        class="fa fa-question-circle"
-                                                                        aria-hidden="true"></i></a></label>
-                                                                <textarea ng-disabled="conf.id.length > 0"
-                                                                          style="width:100%; resize:vertical;"
-                                                                          name="Description"
-                                                                          ng-model="conf.description"
-                                                                          id="conf.description"
-                                                                          placeholder="Description"
-                                                                          class="form-control">
+                                            <form id="myForm">
+                                                <tr>
+                                                    <td>
+                                                        <table class="col-md-12">
+                                                            <tr>
+                                                                <br>
+                                                                <td style="padding-top: 0px !important; border: none !important; padding-bottom: 0px !important;">
+                                                                    <table class="col-md-12">
+                                                                        <tr>
+                                                                            <td class="col-md-4"
+                                                                                style="padding-top: 0px !important; border: none !important; padding-bottom: 0px !important;">
+
+
+                                                                                <label>Configuration Key</label>
+                                                                            </td>
+                                                                            <td class="col-md-8"
+                                                                                style="padding-top: 0px !important; border: none !important; padding-bottom: 0px !important;">
+                                                                                <input
+                                                                                        type="text"
+                                                                                        class="form-control"
+                                                                                        id="Configuration Name"
+                                                                                        ng-model="basicConf.confKey"
+                                                                                /></td>
+
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td style="border: none !important;padding: 0px !important;"
+                                                                                colspan="2">
+                                                                                &nbsp;
+                                                                            </td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td class="col-md-4"
+                                                                                style="padding-top: 0px !important; border: none !important; padding-bottom: 0px !important;">
+                                                                                <label>Configuration Key Value</label>
+                                                                            </td>
+                                                                            <td class="col-md-8"
+                                                                                style="padding-top: 0px !important; border: none !important; padding-bottom: 0px !important;">
+                                                                                <input
+                                                                                        class="form-control"
+                                                                                        id="Configuration Name"
+                                                                                        ng-model="basicConf.value"
+                                                                                />
+
+                                                                            </td>
+
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td style="border: none !important;"
+                                                                                colspan="2">
+                                                                                <label>Description </label>
+                                                                                <textarea
+                                                                                        ng-disabled="conf.id.length > 0"
+                                                                                        style="width:100%; resize:vertical;"
+                                                                                        name="Description"
+                                                                                        ng-model="basicConf.description"
+                                                                                        id="basicConf.description"
+                                                                                        placeholder="Description"
+                                                                                        class="form-control">
                                 </textarea>
-                                                                <br ng-hide="conf.id.length > 0">
-                                                                <button class="btn btn-danger"
-                                                                        ng-disabled="conf.id.length > 0"
-                                                                        ng-hide="conf.id.length > 0" type="button"
-                                                                        ng-click="removeConf($index, vnfdname)">
-                                                                    Delete
-                                                                </button>
-                                                            </td>
-                                                        </tr>
-                                                    </table>
-                                                </td>
-                                            </tr>
+                                                                                <br>
+                                                                                <a type="button"
+                                                                                   class="btn btn-primary right"
+                                                                                   ng-click="addConftoLaunchTmp(vnfdname, basicConf)">Add
+                                                                                    Parameter</a>
+                                                                            </td>
+                                                                        </tr>
+                                                                    </table>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td style="border: none !important;padding-left: 20px !important;padding-right: 20px !important;">
+                                                                </td>
+                                                            </tr>
+                                                        </table>
+                                                    </td>
+                                                </tr>
+                                            </form>
                                             </tbody>
                                         </table>
-                                        <!--<table class="table table-bordered table-striped table-hover"-->
-                                        <!--id="vduTabletable">-->
-                                        <!--<tbody>-->
-                                        <!--<tr ng-repeat="conf in launchConfiguration.configurations[vnfdname].configurationParameters track by $index">-->
-                                        <!--<td>-->
-                                        <!--<table class="col-md-12">-->
-                                        <!--<tr>-->
-                                        <!--<td style="border: none !important;">-->
-                                        <!--<input-->
-                                        <!--placeholder="Configuration Key"-->
-                                        <!--ng-disabled="conf.id.length > 0" type="text"-->
-                                        <!--class="form-control"-->
-                                        <!--id="Configuration Name" ng-model="conf.confKey"-->
-                                        <!--/>-->
-                                        <!--</td>-->
-                                        <!--<td style="border: none !important;"><input-->
-                                        <!--placeholder="Configuration Key Value" type="text"-->
-                                        <!--class="form-control" id="Configuration Name"-->
-                                        <!--ng-model="conf.value"-->
-                                        <!--/>-->
-                                        <!--</td>-->
-                                        <!--</tr>-->
-                                        <!--<tr>-->
-                                        <!--<td style="border: none !important;" colspan="2">-->
-                                        <!--<textarea ng-disabled="conf.id.length > 0"-->
-                                        <!--style="width:100%; resize:vertical;"-->
-                                        <!--name="Description"-->
-                                        <!--ng-model="conf.description" id="conf.description"-->
-                                        <!--placeholder="Description"-->
-                                        <!--class="form-control">-->
-                                        <!--</textarea>-->
-                                        <!--<br ng-hide="conf.id.length > 0">-->
-                                        <!--<button class="btn btn-danger"-->
-                                        <!--ng-disabled="conf.id.length > 0"-->
-                                        <!--ng-hide="conf.id.length > 0" type="button"-->
-                                        <!--ng-click="removeConf($index, vnfdname)">-->
-                                        <!--Delete-->
-                                        <!--</button>-->
-                                        <!--</td>-->
-                                        <!--</tr>-->
-                                        <!--</table>-->
-                                        <!--</td>-->
-                                        <!--</tr>-->
-                                        <!--</tbody>-->
-                                        <!--</table>-->
-                                        <a type="button" class="btn btn-primary" ng-click="addConftoLaunch(vnfdname)">Add
-                                            Parameter</a>
                                     </tab>
                                 </tabset>
-                                <!--p>remove
-            Configuration parameters are the dynamic parameters and would be used during lifecycle events
-        </p>
-        <div class="form-group">
-            <div class="form row">
-                <label for="Configuration Element" class="col-sm-4 control-label">Configuration for Element</label>
-
-                <div class="col-sm-6">
-                    <input type="text" class="form-control" id="Configuration Element" ng-model="basicConfiguration.name" />
-                </div>
-            </div>
-            <div class="form row">
-                <label for="Configuration Name" class="col-sm-4 control-label">Configuration name</label>
-
-                <div class="col-sm-6">
-                    <input type="text" class="form-control" id="Configuration Name" ng-model="basicConfiguraiton.config.name" />
-                </div>
-            </div>
-        </div>
-        <div ng-repeat="conf in basicConfiguration.config.configurationParameters track by $index" class="table-responsive">
-            <table class="table table-bordered table-striped table-hover tablesorter" id="vduTabletable">
-                <thead>
-                    <tr>
-                        <th> Configuration key </th>
-                        <th> Configuration value</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td><input type="text" class="form-control" id="Configuration Name" ng-model="conf.confKey"
-                            /></td>
-                        <td><input type="text" class="form-control" id="Configuration Name" ng-model="conf.value"
-                            /></td>
-                    </tr>
-                </tbody>
-            </table>
-            <table class="table table-bordered table-striped table-hover tablesorter" id="vduTabletable">
-
-                <tbody>
-                    <tr>
-                        <td><textarea style="width:100%;" name="Description" ng-model="conf.description" id="conf.description"
-                                title="Here you can put a human readable description" class="form-control">
-                </textarea></td>
-                    </tr>
-                </tbody>
-            </table>
-            <button type="button" class="btn btn-danger" ng-click="removeConf($index)">Remove Parameter</button>
-            </br>
-            </br>
-        </div>
-        <button type="button" class="btn btn-primary" ng-click="addConftoLaunch()">Add Parameter</button-->
-
                             </div>
                         </div>
                         <div class="tab-pane" id="MonitoringIP">
-                            <!--<p> Open Baton interfaces with monitoring systems using a plugin mechanism. The plugin-->
-                                <!--mechanism allows Open Baton to easily use multiple monitoring system </p>-->
                             <br>
+                            <p>Specify the IP of the monitoring server ro which the VNFs should register</p>
+
                             <b>Monitoring IP: &nbsp;</b>
                             <input style="width: 50%;display: inline;" class="form-control" type="text"
                                    ng-change="changeIp(monitoringIp)" ng-model="monitoringIp">
