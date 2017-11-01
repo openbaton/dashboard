@@ -122,7 +122,7 @@
                     </div>
                     <div class="form-group">
                         <div  class="col-sm-4">
-                        <label style="text-align: left;" for="pass" class="control-label">Reenter Password</label>
+                        <label style="text-align: left;" for="pass" class="control-label">Re-enter Password</label>
                         </div>
                         <div class="col-sm-6">
                             <h8 ng-show="!passwordSame">Password are not same</h8>
@@ -131,8 +131,9 @@
                         </div>
                     </div>
                       <div style="margin-bottom: 8px;" class="form-group">
-                        <label for="pass" class="col-sm-4 control-label">Email</label>
-
+                          <div  class="col-sm-4">
+                        <label style="text-align: left;" for="pass" class="control-label">Email</label>
+                          </div>
                         <div class="col-sm-6">
                             <h8 ng-show="!emailValid">Email must be valid</h8>
                             <input ng-style="emailstyle" type="email" title="Passwords must be valid" class="form-control" id="email" name="email"
@@ -327,7 +328,7 @@
                 </div>
               </div>
                 <div class="form-group">
-                  <label for="name" class="col-sm-4 control-label">Reenter Password</label>
+                  <label for="name" class="col-sm-4 control-label">Re-enter Password</label>
 
                   <div class="col-sm-6">
                       <input type="password" ng-style="newPasswordRepeat" title="Passwords must be the same" class="form-control" id="newPassword1" name="newPassword1"
