@@ -140,12 +140,6 @@
                                    ng-model="userObj.email"/>
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label class="col-sm-4 control-label">&nbsp;</label>
-                        <div class="col-sm-6">
-                            <td><input type="checkbox" ng-model="makeAdmin"/>Make Admin</td>
-                        </div>
-                    </div>
                     <!--div class="form-group" ng-repeat="(key,value) in userObj" ng-if="key!=='username' && key!=='password' && key!=='roles'">
                         <label for="{{key}}" class="col-sm-4 control-label">{{key}}</label>
 
@@ -155,12 +149,17 @@
                         </div>
                     </div-->
                     <hr>
-                    <h3>Role <a title="Add a new Role to this service" href="" ng-click="addRole()">
-                        <li class="fa fa-plus-square"></li>
-                    </a></h3>
+                    <h3>Add a new role to the user</h3>
+                    <input type="checkbox" ng-model="makeAdmin"/> Make Admin
+                    <br>
+                    <a ng-hide="makeAdmin" title="Add a new Role to this service" href="" ng-click="addRole()"><li class="fa fa-plus-square"></li> Assign Role
+                    </a>
+                    <br>
+                    &nbsp;
+                    <div ng-hide="makeAdmin">
                     <div class="form-group" ng-repeat="role in userObj.roles track by $index">
 
-                        <label for="action" class="col-sm-2 control-label">Project</label>
+                        <label for="action" class="col-sm-2 control-label row">Project</label>
                         <div class="col-sm-3">
                             <select name="typeSelect" class="form-control modal-select" id="action"
                                     ng-model="userObj.roles[$index].project"
@@ -186,7 +185,7 @@
                         </div>
 
                     </div>
-
+                    </div>
                 </form>
             </div>
             <div class="modal-footer">
