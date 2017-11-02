@@ -1475,7 +1475,7 @@
                                             </h4>
                                         </div>
                                         <div id="addKey" class="panel-collapse collapse">
-                                            <div class="panel-body" ng-controller="keyPairsCtrl">
+                                            <div class="panel-body">
                                                 <form role="form" class="form-horizontal">
                                                     <div class="form-group">
                                                         <label for="keyName" class="col-sm-2 control-label">Key
@@ -1498,8 +1498,14 @@
                                                     </div>
                                                 </form>
                                                 <button type="button" class="btn btn-primary right"
-                                                        ng-click="importKey(keyName, pubKey)">Save
+                                                        ng-click="importKeyInWizard(keyName, pubKey)">Save
                                                 </button>
+                                                <div class="text-success" ng-show = "KeyImportSuccess">
+                                                    <i class="fa fa-check-circle" aria-hidden="true"></i> <strong>Key is generated successfully.</strong>
+                                                </div>
+                                                <div class="text-danger" ng-show = "KeyImportError">
+                                                    <i class="fa fa-times-circle" aria-hidden="true"></i> <strong>key already exists or look into console.</strong>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -1513,7 +1519,7 @@
                                             </h4>
                                         </div>
                                         <div id="createKey" class="panel-collapse collapse">
-                                            <div class="panel-body" ng-controller="keyPairsCtrl">
+                                            <div class="panel-body">
                                                 <form role="form" class="form-horizontal">
 
                                                     <div class="form-group">
@@ -1527,13 +1533,20 @@
                                                         </div>
                                                     </div>
                                                 </form>
-                                                <button class="btn btn-primary right"
-                                                        ng-click="generateKey(generateKeyName)">Generate
+                                                <button   class="btn btn-primary right"
+                                                        ng-click="generateKeyInWizard(generateKeyName)">Generate
                                                 </button>
+                                                <div class="text-success" ng-show = "KeyGenerateSuccess">
+                                                    <i class="fa fa-check-circle" aria-hidden="true"></i> <strong>Key is generated successfully.</strong>
+                                                </div>
+                                                <div class="text-danger" ng-show = "KeyGenerateError">
+                                                    <i class="fa fa-times-circle" aria-hidden="true"></i> <strong>key already exists or look into console.</strong>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
+
                                 <div class="row">
                                     <div class="col-md-6">
                                         <p>

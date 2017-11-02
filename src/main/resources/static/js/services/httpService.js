@@ -114,7 +114,18 @@ angular.module('app')
             });
 
         };
-
+        http.postImportKeys = function (url, data) {
+            customHeaders['Accept'] = 'application/json';
+            customHeaders['Content-type'] = 'application/json';
+            customHeaders['project-id'] = $cookieStore.get('project').id;
+            //console.log(data);
+            return $http({
+                url: url,
+                method: 'POST',
+                data: data,
+                headers: customHeaders
+            });
+        };
         http.post_with_header = function (url, data, ch) {
             ch['project-id'] = $cookieStore.get('project').id;
             var res = {};
@@ -135,6 +146,19 @@ angular.module('app')
             customHeaders['Content-type'] = 'text/plain';
             //console.log(data);
             $('#modalSend').modal('show');
+            return $http({
+                url: url,
+                method: 'POST',
+                data: data,
+                headers: customHeaders
+            });
+
+        };
+        http.postPlainKeyGeneration = function (url, data) {
+            customHeaders['project-id'] = $cookieStore.get('project').id;
+            customHeaders['Accept'] = 'text/plain';
+            customHeaders['Content-type'] = 'text/plain';
+            //console.log(data);
             return $http({
                 url: url,
                 method: 'POST',

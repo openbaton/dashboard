@@ -25,6 +25,7 @@ app.controller('NsdCtrl', function ($scope, $compile, $cookieStore, $routeParams
     var urlVNFD = baseURL + '/vnf-descriptors/';
     var dropzoneUrl = baseURL + '/csar-nsd/';
     var basicConf = {description: "", confKey: "", value: ""};
+    var urlForKeys = $cookieStore.get('URL') + "/api/v1/keys/";
     $scope.selectedVNFD = "";
     $scope.list = {};
     $scope.keys_exp = {};
@@ -1283,4 +1284,54 @@ app.controller('NsdCtrl', function ($scope, $compile, $cookieStore, $routeParams
             console.log($scope.LastTabNSDLaunch);
         });
     });
+    $scope.generateKeyInWizard = function (generateKeyName) {
+        //console.log($scope.projectObj);
+        http.postPlainKeyGeneration(urlForKeys + 'generate', generateKeyName)
+            .success(function (response) {
+                setTimeout(loadTable(), 250);
+                var key = document.createElement("a");
+                key.download = generateKeyName + '.pem';
+                key.href = 'data:application/x-pem-file,' + encodeURIComponent(response);
+                document.body.appendChild(key);
+                key.click()
+                document.body.removeChild(key);
+                delete key;
+                //document.location = 'title: key.pem, data:application/x-pem-file,' +
+                //  encodeURIComponent(response);
+                loadKeys();
+                $scope.KeyGenerateSuccess = false;
+                $scope.KeyGenerateSuccess = $scope.KeyGenerateSuccess ? false : true;
+                $scope.generateKeyName = null;
+            })
+            .error(function (response, status) {
+                $scope.KeyGenerateError = false;
+                $scope.KeyGenerateError = $scope.KeyGenerateError ? false : true;
+                $scope.generateKeyName = null;
+            });
+    };
+    $scope.importKeyInWizard = function (keyName, pubKey) {
+        //console.log($scope.projectObj);
+        newKey = {name: "", publicKey: ""};
+        newKey.name = keyName;
+        newKey.publicKey = pubKey;
+        console.log(newKey);
+        http.postImportKeys(urlForKeys, newKey)
+            .success(function (response) {
+                // setTimeout(loadTable(), 250);
+                keyName = "";
+                pubKey = "";
+                //location.reload();
+                loadKeys();
+                $scope.KeyImportSuccess = false;
+                $scope.KeyImportSuccess = $scope.KeyImportSuccess ? false : true;
+                $scope.keyName = null;
+                $scope.pubKey = null;
+            })
+            .error(function (response, status) {
+                $scope.KeyImportError = false;
+                $scope.KeyImportError = $scope.KeyImportError ? false : true;
+                $scope.keyName = null;
+                $scope.pubKey = null;
+            });
+    };
 });
