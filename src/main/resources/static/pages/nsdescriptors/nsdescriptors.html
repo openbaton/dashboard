@@ -16,7 +16,7 @@
 <div class="col-lg-12">
     <h1>
         Network Service Descriptors
-        <small>List of NSDs</small>
+        <small>Catalogue</small>
     </h1>
     <ol class="breadcrumb">
         <li><a href="#main"><i class="fa fa-dashboard"></i>
@@ -33,14 +33,14 @@
                 title="Delete all the items selected" data-target="#deleteModal" data-toggle="modal">Delete
         </button>
         <div class="btn-group right">
-            <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown"> Add NSD
+            <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown"> On Board NSD
                 <span class="caret"></span></button>
             <ul class="dropdown-menu" role="menu">
                 <li>
-                    <a href="" ng-click="loadVNFD()">Create NSD</a>
-                <li><a href="" ng-click="loadVNFDUploadNSD()">Upload NSD</a>
+                    <a href="" ng-click="loadVNFD()">Compose NSD</a>
+                <li><a href="" ng-click="loadVNFDUploadNSD()">Upload JSON</a>
                 </li>
-                <li><a data-target="#modalFileCSAR" data-toggle="modal">Upload CSAR NSD
+                <li><a data-target="#modalFileCSAR" data-toggle="modal">Upload CSAR
                 </a></li>
             </ul>
         </div>
@@ -580,25 +580,20 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Add a Network Service Descriptor</h4>
+                <h4 class="modal-title">On Board a Network Service Descriptor</h4>
             </div>
             <div class="modal-body">
                 <div class="container" style="width: 100%">
                     <ul class="nav nav-pills tmp nav-stacked col-md-3">
                         <li class="active"><a href="#generalInfo" data-toggle="pill">General Information</a></li>
-                        <li><a href="#VNFDSelection" data-toggle="pill">VNFD in the Catalogue</a></li>
-                        <li><a href="#vldSelection" data-toggle="pill">Virtual Link Descriptor</a></li>
+                        <li><a href="#VNFDSelection" data-toggle="pill">Virtual Network Function(s)</a></li>
+                        <li><a href="#vldSelection" data-toggle="pill">Virtual Links</a></li>
                     </ul>
 
                     <div class="tab-content col-md-9">
 
                         <div class="tab-pane active" id="generalInfo">
-                            Here you can create an NSD via choosing the VNFDs that you have in your database. Choose the
-                            name of the VNFD from the catalogue
-                            and click plus to add to it to the new NSD. All virtual links referenced in the VNFDs must
-                            be
-                            present
-                            in the VLDs.
+                            Compose your Network Service Descriptor choosing VNFDs already present in the Catalogue.
                             <br>
                             <br>
                             <button ng-if="data.serviceContainers.length == 0" class="btn btn-default"
@@ -634,7 +629,7 @@
                         </div>
                         <div class="tab-pane" id="VNFDSelection">
                             <div class="input-group">
-                                <span>VNFD in the Catalogue</span>
+                                <span>VNFDs Catalogue</span>
                                 <select name="typeSelect" class="form-control input-margintop" ng-model="selectedVNFD"
                                         ng-options="vnfd.name for vnfd in vnfdList| orderBy:'itemKey':false">
                                 </select>
@@ -804,7 +799,7 @@
                         </tabset-->
                                 <div class="" ng-if="tmpVnfd.length > 0">
 
-                                    <h3>VNFDs in NSD</h3>
+                                    <h3>VNFDs already selected</h3>
                                     <table class="table table-condensed table-bordered">
                                         <thead>
                                         <tr>
@@ -956,7 +951,7 @@
                             </div>
                         </div>
                         <div class="tab-pane" id="vldSelection">
-                            <span style="margin-bottom: 10px;">Virtual Link Descriptor</span>
+                            <span style="margin-bottom: 10px;">VLDs Catalogue</span>
                             <div class="form-group">
                                 <label style="display: none;" for="vld" class=" control-label"></label>
                                 <div class="form-group input-group">
@@ -1051,7 +1046,7 @@
                         <button type="button" class="btn btn-default" data-dismiss="modal">Close
                         </button>
                         <button type="button" id="storeNSD" ng-click="sendFile(textTopologyJson)"
-                                class="btn btn-primary">Store NSD
+                                class="btn btn-primary">Upload NSD
                         </button>
                     </div>
                 </tab>
@@ -1832,7 +1827,8 @@
                         </div>
                         <div class="tab-pane" id="MonitoringIP">
                             <br>
-                            <p>Specify the IP of the monitoring server to which the VNFs should register</p>
+                            <p>Specify the IP of the monitoring server to which the VNFs should register. Open Baton supports only Zabbix by default.
+                            Please refer to the documentation for understanding how to use a different monitoring system</p>
 
                             <b>Monitoring IP: &nbsp;</b>
                             <input style="width: 50%;display: inline;" class="form-control" type="text"
@@ -1858,7 +1854,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title">Upload a CSAR NSD</h4>
+                <h4 class="modal-title">On Board NSD as CSAR archive</h4>
             </div>
             <div class="modal-body">
                 <form role="form" id="my-dropzone" class="">
@@ -1902,7 +1898,7 @@
                 <button type="button" class="btn btn-default"
                         data-dismiss="modal">Close
                 </button>
-                <button type="button" id="submit-all" class="btn btn-primary">Send All</button>
+                <button type="button" id="submit-all" class="btn btn-primary">Upload All</button>
             </div>
         </div>
     </div>

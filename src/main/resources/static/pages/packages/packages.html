@@ -33,7 +33,7 @@
         </button>
         <button id="btn_create_nsd" href="#" class="btn btn-primary pull-right" ng-style="{'margin-left':'25px'}"
                 title="Upload a new VNF Package" ng-click="createDropzone()" data-toggle="modal"
-                data-target="#modalFile">Upload VNFPackage
+                data-target="#modalFile">Upload VNF Package(s)
         </button>
     </div>
 </div>
@@ -94,12 +94,12 @@
             </div>
             <div class="modal-body">
                 <form role="form" id="my-dropzone" class="">
-                    <td><input type="checkbox" ng-model="csarPackage"/>Use CSAR parser</td>
                     <h4>Drag and drop files below</h4>
 
                     <div class="upload-drop-zone dz-clickable dz-default dz-message" id="drop-zone">
                         Just drag and drop files here
                     </div>
+                    <td><input type="checkbox" ng-model="csarPackage"/>Use CSAR parser</td>
 
                     <div class="table table-striped" class="files" id="previews">
 
