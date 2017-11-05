@@ -1000,19 +1000,23 @@ app.controller('NsdCtrl', function ($scope, $compile, $cookieStore, $routeParams
 
     function showError(data, status) {
         if (status === 500) {
+            if (data.message === undefined || data.message === '')
+                mes = 'An error occured and could not be handled properly, please, report to us and we will fix it as soon as possible';
+            else
+                mes = data.message;
             $scope.alerts.push({
                 type: 'danger',
-                msg: 'An error occured and could not be handled properly, please, report to us and we will fix it as soon as possible'
+                msg: mes
             });
         }
         else if (status === 400) {
-            if (data != undefined) {
+            if (data !== undefined) {
                 $scope.alerts.push({
                     type: 'danger',
                     msg: "Bad request: " + data.message
                 });
             } else {
-                console.log(data)
+                console.log(data);
                 $scope.alerts.push({
                     type: 'danger',
                     msg: "Error while uploading NSD, no message available... sorry :("
