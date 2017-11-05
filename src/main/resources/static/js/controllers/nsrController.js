@@ -300,7 +300,6 @@ var app = angular.module('app').controller('NsrCtrl', function ($scope, $http, $
                     .success(function (response) {
                         showOk('Network Service Descriptors stored!');
                         loadTable();
-
                         //                        window.setTimeout($scope.cleanModal(), 3000);
                     })
                     .error(function (data, status) {
@@ -525,6 +524,7 @@ var app = angular.module('app').controller('NsrCtrl', function ($scope, $http, $
 
     $scope.selection = {};
     $scope.selection.ids = {};
+
     /* -- multiple delete functions END -- */
 
     function showError(data, status) {
@@ -644,21 +644,24 @@ var app = angular.module('app').controller('NsrCtrl', function ($scope, $http, $
         }
         return false;
     };
-    function refreshFn () {
 
-            var promise = $interval($scope.loadTable, 10000);
-            $scope.$on('$destroy',function(){
-                if(promise)
-                    $interval.cancel(promise);
-            });
+    function refreshFn() {
+
+        var promise = $interval($scope.loadTable, 10000);
+        $scope.$on('$destroy', function () {
+            if (promise)
+                $interval.cancel(promise);
+        });
     }
+
     $scope.vnfrjsonname = "";
     $scope.vnfrJSON = "";
     $scope.copyJson = function (vnfr) {
         $scope.vnfrjsonname = vnfr.name;
         $scope.vnfrJSON = vnfr;
         $scope.jsonrendVNFR();
-    }
+    };
+
     $scope.startVNFCI = function (vnfci, vnfr) {
         startObj = {};
         vnfciurl = url + $scope.nsrinfo.id + '/vnfrecords/' + vnfr.id + '/vnfcinstance/' + vnfci.id + '/start';
@@ -688,7 +691,7 @@ var app = angular.module('app').controller('NsrCtrl', function ($scope, $http, $
         var jsonDiv = document.querySelector("#json");
         jsonDiv.childNodes[0].remove();
 
-    }
+    };
     $scope.jsonrend = function () {
         renderjson.set_icons('+', '-');
         renderjson.set_show_to_level(1);
@@ -697,7 +700,7 @@ var app = angular.module('app').controller('NsrCtrl', function ($scope, $http, $
         jsonDiv.append(
             renderjson($scope.nsrJSON)
         );
-    }
+    };
     $scope.jsonrendVNFR = function () {
         renderjson.set_icons('+', '-');
         renderjson.set_show_to_level(1);
@@ -706,7 +709,7 @@ var app = angular.module('app').controller('NsrCtrl', function ($scope, $http, $
         jsonDiv.append(
             renderjson($scope.vnfrJSON)
         );
-    }
+    };
     $('#jsonInfo').on('hidden.bs.modal', function () {
         var jsonDiv = document.querySelector("#json");
         jsonDiv.childNodes[0].remove();
@@ -717,6 +720,7 @@ var app = angular.module('app').controller('NsrCtrl', function ($scope, $http, $
         jsonDiv.childNodes[0].remove();
 
     });
+
     function loadVIMs() {
         var promise = http.get(urlVim)
             .success(function (response) {

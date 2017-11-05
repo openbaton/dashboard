@@ -592,8 +592,12 @@ app.controller('NsdCtrl', function ($scope, $compile, $cookieStore, $routeParams
                 http.post(url, postNSD)
                     .success(function (response) {
                         showOk('Network Service Descriptors stored!');
-                        location.reload();
-                        loadTable();
+                        // location.reload();
+                        setTimeout(function(){
+                            //do what you need here
+                            loadTable();
+                        }, 500);
+
                         //                        window.setTimeout($scope.cleanModal(), 3000);
                     })
                     .error(function (data, status) {
@@ -632,7 +636,10 @@ app.controller('NsdCtrl', function ($scope, $compile, $cookieStore, $routeParams
         http.delete(url + data.id)
             .success(function (response) {
                 showOk('Deleted Network Service Descriptor with id: ' + data.id);
-                loadTable();
+                setTimeout(function(){
+                    //do what you need here
+                    loadTable();
+                }, 500);
             })
             .error(function (data, status) {
                 showError(data, status);
@@ -1026,10 +1033,10 @@ app.controller('NsdCtrl', function ($scope, $compile, $cookieStore, $routeParams
     function showOk(msg) {
 
         $scope.alerts.push({type: 'success', msg: msg});
-        location.reload();
+        // location.reload();
         window.setTimeout(function () {
             for (i = 0; i < $scope.alerts.length; i++) {
-                if ($scope.alerts[i].type == 'success') {
+                if ($scope.alerts[i].type === 'success') {
                     $scope.alerts.splice(i, 1);
 
                 }
