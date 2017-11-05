@@ -1495,11 +1495,13 @@
                                                 <button type="button" class="btn btn-primary right"
                                                         ng-click="importKeyInWizard(keyName, pubKey)">Save
                                                 </button>
-                                                <div class="text-success" ng-show = "KeyImportSuccess">
-                                                    <i class="fa fa-check-circle" aria-hidden="true"></i> <strong>Key is generated successfully.</strong>
+                                                <div class="text-success" ng-show="KeyImportSuccess">
+                                                    <i class="fa fa-check-circle" aria-hidden="true"></i> <strong>Key is
+                                                    generated successfully.</strong>
                                                 </div>
-                                                <div class="text-danger" ng-show = "KeyImportError">
-                                                    <i class="fa fa-times-circle" aria-hidden="true"></i> <strong>key already exists or look into console.</strong>
+                                                <div class="text-danger" ng-show="KeyImportError">
+                                                    <i class="fa fa-times-circle" aria-hidden="true"></i> <strong>key
+                                                    already exists or look into console.</strong>
                                                 </div>
                                             </div>
                                         </div>
@@ -1528,14 +1530,16 @@
                                                         </div>
                                                     </div>
                                                 </form>
-                                                <button   class="btn btn-primary right"
+                                                <button class="btn btn-primary right"
                                                         ng-click="generateKeyInWizard(generateKeyName)">Generate
                                                 </button>
-                                                <div class="text-success" ng-show = "KeyGenerateSuccess">
-                                                    <i class="fa fa-check-circle" aria-hidden="true"></i> <strong>Key is generated successfully.</strong>
+                                                <div class="text-success" ng-show="KeyGenerateSuccess">
+                                                    <i class="fa fa-check-circle" aria-hidden="true"></i> <strong>Key is
+                                                    generated successfully.</strong>
                                                 </div>
-                                                <div class="text-danger" ng-show = "KeyGenerateError">
-                                                    <i class="fa fa-times-circle" aria-hidden="true"></i> <strong>key already exists or look into console.</strong>
+                                                <div class="text-danger" ng-show="KeyGenerateError">
+                                                    <i class="fa fa-times-circle" aria-hidden="true"></i> <strong>key
+                                                    already exists or look into console.</strong>
                                                 </div>
                                             </div>
                                         </div>
@@ -1714,19 +1718,19 @@
                                                                     class="fa fa-question-circle"
                                                                     aria-hidden="true"></i></a>:
                                                         </b>
-                                                      </div>
-                                                        </td>
-                                                        <div>
-                                                        <td class="row"
-                                                            style="padding: 7px !important; border-top: none !important; border-bottom: none !important; border-right: none !important; border-left: none !important; width: 70%;">
+                                                    </div>
+                                                </td>
+                                                <div>
+                                                    <td class="row"
+                                                        style="padding: 7px !important; border-top: none !important; border-bottom: none !important; border-right: none !important; border-left: none !important; width: 70%;">
                                                         <input style="border: 1px solid #ccc; border-radius: 3px; padding: 5px;width: 90%;"
                                                                id="Configuration Name"
                                                                ng-model="conf.value"
                                                         />
-                                                    </div>
-                                                  </td>
-                                                  <td class="row"
-                                                      style="padding: 7px !important; border-top: none !important; border-bottom: none !important; border-right: none !important; border-left: none !important;width: 10%;">
+                                                </div>
+                                                </td>
+                                                <td class="row"
+                                                    style="padding: 7px !important; border-top: none !important; border-bottom: none !important; border-right: none !important; border-left: none !important;width: 10%;">
                                                     <div class="col-md-2">
                                                         <button data-toggle="tooltip" title='Delete'
                                                                 class="btn btn-danger right"
@@ -1827,8 +1831,10 @@
                         </div>
                         <div class="tab-pane" id="MonitoringIP">
                             <br>
-                            <p>Specify the IP of the monitoring server to which the VNFs should register. Open Baton supports only Zabbix by default.
-                            Please refer to the documentation for understanding how to use a different monitoring system</p>
+                            <p>Specify the IP of the monitoring server to which the VNFs should register. Open Baton
+                                supports only Zabbix by default.
+                                Please refer to the documentation for understanding how to use a different monitoring
+                                system</p>
 
                             <b>Monitoring IP: &nbsp;</b>
                             <input style="width: 50%;display: inline;" class="form-control" type="text"

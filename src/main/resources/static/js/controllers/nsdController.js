@@ -523,7 +523,10 @@ app.controller('NsdCtrl', function ($scope, $compile, $cookieStore, $routeParams
         http.post(url, $scope.nsdCreateTmp)
             .success(function (response) {
                 showOk('Network Service Descriptor stored!');
-                loadTable();
+                setTimeout(function(){
+                    //do what you need here
+                    loadTable();
+                }, 500);
             })
             .error(function (data, status) {
                 console.error('STATUS: ' + status + ' DATA: ' + JSON.stringify(data));
