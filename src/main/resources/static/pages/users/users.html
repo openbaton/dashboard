@@ -140,14 +140,6 @@
                                    ng-model="userObj.email"/>
                         </div>
                     </div>
-                    <!--div class="form-group" ng-repeat="(key,value) in userObj" ng-if="key!=='username' && key!=='password' && key!=='roles'">
-                        <label for="{{key}}" class="col-sm-4 control-label">{{key}}</label>
-
-                        <div class="col-sm-6">
-                            <input type="text" class="form-control" id="{{key}}" name="{{key}}"
-                                   ng-model="userObj[key]"/>
-                        </div>
-                    </div-->
                     <hr>
                     <h3>Add a new role to the user</h3>
                     <input type="checkbox" ng-model="makeAdmin"/> Make Admin
@@ -222,32 +214,6 @@
                                    ng-model="userUpdate.email"/>
                         </div>
                     </div>
-                    <!--div class="form-group">
-                        <label for="pass" class="col-sm-4 control-label">New Password</label>
-
-                        <div class="col-sm-6">
-                            <input type="password" class="form-control" id="pass" name="pass"
-                                   ng-model="userUpdate.password"/>
-                        </div>
-                    </div-->
-                    <!--div class="form-group">
-                        <label for="pass" class="col-sm-4 control-label">New password</label>
-
-                        <div class="col-sm-6">
-                            <input type="password" class="form-control" id="pass" name="pass"
-                                   ng-model="newpassword"/>
-                        </div>
-
-                    </div-->
-
-                    <!--div class="form-group" ng-repeat="(key,value) in userUpdate" ng-if="key!=='username' && key!=='password' && key!=='roles'">
-                        <label for="{{key}}" class="col-sm-4 control-label">{{key}}</label>
-
-                        <div class="col-sm-6">
-                            <input type="text" class="form-control" id="{{key}}" name="{{key}}"
-                                   ng-model="userUpdate[key]"/>
-                        </div>
-                    </div-->
                     <hr>
                     <h3>Role <a title="Add a new Role to this user" href="" ng-click="addRoleUpdate()"><li class="fa fa-plus-square"></li></a></h3>
                     <div class="form-group" ng-repeat="role in userUpdate.roles track by $index">

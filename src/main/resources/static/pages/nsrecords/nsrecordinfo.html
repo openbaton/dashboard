@@ -139,13 +139,6 @@
                         </table>
                     </div>
                 </tab>
-                <!--<dd>
-                    <spam ng-repeat="vnfr in nsrinfo.vnfr">
-                        <spam ng-repeat="(k,v) in vnfr"><b>{{k}}</b>: {{v}}
-                            <spam ng-if="!$last">,</spam>
-                        </spam>
-                    </spam>
-                </dd>-->
                 <tab heading="VNF Forward Graph Descriptor" ng-if="nsrinfo.vnffgd.length>0">
                     <div ng-show="nsrinfo.vnffgd>0">
                         <dt>VNF Forward Graph Descriptor:</dt>
@@ -221,12 +214,6 @@
 
 </div>
 </div>
-
-<!--<div class="row">
-    <div class="panel panel-default top-buffer" id="graphContainer"
-         style="min-height: 500px" data-ng-init="Jsplumb()"></div>
-</div>-->
-
 <div class="modal" id="jsonInfo" tabindex="" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -267,7 +254,6 @@
                         <th>Virtual link reference</th>
                         <th>floatingIp</th>
                         <th>Interface ID</th>
-                        <!--th>Delete</th-->
                     </tr>
                     </thead>
                     <tbody>
@@ -277,9 +263,6 @@
                                    ng-model="cp.floatingIp"
                         /></td>
                         <td>{{cp.interfaceId}}</td>
-                        <!--td>
-                            <a href="" ng-click="removeCPtoVNFCI($index)"><span class="fa fa-trash"></span></a>
-                        </td-->
                     </tr>
                     </tbody>
                 </table>

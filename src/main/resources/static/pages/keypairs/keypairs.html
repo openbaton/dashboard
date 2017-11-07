@@ -57,8 +57,6 @@
                 </thead>
                 <tbody>
                 <tr ng-repeat="data in keypairs| filter:search|orderBy:predicate:reverse">
-                    <!--td><input type="checkbox"  ng-disabled="data.name==projectSelected.name"  ng-init="selection.ids[data.id] = false" ng-model="selection.ids[data.id]" name="group" id="{{data.id}}" /></td-->
-                    <!--<td><a href="#projects/{{data.id}}">{{data.id}} </a></td>-->
                     <td>{{data.id}}</td>
                     <td>{{data.fingerprint}}</td>
                     <td>{{data.name}}</td>
@@ -67,9 +65,6 @@
                             <button type="button" class="btn btn-danger pull right"
                                     ng-disabled="data.name==projectSelected.name" ng-click="delete(data)"> Delete
                             </button>
-                            <!--ul class="dropdown-menu" role="menu">
-                                <li ng-if="data.name!==projectSelected.name"><a href="" ng-click="deleteEvent(data)">Delete</a></li>
-                            </ul-->
                         </div>
                     </td>
                 </tr>

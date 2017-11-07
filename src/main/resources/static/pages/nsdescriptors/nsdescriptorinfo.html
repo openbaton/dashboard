@@ -77,28 +77,6 @@
           </div>
         </div>
         <div class="col-lg-12">
-            <!--h2>NSD name: {{nsdinfo.name}}</h2>
-            <a href="#" data-toggle="modal" data-target="#jsonInfo">Show JSON</a>
-            <br/>
-            <a href="#nsdescriptors/{{nsdinfo.id}}/graph">Show Graph</a>
-            <dl class="dl-horizontal">
-                <dt>id:</dt>
-                <dd>{{nsdinfo.id}}</dd>
-                <dt>Vendor:</dt>
-                <dd>{{nsdinfo.vendor}}</dd>
-                <dt>Version:</dt>
-                <dd>{{nsdinfo.version}}</dd>
-                <dt>Enabled:</dt>
-                <dd>{{nsdinfo.enabled}}</dd>
-            </dl-->
-            <!--<dt>Service Deployment Flavor:</dt>
-            <dd ng-repeat="sdf in nsdinfo.service_deployment_flavour">
-                <spam ng-repeat="(k,v) in sdf"><b>{{k}}</b>: {{v}}
-                    <spam ng-if="!$last">,</spam>
-                </spam>
-            </dd>
--->
-
             <tabset>
                 <tab heading="VNF Descriptors" ng-if="nsdinfo.vnfd.length > 0">
                     <div class="table-responsive">
@@ -198,10 +176,6 @@
                                             Action
                                             <span class="caret"></span></button>
                                         <ul class="dropdown-menu" role="menu">
-                                            <!--li><a href="" data-toggle="modal" data-target="#modalAdd"
-                                                   ng-click="launch(nsd)">Launch</a>
-                                            </li-->
-                                            <!--li class="divider"></li-->
                                             <li><a href="" ng-click="deleteVNFDependency(df)">Delete</a></li>
                                         </ul>
                                     </div>
@@ -264,53 +238,6 @@
                                 </div>
                             </div>
                         </tab>
-
-                        <!--tab heading="Configurations">
-                            <div class="row">
-                                <div class="col-lg-12">
-                                    <div ng-if="editObj.configurations===undefined">
-                                        Add a new Configuration <a href="" ng-click="addNewConfig()"><span class="fa fa-plus-square"></span></a>
-                                    </div>
-
-
-                                    <div class="form-group"
-                                         ng-repeat="cp in editObj.configurations.configurationParameters track by $index">
-                                        <div class="col-sm-6 ">
-                                            <label for="confKey" class="control-label">Key</label>
-                                            <div class="input-group">
-                                                <input type="text" class="form-control" id="confKey" name="confKey"
-                                                       ng-model="cp.confKey"/>
-                                                <span class="input-group-btn">
-                                                <button class="btn btn-default" ng-disabled="cp.confKey.length < 1 || cp.value.length < 1" ng-click="addNewConfig()" type="button"
-                                                        title="Add a new configuration">
-                                                    <span class="fa fa-plus" aria-hidden="true"></span>
-                                                </button>
-                                            </span>
-                                            </div>
-
-
-                                        </div>
-                                        <div class="col-sm-6 ">
-
-                                            <label for="value" class="control-label">Value</label>
-                                            <div class="input-group">
-                                                <input type="text" class="form-control" id="value" name="value"
-                                                       ng-model="cp.value"/>
-                                            <span class="input-group-btn">
-                                                <button class="btn btn-default" ng-disabled="editObj.configurations.configurationParameters.length < 2" ng-click="removeConfig($index)" type="button"
-                                                        title="Delete this configuration">
-                                                    <span class="fa fa-trash" aria-hidden="true"></span>
-                                                </button>
-                                            </span>
-                                            </div>
-                                        </div>
-
-                                    </div>
-
-
-                                </div>
-                            </div>
-                        </tab-->
                     </tabset>
                 </form>
             </div>

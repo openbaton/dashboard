@@ -32,9 +32,6 @@
     </div>
 </div>
 <div class="row">
-
-
-    <!--<h4><a href="#/vim-instances/{{vimInstance.id}}/networks" >Networks<i class=""></i></a></h4>-->
     <div class="col-lg-6">
         <h3>Refresh status <a href="" ng-click="refreshDc()"><i id="refreshIco"
                                                                 class="fa fa-refresh"></i>
@@ -69,21 +66,6 @@
                     <td>Key Pair</td>
                     <td>{{vimInstance.keyPair}}</td>
                 </tr>
-                <!--tr>
-                  <td>VIM Key Pair</td><td>{{vimInstance.keyPair}}</td>
-                </tr-->
-                <!--tr>
-                  <td>Password</td><td>  <span ng-show="!showPass">
-                    <dd>********* <a ng-click="showPass=!showPass" href=""><i class="fa fa-eye" title="show password"> </i></a>
-                    </dd>
-                    </span>
-                    <span ng-show="showPass">
-                        <dd>{{vimInstance.password}} <a ng-click="showPass=!showPass" href=""><i class="fa fa-eye-slash"
-                                                                                                 title="hide password"> </i></a>
-                        </dd>
-                    </span>
-                  </td>
-                </tr-->
                 <tr>
                     <td>ID</td>
                     <td>{{vimInstance.id}}</td>
@@ -125,7 +107,6 @@
         <tab heading="Networks">
             <div ng-if="vimInstance.networks.length>0">
                 <h4>Networks</h4>
-                <!--{{vimInstance.networks[0]}}-->
                 <table
                         class="table table-bordered table-striped table-hover tablesorter"
                         id="nsdTabletable">
@@ -173,7 +154,6 @@
         <tab heading="Images">
             <div ng-if="vimInstance.images.length>0">
                 <h4>Images</h4>
-                <!--{{vimInstance.images[0]}}-->
                 <table
                         class="table table-bordered table-striped table-hover tablesorter"
                         id="nsdTabletable">
@@ -221,9 +201,6 @@
                 <table class="table table-bordered table-striped table-hover tablesorter" id="nsdTabletable">
                     <thead>
                     <tr>
-                        <!-- <th class="col-sm-4" ng-click="predicate = 'id'; reverse = !reverse">Id <i
-                                class="fa fa-sort"></i>
-                        </th> -->
                         <th ng-click="predicate = 'flavour_key'; reverse = !reverse">flavour_key <i
                                 class="fa fa-sort"></i></th>
                         <th ng-click="predicate = 'extId'; reverse = !reverse">extId <i class="fa fa-sort"></i></th>
@@ -234,7 +211,6 @@
                     </thead>
                     <tbody>
                     <tr ng-repeat="flavour in vimInstance.flavours| orderBy:predicate:reverse">
-                        <!-- <td>{{flavour.id}}</td> -->
                         <td>{{flavour.flavour_key}}</td>
                         <td>{{flavour.extId}}</td>
                         <td>{{flavour.ram}}</td>

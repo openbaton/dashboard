@@ -94,9 +94,6 @@
 								<td>Requires</td>
 								<td>{{vnfdinfo.requires}}</td>
 							</tr>
-							<!--tr ng-show="vnfdinfo.service_deployment_flavour">
-                      <td>Service Deployment Flavour</td><td>{{vnfdinfo.service_deployment_flavour"}}</td>
-                    </tr-->
 							<tr ng-show="vnfdinfo.vdu_dependency.length > 0">
 								<td>VDU dependency</td>
 								<td>{{vnfdinfo.vdu_dependency}}</td>
@@ -126,54 +123,6 @@
 		<div class="col-lg-12">
 
 			<div>
-				<!--dl class="dl-horizontal">
-                    <dt>name</dt>
-                    <dd>{{vnfdinfo.name}}</dd>
-                    <dt>type</dt>
-                    <dd>{{vnfdinfo.type}}</dd>
-                    <dt>version</dt>
-                    <dd>{{vnfdinfo.version}}</dd>
-                    <dt>vendor</dt>
-                    <dd>{{vnfdinfo.vendor}}</dd>
-                    <span ng-if="vnfdinfo.configurations">
-                        <dt>{{vnfdinfo.configurations.name}}</dt>
-                        <dd>
-                            <pairlist ng-repeat="cp in vnfdinfo.configurations.configurationParameters">
-                                <pair>
-                                    <key><b>{{cp.confKey}}:</b>
-                                        <key>
-                                            <value>{{cp.value}}</value>
-                                </pair>
-                                <span ng-if="!$last">,</span>
-                            </pairlist>
-                        </dd>
-                    </span>
-                    <spam ng-repeat="(k,v) in vnfdinfo" ng-show="v != null"
-                          ng-if="k!='vdu' && k!='deployment_flavour' ">
-
-                        <spam ng-if="k!='requires' && k!='provides' && k!='lifecycle_event'&& k!='name'&& k!='type'&& k!='version'&& k!='vendor' && k!='configurations'  && k!='virtual_link' && k!='vnfPackage'">
-                            <dt>{{k}}</dt>
-                            <dd>{{v}}</dd>
-                        </spam>
-
-                        <spam ng-if="k=='vnfPackage'">
-                            <dt>{{k}}</dt>
-                            <dd>
-                                       <span ng-repeat="(k,v1) in v">
-                                            <b>{{k}}</b>: {{v1}}
-                                           <span ng-if="!$last">,</span>
-                                        </span>
-                            </dd>
-                        </spam>
-                        <spam ng-if="k=='requires' || k=='provides'">
-                            <hr class="hr_title">
-                            <dt>{{k}}</dt>
-                            <dd>{{v}}</dd>
-                            <hr class="hr_title">
-                        </spam>
-
-                    </spam>
-                </dl-->
 				<tabset>
 					<tab heading="Vdu">
 						<div class="table-responsive" ng-show="vnfdinfo.vdu.length > 0">
@@ -199,7 +148,6 @@
 										</td>
 										<td>{{vdu.vm_image | clearText}}</td>
 										<td>{{vdu.vimInstanceName | clearText}}</td>
-										<!--<td>{{vdu.vnfc_instance}}</td>-->
 									</tr>
 								</tbody>
 							</table>

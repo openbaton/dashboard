@@ -170,11 +170,6 @@
                                                ng-model="vnfdCreate.configurations.name"/>
                                     </div>
                                 </div>
-                                <!--<label for="conf_name" class="col-sm-4 control-label">Configuration name</label>-->
-                                <!--<div class="col-sm-6">-->
-                                <!--<input type="text" class="form-control" id="conf_name" name="conf_name"-->
-                                <!--ng-model="vnfdCreate.configurations.name"/>-->
-                                <!--</div>-->
                             </div>
                             <div class="form-group row" style="margin-bottom: 0px;"
                                  ng-repeat="conf in vnfdCreate.configurations.configurationParameters track by $index ">
@@ -263,13 +258,11 @@
                                                 <tbody>
                                                 <tr ng-repeat="vdu in vnfdCreate.vdu track by $index | orderBy:predicate:reverse">
                                                     <td>
-                                                        <!--a href="#nsdescriptors/{{nsdinfo.id}}/vnfdinfoescriptors/{{vnfdinfo.id}}/vdus/{{vdu.id}}">{{vdu.id}}</a-->
                                                         {{vdu.id}}
                                                     </td>
                                                     <td>{{vdu.version}}</td>
                                                     <td>{{vdu.vm_image}}</td>
                                                     <td>{{vdu.vimInstanceName}}</td>
-                                                    <!--<td>{{vdu.vnfc_instance}}</td>-->
                                                     <td>
                                                         <ul ng-repeat="vnfc in vdu.vnfc">
                                                             <li ng-repeat="cp in vnfc.connection_point">
@@ -315,23 +308,10 @@
                                             <input type="text" class="form-control" id="fkey" ng-model="df.flavour_key"/>
                                         </div>
                                     </div>
-                                    <!--div class="row">
-                                        <spam ng-repeat="(key,value) in df" ng-if="!isEmpty(value)">
-                                            <b>{{key}}</b>: {{value}}
-                                            <spam ng-if="!$last"><br/></spam>
-                                        </spam>
-                                        <div class="pull-right">
-                                            <a href="" title="Edit this Deployment Flavour" ng-click="editDF(df,$index)">
-                                                <i class="fa fa-pencil-square"> &nbsp; &nbsp;</i></a>
-                                            <a href="" title="Delete this Deployment Flavour" ng-click="deleteDF($index)">
-                                                <i class="fa fa-trash-o"> </i></a>
-                                        </div>
-                                    </div-->
                                 </div>
                             </div>
                         </div>
                         <div class="tab-pane" id="LifecycleEvents">
-                            <!--   {{vnfdCrate.lifecycle_event}}-->
                             <h4 class="row">
                                 <div class="col-lg-12">
                                     <a title="Add a New Lifecycle Event" href=""
@@ -394,8 +374,6 @@
                                         </div>
                                     </div>
                                 </div>
-                                <!--button type="button" id="addVL" ng-click="addVL()" class="btn btn-primary">Add virtual link
-                                </button-->
                             </div>
                         </div>
                     </div><!-- tab content -->
@@ -471,7 +449,6 @@
                                 <li>{{dfc}} <a href="" ng-click="deleteDFC($index)"><i class="fa fa-trash-o"></i></a>
                                 </li>
                             </ul>
-                            <!--{{depFlavor.costituent_vdu}}-->
                         </tab>
                         <tab heading="df_constraint">
                             <div class="">
@@ -509,7 +486,6 @@
                                 <li>{{c_vdu}} <a href="" ng-click="deleteCVDU($index)"><i class="fa fa-trash-o"></i></a>
                                 </li>
                             </ul>
-                            <!--{{depFlavor.costituent_vdu}}-->
                         </tab>
                     </tabset>
                 </form>
@@ -532,16 +508,6 @@
             </div>
             <div class="modal-body">
                 <form role="form" class="form-horizontal">
-                    <!--div class="form-group" ng-repeat="(key,value) in vduCreate"
-                         ng-if="key!='lifecycle_event' && key!='monitoring_parameter'
-                         && key!='vm_image'&& key!='vnfc' && key!='vimInstanceName'">
-                        <label for="{{key}}" class="col-sm-4 control-label">{{key}}</label>
-
-                        <div class="col-sm-6">
-                            <input type="text" class="form-control" id="{{key}}" name="{{key}}"
-                                   ng-model="vduCreate[key]"/>
-                        </div>
-                    </div-->
                     <div class="form-group">
                         <label for="scale_in_out" class="col-sm-4 control-label">Scale In Out</label>
 
@@ -554,16 +520,11 @@
                         <label for="vimInstanceName" class="col-sm-4 control-label">Vim Instance</label>
 
                         <div class="col-sm-6">
-                            <!--          <select type="text" class="form-control" id="vimInstanceName" name="{{key}}"
-                                             ng-model="vduCreate['vimInstance']['name']"/>-->
                             <select name="typeSelect" class="form-control modal-select"
                                     ng-model="vduCreate.vimInstanceName[0]"
                                     ng-options="vim.name as vim.name for vim in vimInstances | orderBy:'name':false"
                                     ng-change="">
                             </select>
-                            <!--<select name="vimInstanceName" id="vimInstanceName" ng-model="vduCreate['vimInstanceName']">
-                                <option ng-repeat="option in vimInstances" value="{{option.name}}">{{option.name}}</option>
-                            </select>-->
                         </div>
                         <span class="input-group-btn">
                                                 <button title="Clear VIM" class="btn btn-default" type="button"
@@ -654,11 +615,6 @@
                                 </div>
                             </div>
                             <br/>
-                            <!--ul class="col-lg-offset-3" ng-repeat="vmi in vduCreate.vm_image track by $index">
-                                    <li>{{vmi}} <a href="" ng-click="deleteVMI($index)"><i class="fa fa-trash-o"></i></a>
-                                    </li>
-                                </ul-->
-                            <!--{{vduCreate.vm_image}}-->
                         </tab>
                         <tab heading="VNFC">
                             <div class="row" ng-style="{'padding-left':'15px','padding-right':'40px'}">
