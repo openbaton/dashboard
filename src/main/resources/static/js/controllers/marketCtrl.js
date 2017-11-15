@@ -19,7 +19,7 @@ var app = angular.module('app').controller('marketCtrl', function ($scope, servi
 
     var url = $cookieStore.get('URL');
     //var defaultUrl = "lore:8082"
-    var defaultUrl = "marketplace.openbaton.org:8082";
+    var defaultUrl = "marketplace.openbaton.org:8080";
     $scope.defaultUrl = defaultUrl;
     $scope.alerts = [];
 
