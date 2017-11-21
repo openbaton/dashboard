@@ -29,6 +29,8 @@ app.controller('LoginController', function ($scope, AuthService, Session, $rootS
     $scope.URL = '';
     $scope.alerts = [];
     $scope.NFVOVersion = "";
+    // to avoid the order of tables while it refresh in the background
+    $scope.predicate = 'id';
     $scope.oldUrl = localStorage.LastURL;
     $scope.credential = {
         "username": '',

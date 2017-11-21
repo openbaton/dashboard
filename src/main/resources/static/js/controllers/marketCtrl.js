@@ -22,7 +22,6 @@ var app = angular.module('app').controller('marketCtrl', function ($scope, servi
     var defaultUrl = "marketplace.openbaton.org:8080";
     $scope.defaultUrl = defaultUrl;
     $scope.alerts = [];
-
     $scope.marketUrl = null;
     $scope.privatepackages = [];
     $scope.publicpackages = [];
@@ -30,14 +29,12 @@ var app = angular.module('app').controller('marketCtrl', function ($scope, servi
     $scope.csarVNFs = [];
     $scope.csarNSs = [];
     $scope.NFVOversion = '';
-
+    // to avoid the order of tables while it refresh in the background
+    $scope.predicate = 'id';
     loadTablePublic();
     loadTablePublicNSD();
-
     getMarketURL();
     getVersion();
-
-
     function getVersion() {
         http.get(url + '/api/v1/main/version/')
             .success(function (response) {

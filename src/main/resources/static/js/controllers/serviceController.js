@@ -21,6 +21,8 @@ app.controller('ServiceCtrl', function ($scope, $interval, serviceAPI, $routePar
 
 
     $scope.alerts = [];
+    // to avoid the order of tables while it refresh in the background
+    $scope.predicate = 'id';
     $scope.closeAlert = function (index) {
         $scope.alerts.splice(index, 1);
     };

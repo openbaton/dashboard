@@ -19,7 +19,8 @@ angular.module('app').controller('VnfManagerCtrl', function ($scope, $routeParam
     var url = $cookieStore.get('URL') + "/api/v1/vnfmanagers/";
 
     $scope.alerts = [];
-
+    // to avoid the order of tables while it refresh in the background
+    $scope.predicate = 'id';
     //$interval(loadTable, 2000);
     loadTable();
 

@@ -32,6 +32,8 @@ var app = angular.module('app').controller('NsrCtrl', function ($scope, $http, $
     $scope.file = '';
     $scope.alerts = [];
     $scope.lastActions = {};
+    // to avoid the order of tables while it refresh in the background
+    $scope.predicate = 'id';
 
     $scope.getLastHistoryLifecycleEvent = function (vnfs) {
 

@@ -22,6 +22,8 @@ var app = angular.module('app').controller('driverCtrl', function ($scope, servi
     $scope.driversInstalled;
     $scope.installed = [];
     $scope.alerts = [];
+    // to avoid the order of tables while it refresh in the background
+    $scope.predicate = 'id';
     loadTable();
     loadInstalled();
     function loadTable() {

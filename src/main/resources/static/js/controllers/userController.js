@@ -22,7 +22,8 @@ app.controller('UserCtrl', function ($scope, serviceAPI, $routeParams, http, $co
     $scope.passwordSame = false;
     $scope.passwordStrong = false;
     $scope.emailValid = false;
-
+    // to avoid the order of tables while it refresh in the background
+    $scope.predicate = 'id';
     $scope.alerts = [];
     $scope.closeAlert = function (index) {
         $scope.alerts.splice(index, 1);

@@ -50,6 +50,8 @@ app.controller('NsdCtrl', function ($scope, $compile, $cookieStore, $routeParams
     $scope.basicConfiguration = {name: "", config: {name: "", configurationParameters: []}};
     $scope.LastTabNSDLaunch = '';
     $scope.basicConf = {description: "", confKey: "", value: ""};
+    // to avoid the order of tables while it refresh in the background
+    $scope.predicate = 'id';
     loadTable();
     loadKeys();
     loadVIMs();
