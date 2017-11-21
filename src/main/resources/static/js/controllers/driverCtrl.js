@@ -17,15 +17,46 @@
 var app = angular.module('app').controller('driverCtrl', function ($scope, serviceAPI, $routeParams, $http, $cookieStore, AuthService, $window, $interval, http) {
     var url = $cookieStore.get('URL');
     //var defaultUrl = "lore:8082"
-    var defaultUrl = "marketplace.openbaton.org:8082";
+    var defaultUrl = "marketplace.openbaton.org:8080";
+
+
+
+
+    env();
+    function env() {
+        http.get($cookieStore.get('URL') + '/env')
+            .success(function (response) {
+                // console.log(response);
+                marketplaceip = response['applicationConfig: [file:/etc/openbaton/openbaton-nfvo.properties]']['nfvo.marketplace.ip'];
+                 // console.log($scope.marketplaceip);
+                $scope.marketplaceip = marketplaceip;
+
+
+                marketplaceport = response['applicationConfig: [file:/etc/openbaton/openbaton-nfvo.properties]']['nfvo.marketplace.port'];
+
+                $scope.marketplaceport = marketplaceport;
+                console.log($scope.marketplaceport);
+
+
+            })
+            .error(function (response, status) {
+                showError(response, status);
+            });
+    }
+
+
+
+
     $scope.drivers = [];
     $scope.driversInstalled;
     $scope.installed = [];
     $scope.alerts = [];
+
+
+
+
     loadTable();
     loadInstalled();
-
-
     function loadTable() {
         //console.log($routeParams.userId);
         $http.get("http://" + defaultUrl + "/api/v1/vim-drivers")
