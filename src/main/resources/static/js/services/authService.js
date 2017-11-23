@@ -24,23 +24,35 @@ angular.module('app').factory('AuthService', function ($http, Session, $location
     authService.login = function (credentials, URL) {
         console.log(credentials);
         var basic = "Basic " + btoa(clientId + ":" + clientPass);
-        return $http({
-            method: 'POST',
-            url: URL + '/oauth/token',
-            headers: {
-                "Authorization": basic,
-                'Content-Type': 'application/x-www-form-urlencoded'
-            },
-            data: "username=" + credentials.username + "&password=" + credentials.password + "&grant_type=" + credentials.grant_type
-        })
-            .then(function (res) {
-                console.log(res);
-                Session.create(URL, res.data.value, credentials.username, true);
-                $location.path("/main");
-                $window.location.reload();
-                return;
-            });
+        var loginRes = function () {
+            return $http({
+                method: 'POST',
+                url: URL + '/oauth/token',
+                headers: {
+                    "Authorization": basic,
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                data: "username=" + credentials.username + "&password=" + credentials.password + "&grant_type=" + credentials.grant_type
+            })
 
+                .then(function (res) {
+                    console.log(res);
+                    if (res.data.value === undefined) {
+                        _token = res.data.access_token
+                    } else {
+                        _token = res.data.value
+                    }
+
+                    Session.create(URL, _token, credentials.username, true);
+                    $location.path("/main");
+                    $window.location.reload();
+                    $cookieStore.put('redirection', true);
+                    return true;
+                }, function (res) {
+                    return false;
+                });
+        };
+        return {loginRes: loginRes};
     };
 
     authService.loginGuest = function (URL) {
@@ -90,8 +102,9 @@ angular.module('app').factory('AuthService', function ($http, Session, $location
         $cookieStore.put('userName', userName);
         $cookieStore.put('token', token);
         $cookieStore.put('URL', URL);
-        $cookieStore.put('project', {name: 'default', id: ''});
-
+        if (!$cookieStore.get('project')) {
+            $cookieStore.put('project', {name: 'default', id: ''});
+        }
 
 //        console.log($cookieStore.get('token'));
 
@@ -105,7 +118,7 @@ angular.module('app').factory('AuthService', function ($http, Session, $location
         $cookieStore.remove('userName');
         $cookieStore.remove('token');
         $cookieStore.remove('URL');
-        $cookieStore.remove('project');
+        //$cookieStore.remove('project');
     };
     return this;
 });

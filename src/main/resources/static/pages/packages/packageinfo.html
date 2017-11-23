@@ -68,27 +68,6 @@
           </div>
         </div>
         <div class="col-lg-12" ng-show="vnfpackage">
-            <!--h3>VNF Package name: {{vnfpackage.name}}</h3>
-            <a href="#" data-toggle="modal" data-target="#jsonInfo">Show JSON</a>
-
-            <dl class="dl-horizontal">
-        <span class="dl-horizontal" ng-repeat="(key,value) in vnfpackage" ng-if="key !== 'scripts'">
-
-                    <div ng-if="key !== 'image'">
-                        <dt>{{key}}:</dt>
-                        <dd>{{value}}</dd>
-                    </div>
-                    <div ng-if="key === 'image'">
-                        <dt>image:</dt>
-                        <dd><span ng-repeat="(k, v) in value"><b>{{k}}</b>: {{v}}
-                            <span ng-if="!$last">, </span>
-                            </span></dd>
-                    </div>
-                </span>
-
-            </dl-->
-
-
         </div>
         <tabset ng-if="vnfpackage.scripts.length > 0">
             <tab heading="Scripts" ng-if="vnfpackage.scripts.length > 0">
@@ -123,8 +102,6 @@
                                         <li><a href="" data-toggle="modal"
                                                ng-click="editScript(script)">Edit</a>
                                         </li>
-                                        <!--<li class="divider"></li>-->
-                                        <!--<li><a href="" ng-click="deleteScript(script)">Delete</a></li>-->
                                     </ul>
                                 </div>
                             </td>

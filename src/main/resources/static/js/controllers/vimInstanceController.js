@@ -22,7 +22,7 @@ angular.module('app').controller('vimInstanceCtrl', function ($scope, $routePara
     $scope.datacenter = {};
     $scope.file = '';
     $scope.showPass = false;
-    $scope.newvim = { type: "openstack", securityGroups: [] };
+    $scope.newvim = {type: "openstack", securityGroups: []};
     $scope.driversinstalled = [];
     $scope.installed = [];
     var formInput = true;
@@ -34,11 +34,11 @@ angular.module('app').controller('vimInstanceCtrl', function ($scope, $routePara
     $scope.setFormInput = function () {
         formInput = true;
         fileInput = false;
-        
+
     };
     $scope.setFileInput = function () {
         formInput = false;
-        fileInput = true;    
+        fileInput = true;
     };
 
     $scope.changeText = function (text) {
@@ -70,7 +70,7 @@ angular.module('app').controller('vimInstanceCtrl', function ($scope, $routePara
             })
             .error(function (data, status) {
                 console.error('STATUS: ' + status + ' DATA: ' + JSON.stringify(data));
-                showError(status, JSON.stringify(data));
+                showError(JSON.stringify(data), status);
             });
     }
 
@@ -84,14 +84,15 @@ angular.module('app').controller('vimInstanceCtrl', function ($scope, $routePara
     $scope.hoverOut = function () {
         this.hoverEdit = false;
     };
-function checkKey() {
-    if (angular.isUndefined($scope.newvim.keyPair)) {
-        return;
+    function checkKey() {
+        if (angular.isUndefined($scope.newvim.keyPair)) {
+            return;
+        }
+        if ($scope.newvim.keyPair === '') {
+            delete $scope.newvim.keyPair;
+        }
     }
-    if ($scope.newvim.keyPair === '') {
-        delete $scope.newvim.keyPair;
-    }
-}
+
     $scope.setFile = function (element) {
         $scope.$apply(function ($scope) {
 
@@ -122,9 +123,9 @@ function checkKey() {
                 })
                 .error(function (data, status) {
                     if (status === 400)
-                        showError(status, {message:"Something went wrong"});
+                        showError({message: "Something went wrong"}, status);
                     else
-                        showError(status, data);
+                        showError(data, status);
 
                 });
         } else if (fileInput) {
@@ -137,7 +138,7 @@ function checkKey() {
                         loadVIM();
                     })
                     .error(function (data, status) {
-                            showError(status, data);
+                        showError(data, status);
 
                     });
             } else if ($scope.textTopologyJson !== '') {
@@ -149,7 +150,7 @@ function checkKey() {
                         loadVIM();
                     })
                     .error(function (data, status) {
-                        showError(status, data);
+                        showError(data, status);
 
                     });
             }
@@ -159,9 +160,9 @@ function checkKey() {
 
         }
         $('#modalDC').on('hidden.bs.modal', function () {
-        $(this).find("input,textarea,select").val('').end();
+            $(this).find("input,textarea,select").val('').end();
 
-            });
+        });
         $scope.textTopologyJson = '';
         $scope.file = '';
     };
@@ -200,7 +201,7 @@ function checkKey() {
                 $scope.vimInstanceJson = {};
             })
             .error(function (data, status) {
-                showError(status, data);
+                showError(data, status);
             });
 
     };
@@ -233,7 +234,7 @@ function checkKey() {
                 $scope.upDatacenter = data;
             })
             .error(function (data, status) {
-                showError(status, data);
+                showError(data, status);
             });
     };
     $scope.closeAlert = function (index) {
@@ -249,7 +250,7 @@ function checkKey() {
 
             })
             .error(function (data, status) {
-                showError(status, data);
+                showError(data, status);
             });
     };
 
@@ -262,26 +263,65 @@ function checkKey() {
                     $scope.vimInstanceJSON = JSON.stringify(response, undefined, 4);
 
                 }).error(function (data, status) {
-                    showError(status, data);
-                });
+                showError(data, status);
+            });
         else {
             http.get(url)
                 .success(function (response) {
                     $scope.vimInstances = response;
                 })
                 .error(function (data, status) {
-                    showError(status, data);
+                    showError(data, status);
                 });
         }
     }
 
+    $scope.loadVIM = function () {
+        if (!angular.isUndefined($routeParams.vimInstanceId))
+            http.get(url + $routeParams.vimInstanceId)
+                .success(function (response, status) {
+                    console.log(response);
+                    $scope.vimInstance = response;
+                    $scope.vimInstanceJSON = JSON.stringify(response, undefined, 4);
+
+                }).error(function (data, status) {
+                showError(data, status);
+            });
+        else {
+            http.get(url)
+                .success(function (response) {
+                    $scope.vimInstances = response;
+                })
+                .error(function (data, status) {
+                    showError(data, status);
+                });
+        }
+    }
+    var promise = $interval($scope.loadVIM, 10000);
+    $scope.$on('$destroy', function () {
+        if (promise)
+            $interval.cancel(promise);
+    });
+
+    $scope.ActiveVIM = function (status) {
+        if (status === 'ACTIVE') {
+            return true;
+        }
+        return false;
+    };
+    $scope.PendingVIM = function (status) {
+        if (status != 'ACTIVE') {
+            return true;
+        }
+        return false;
+    };
 
     function loadInstalled() {
         http.get(bareUrl + "/api/v1/plugins").success(function (response) {
             $scope.driversinstalled = response;
             response.map(function (pl) {
                 l1 = pl.split(".");
-                $scope.installed.push({ name: l1[2], type: l1[1] });
+                $scope.installed.push({name: l1[2], type: l1[1]});
 
             })
             console.log($scope.installed);
@@ -289,24 +329,24 @@ function checkKey() {
 
         })
             .error(function (data, status) {
-                showError(status, data);
+                showError(data, status);
             });
 
     }
 
 
-    function showError(status, data) {
+    function showError(data, status) {
         if (status === 500) {
             $scope.alerts.push({
-            type: 'danger',
-            msg: 'An error occured and could not be handled properly, please, report to us and we will fix it as soon as possible'
-        });
+                type: 'danger',
+                msg: 'An error occured and could not be handled properly, please, report to us and we will fix it as soon as possible'
+            });
         } else {
-        console.log('Status: ' + status + ' Data: ' + JSON.stringify(data));
-        $scope.alerts.push({
-            type: 'danger',
-            msg:  data.message + " Code: " + status
-        });
+            console.log('Status: ' + status + ' Data: ' + JSON.stringify(data));
+            $scope.alerts.push({
+                type: 'danger',
+                msg: data.message + " Code: " + status
+            });
         }
 
         $('.modal').modal('hide');
@@ -317,7 +357,7 @@ function checkKey() {
     }
 
     function showOk(msg) {
-        $scope.alerts.push({ type: 'success', msg: msg });
+        $scope.alerts.push({type: 'success', msg: msg});
         window.setTimeout(function () {
             for (i = 0; i < $scope.alerts.length; i++) {
                 if ($scope.alerts[i].type == 'success') {
@@ -326,6 +366,33 @@ function checkKey() {
             }
         }, 5000);
         $('.modal').modal('hide');
+    }
+
+    // vim JSON modal Starts
+    $scope.prettyJson = function (vimInstanceJSON) {
+        $scope.vimInstanceJSON = vimInstanceJSON;
+        $scope.jsonrendVIM()
+    }
+    $scope.jsonrendVIM = function () {
+        renderjson.set_icons('+', '-');
+        renderjson.set_show_to_level(1);
+        var jsonDiv = document.querySelector("#json");
+        jsonDiv.append(
+            renderjson($scope.vimInstance)
+        );
+    }
+    $('#jsonInfo').on('hidden.bs.modal', function () {
+        var jsonDiv = document.querySelector("#json");
+        jsonDiv.childNodes[0].remove();
+        jsonDiv.childNodes[0].remove();
+    });
+// vim JSON Starts
+// to Store current page into local storage
+    if (typeof(Storage) !== "undefined") {
+        // Store
+        localStorage.setItem("LastURL", location.href);
+    } else {
+        document.getElementById("result").innerHTML = "Sorry, your browser does not support Web Storage...";
     }
 
 });

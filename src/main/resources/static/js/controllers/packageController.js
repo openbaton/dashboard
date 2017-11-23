@@ -15,7 +15,7 @@
  */
 
 var app = angular.module('app');
-app.controller('PackageCtrl', function ($scope, serviceAPI, $routeParams, http, $cookieStore, AuthService, $interval) {
+app.controller('PackageCtrl', function ($scope, serviceAPI, $routeParams, http, $cookieStore, AuthService, $interval, NgTableParams, $filter) {
 
     var url = $cookieStore.get('URL') + "/api/v1/vnf-packages/";
     var urlTosca = $cookieStore.get('URL') + "/api/v1/csar-vnfd/";
@@ -100,9 +100,20 @@ app.controller('PackageCtrl', function ($scope, serviceAPI, $routeParams, http, 
         $scope.selection.ids = {};
 
     };
-    $scope.$watch('mainCheckbox', function (newValue, oldValue) {
-        //console.log(newValue);
-        //console.log($scope.selection.ids);
+    $scope.main = {checkbox: false};
+
+    $scope.selectAll = function () {
+        var newValue = $scope.main.checkbox;
+        angular.forEach($scope.selection.ids, function (value, k) {
+            /*     console.log(k);
+             console.log(value);*/
+
+            $scope.selection.ids[k] = newValue;
+        });
+    }
+    $scope.$watch('main', function (newValue, oldValue) {
+        console.log(newValue);
+        console.log($scope.selection.ids);
 
 
         angular.forEach($scope.selection.ids, function (value, k) {
@@ -160,12 +171,14 @@ app.controller('PackageCtrl', function ($scope, serviceAPI, $routeParams, http, 
                     $scope.vnfpackageJSON = JSON.stringify(response, undefined, 4);
 
                 }).error(function (data, status) {
-                    showError(data, status);
-                });
+                showError(data, status);
+            });
         else {
             http.get(url)
                 .success(function (response) {
                     $scope.vnfpackages = response;
+                    vnfpackagetable();
+
                 })
                 .error(function (data, status) {
                     showError(data, status);
@@ -194,7 +207,7 @@ app.controller('PackageCtrl', function ($scope, serviceAPI, $routeParams, http, 
     }
 
     function showOk(msg) {
-        $scope.alerts.push({ type: 'success', msg: msg });
+        $scope.alerts.push({type: 'success', msg: msg});
         window.setTimeout(function () {
             for (i = 0; i < $scope.alerts.length; i++) {
                 if ($scope.alerts[i].type == 'success') {
@@ -217,7 +230,7 @@ app.controller('PackageCtrl', function ($scope, serviceAPI, $routeParams, http, 
             var header = {};
 
             if ($cookieStore.get('token') !== '')
-                header = { 'Authorization': 'Bearer ' + $cookieStore.get('token') };
+                header = {'Authorization': 'Bearer ' + $cookieStore.get('token')};
 
             header['project-id'] = $cookieStore.get('project').id;
             myDropzone = new Dropzone('#my-dropzone', {
@@ -229,7 +242,7 @@ app.controller('PackageCtrl', function ($scope, serviceAPI, $routeParams, http, 
                 previewsContainer: "#previews", // Define the container to display the previews
                 headers: header,
                 init: function () {
-                   
+
                     var submitButton = document.querySelector("#submit-all");
                     myDropzone = this; // closure
                     myDropzone.removeAllFiles(true);
@@ -242,16 +255,16 @@ app.controller('PackageCtrl', function ($scope, serviceAPI, $routeParams, http, 
                     this.on("success", function (file, responseText) {
                         $scope.$apply(function ($scope) {
                             showOk("Uploaded the VNF Package");
-                           
+
                             loadTable();
-                            
+
                         });
 
                     });
                     this.on("error", function (file, responseText) {
                         if (responseText === "Server responded with 500 code.") {
                             $scope.$apply(function ($scope) {
-                                showError({ message: "error" }, 500);
+                                showError({message: "error"}, 500);
                             });
                         } else {
                             console.log(responseText);
@@ -259,12 +272,10 @@ app.controller('PackageCtrl', function ($scope, serviceAPI, $routeParams, http, 
                                 showError(responseText, responseText.code);
                             });
                         }
-                       
-                        });
+
+                    });
                 }
             });
-
-
 
 
             // Update the total progress bar
@@ -282,7 +293,7 @@ app.controller('PackageCtrl', function ($scope, serviceAPI, $routeParams, http, 
             // Hide the total progress bar when nothing's uploading anymore
             myDropzone.on("queuecomplete", function (progress) {
                 $('.progress .bar:first').opacity = "0";
-                   myDropzone.removeAllFiles(true);
+                myDropzone.removeAllFiles(true);
             });
 
 
@@ -292,6 +303,28 @@ app.controller('PackageCtrl', function ($scope, serviceAPI, $routeParams, http, 
         }
 
     });
+    function vnfpackagetable() {
+        var paginationpkg = []
+        $scope.tableParamspaginationpkg = new NgTableParams({
+                page: 1,
+                count: 10,
+                sorting: {
+                    name: 'asc'     // initial sorting
+                },
+                filter: {name: ""},
+            },
+            {
+                counts: [],
+                dataset: $scope.vnfpackages
+            });
 
+    }
 
+// to Store current page into local storage
+    if (typeof(Storage) !== "undefined") {
+        // Store
+        localStorage.setItem("LastURL", location.href);
+    } else {
+        document.getElementById("result").innerHTML = "Sorry, your browser does not support Web Storage...";
+    }
 });

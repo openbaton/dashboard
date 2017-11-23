@@ -17,6 +17,7 @@
 require({
     baseUrl: 'js',
     paths: {
+        renderjson: "libs/renderjson",
         jquery: 'libs/jquery/jquery.min',
         jquery_ui: 'libs/jquery/jquery-ui.min',
         bootstrapJS: "../bower_components/bootstrap/dist/js/bootstrap.min",
@@ -44,6 +45,7 @@ require({
         topologyServices: "services/topologyServices",
         packageController: "controllers/packageController",
         eventController: "controllers/eventController",
+        serviceController: "controllers/serviceController",
         projectController: "controllers/projectController",
         userController: "controllers/userController",
         vimInstanceController: "controllers/vimInstanceController",
@@ -129,7 +131,7 @@ require({
             deps: ['app']
         },
         nsdController: {
-            deps: ['app', 'servicesServices', 'httpService', 'underscore', 'angular_cookies','topologyServices', 'authService','underscore']
+            deps: ['app', 'servicesServices', 'httpService', 'underscore', 'angular_cookies','topologyServices', 'authService','underscore', 'renderjson']
         },
         nsrController: {
             deps: ['app', 'servicesServices', 'httpService', 'underscore', 'topologyServices', 'angular_cookies', 'bootstrapSwitch','authService','underscore']
@@ -150,6 +152,9 @@ require({
             deps: ['app', 'servicesServices', 'httpService', 'angular_cookies','authService','dropzone']
         },
         eventController: {
+            deps: ['app', 'servicesServices', 'httpService', 'angular_cookies','authService']
+        },
+        serviceController: {
             deps: ['app', 'servicesServices', 'httpService', 'angular_cookies','authService']
         },
         projectController: {
@@ -200,6 +205,7 @@ require({
     'vnfmanagerController',
     'packageController',
     'eventController',
+    'serviceController',
     'projectController',
     'userController',
     'nsrController',

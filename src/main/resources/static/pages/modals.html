@@ -60,16 +60,6 @@
             </div>
             <div class="modal-body">
                 <form role="form" class="form-horizontal">
-                    <!--div class="form-group" ng-repeat="(key,value) in vduCreate"
-                         ng-if="key!='vimInstance' && key!='lifecycle_event' && key!='monitoring_parameter'
-                         && key!='vm_image'&& key!='vnfc'">
-                        <label for="{{key}}" class="col-sm-4 control-label">{{key}}</label>
-
-                        <div class="col-sm-6">
-                            <input type="text" class="form-control" id="{{key}}" name="{{key}}"
-                                   ng-model="vduCreate[key]"/>
-                        </div>
-                    </div-->
                     <div class="form-group">
                         <label for="scale_in_out" class="col-sm-4 control-label">Scale In Out</label>
 
@@ -143,7 +133,6 @@
                                 ng-repeat="mp in vduCreate.monitoring_parameter track by $index">
                                 <li>{{mp}} <a href="" ng-click="deleteMP($index)"><i class="fa fa-trash-o"></i></a></li>
                             </ul>
-                            <!--{{vduCreate.monitoring_parameter}}-->
                         </tab>
                         <tab heading="VM Image">
                             <div class="">
@@ -185,7 +174,6 @@
                                 <li>{{vmi}} <a href="" ng-click="deleteVMI($index)"><i class="fa fa-trash-o"></i></a>
                                 </li>
                             </ul>
-                            <!--{{vduCreate.vm_image}}-->
                         </tab>
                         <tab heading="vnfc" ng-show="showTab(vduCreate.vnfc.length)">
                             {{vduCreate.vnfc}}
@@ -267,8 +255,6 @@
                                 <li>{{dfc}} <a href="" ng-click="deleteDFC($index)"><i class="fa fa-trash-o"></i></a>
                                 </li>
                             </ul>
-                            <!--{{depFlavor.costituent_vdu}}-->
-
                         </tab>
                         <tab heading="df_constraint">
                             <div class="">
@@ -310,7 +296,6 @@
                                 <li>{{c_vdu}} <a href="" ng-click="deleteCVDU($index)"><i class="fa fa-trash-o"></i></a>
                                 </li>
                             </ul>
-                            <!--{{depFlavor.costituent_vdu}}-->
                         </tab>
                     </tabset>
                 </form>
@@ -401,7 +386,6 @@
                                 <li>{{mp}} <a href="" ng-click="deleteMPfromVNFD($index)"><i class="fa fa-trash-o"></i></a>
                                 </li>
                             </ul>
-                            <!--{{vnfdCreate.monitoring_parameter}}-->
                         </tab>
                         <!---->
                         <tab class="" heading="vdu">
@@ -472,7 +456,6 @@
                                     <hr class="hr_title"/>
                                 </div>
                             </div>
-                            <!--{{vnfdCreate.deployment_flavour}}-->
                         </tab>
                         <tab class="" heading="lifecycle_event" ng-show="showTab(vnfdCreate.lifecycle_event.length)">
                             {{vnfdCreate.lifecycle_event}}
@@ -481,7 +464,6 @@
                             {{vnfdCreate.virtual_link}}
                         </tab>
                     </tabset>
-                    <!--{{vnfdCreate}}-->
                 </form>
 
             </div>
@@ -575,7 +557,6 @@
                                 <li>{{mp}} <a href="" ng-click="deleteMPfromNSD($index)"><i
                                         class="fa fa-trash-o"></i></a></li>
                             </ul>
-                            <!--{{nsdCreate.monitoring_parameter}}-->
                         </tab>
                         <tab heading="pnfd" ng-show="showTab(nsdCreate.pnfd.length)">
                             {{nsdCreate.pnfd}}
@@ -608,7 +589,6 @@
                                         href="" ng-click="deleteVNFDep($index)"><i
                                         class="fa fa-trash-o"></i></a></li>
                             </ul>
-                            <!--{{nsdCreate.vnf_dependency}}-->
                         </tab>
 
                         <tab heading="vnffgd" ng-show="showTab(nsdCreate.vnffgd.length)">

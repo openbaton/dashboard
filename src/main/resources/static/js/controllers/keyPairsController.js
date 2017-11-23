@@ -20,7 +20,6 @@ var app = angular.module('app').controller('keyPairsCtrl', function ($scope, ser
     var urlprojects = $cookieStore.get('URL') + "/api/v1/projects/";
     $scope.keypairs = "";
     $scope.alerts = [];
-
     loadTable();
     function loadTable() {
 
@@ -58,7 +57,7 @@ var app = angular.module('app').controller('keyPairsCtrl', function ($scope, ser
                 //location.reload();
             })
             .error(function (response, status) {
-                showError(status, response);
+                showError(response, status);
             });
     };
     $scope.delete = function (data) {
@@ -69,7 +68,7 @@ var app = angular.module('app').controller('keyPairsCtrl', function ($scope, ser
 
             })
             .error(function (response, status) {
-                showError(status, response);
+                showError(response, status);
             });
     };
     $scope.generateKey = function (generateKeyName) {
@@ -91,22 +90,22 @@ var app = angular.module('app').controller('keyPairsCtrl', function ($scope, ser
                 //location.reload();
             })
             .error(function (response, status) {
-                showError(status, response);
+                showError(response, status);
             });
     };
 
-    function showError(status, data) {
+    function showError(data, status) {
         if (status === 500) {
             $scope.alerts.push({
-            type: 'danger',
-            msg: 'An error occured and could not be handled properly, please, report to us and we will fix it as soon as possible'
-        });
+                type: 'danger',
+                msg: 'An error occured and could not be handled properly, please, report to us and we will fix it as soon as possible'
+            });
         } else {
-        console.log('Status: ' + status + ' Data: ' + JSON.stringify(data));
-        $scope.alerts.push({
-            type: 'danger',
-            msg:  data.message + " Code: " + status
-        });
+            console.log('Status: ' + status + ' Data: ' + JSON.stringify(data));
+            $scope.alerts.push({
+                type: 'danger',
+                msg: data.message + " Code: " + status
+            });
         }
 
         $('.modal').modal('hide');
@@ -121,4 +120,14 @@ var app = angular.module('app').controller('keyPairsCtrl', function ($scope, ser
         loadTable();
         $('.modal').modal('hide');
     }
+
+    // to Store current page into local storage
+    if (typeof(Storage) !== "undefined") {
+        // Store
+        localStorage.setItem("LastURL", location.href);
+    } else {
+        document.getElementById("result").innerHTML = "Sorry, your browser does not support Web Storage...";
+    }
+
+
 });

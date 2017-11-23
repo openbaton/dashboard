@@ -161,7 +161,6 @@
                                 <tr>
                                   <th>ID</th>
                                   <th>Version</th>
-                                  <!--th>Connection Point</th-->
                                   <th>Virtual Link Reference</th>
                                   <th>Floating IP</th>
                                 </tr>
@@ -170,7 +169,6 @@
                                 <tr ng-repeat="n in vdu.vnfc track by $index">
                                 <td>{{n.id}}</td>
                                 <td>{{n.version}}</td>
-                                <!--td>{{n.connection_point}}</td-->
                                 <td>{{n.connection_point[0].virtual_link_reference}}</td>
                                 <td>{{n.connection_point[0].floatingIp}}</td>
                                 </tr>
@@ -290,58 +288,6 @@
                       </tab>
                     </tabset>
                   </div>
-
-                <!--dl class="dl-horizontal">
-                    <spam ng-repeat="(k,v) in vdu"
-                          ng-if="k!='vimInstance' && k!='vnfc' && k!='fault_management_policy'&& k!='monitoring_parameter' && k!='vnfc_instance'">
-                        <dt>{{k}}</dt>
-                        <dd>{{v}}</dd>
-                    </spam>
-                    <spam ng-if="vdu.fault_management_policy.length>0">
-                        <dt>fault_management_policy</dt>
-                        <dd ng-repeat="fmp in vdu.fault_management_policy">
-                            <b>name:</b> {{fmp.name}}, <b>period:</b> {{fmp.period}}, <b>severety:</b> {{fmp.severety}}
-                            <span ng-if="fmp.criteria.length>0">
-                                <b>critertia:</b>
-                                 <span ng-repeat="c in fmp.criteria">
-                            {{c.parameter_ref}} {{c.comparison_operator}} {{c.threshold}}, function: {{c.function}}, vnfc_selector: {{c.vnfc_selector}}
-
-                            </span>
-                            </span>
-                        </dd>
-                    </spam>
-                    <spam ng-if="vdu.monitoring_parameter.length>0">
-                        <dt>monitoring_parameter</dt>
-                        <dd>
-                            <span ng-repeat="mp in vdu.monitoring_parameter">{{mp}}<span ng-if="!$last">,</span> </span>
-                        </dd>
-                    </spam>
-                    <spam ng-if="vdu.vnfc.length>0">
-                        <dt>vnfc</dt>
-                        <spam ng-repeat="vnfc in vdu.vnfc">
-                            <dd ng-repeat="cp in vnfc.connection_point">
-                                virtual_link_reference: {{cp.virtual_link_reference}}
-                                floatingIp: {{cp.floatingIp}}
-                            </dd>
-                        </spam>
-                    </spam>
-                    <spam ng-if="vdu.vnfc.vnfc_instance">
-                        <dt>vnfc_instances</dt>
-                        <span ng-repeat="vnfc_instance in vdu.vnfc_instance">
-                            <p>{{}}</p>
-                        <dd ng-repeat="cp in vnfc_instance.connection_point">
-                            virtual_link_reference: {{cp.virtual_link_reference}}
-                            floatingIp: {{cp.floatingIp}}
-                            <span ng-if="!$last">,</span>
-                        </dd>
-                        </span>
-                    </spam>
-                         <span ng-if="vdu.vimInstance">
-                                 <dt>vimInstance</dt>
-                                 <dd><a href="#vim-instances/{{vdu.vimInstance.id}}">{{vdu.vimInstance.name}}</a></dd>
-                         </span>
-                </dl-->
-
             </div>
         </div>
 

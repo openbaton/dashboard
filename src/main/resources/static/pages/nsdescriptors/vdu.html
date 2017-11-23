@@ -148,7 +148,6 @@
                                       <tr>
                                         <th>ID</th>
                                         <th>Version</th>
-                                        <!--th>Connection Point</th-->
                                         <th>Virtual Link Reference</th>
                                         <th>Floating IP</th>
                                       </tr>
@@ -157,7 +156,6 @@
                                       <tr ng-repeat="n in vdu.vnfc track by $index">
                                       <td>{{n.id}}</td>
                                       <td>{{n.version}}</td>
-                                      <!--td>{{n.connection_point}}</td-->
                                       <td>{{n.connection_point[0].virtual_link_reference}}</td>
                                       <td>{{n.connection_point[0].floatingIp}}</td>
                                       </tr>
@@ -213,28 +211,6 @@
                             </tab>
                           </tabset>
                         </div>
-
-
-
-                        <!--dl class="dl-horizontal">
-                            <spam ng-repeat="(k,v) in vdu" ng-if="k!='vimInstance' && k!='vnfc_instance' && k!= vnfc">
-                                <dt>{{k}}</dt>
-                                <dd>{{v}}</dd>
-                            </spam>
-                         <span ng-if="vdu.vimInstance">
-                                 <dt>vimInstance</dt>
-                                 <dd><a href="#vim-instances/{{vdu.vimInstance.id}}">{{vdu.vimInstance.name}}</a></dd>
-                         </span>
-                            <spam ng-if="vdu.vnfc.length>0">
-                                <dt>vnfc</dt>
-                                <spam ng-repeat="vnfc in vdu.vnfc">
-                                    <dd ng-repeat="cp in vnfc.connection_point">
-                                        virtual_link_reference: {{cp.virtual_link_reference}}
-                                        floatingIp: {{cp.floatingIp}}
-                                    </dd>
-                                </spam>
-                            </spam>
-                        </dl-->
                         <tabset ng-if="vdu.vnfc_instance.length > 0">
                             <tab heading="VNFC Instance">
                                 <div class="table-responsive">
@@ -261,7 +237,6 @@
                                         </thead>
                                         <tbody>
                                         <tr ng-repeat="vnfci in vdu.vnfc_instance | orderBy:predicate:reverse">
-                                            <!--<td><a href="#nsrecords/{{nsrinfo.id}}/vnfdependencies/{{df.id}}" ng-click="showData(nsd)">{{df.id}}</a></td>-->
                                             <td>{{vnfci.hostname}}</td>
                                             <td>{{vnfci.version}}</td>
                                             <td>

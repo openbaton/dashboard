@@ -33,7 +33,7 @@
         </button>
         <button id="btn_create_nsd" href="#" class="btn btn-primary pull-right" ng-style="{'margin-left':'25px'}"
                 title="Upload a new VNF Package" ng-click="createDropzone()" data-toggle="modal"
-                data-target="#modalFile">Upload VNFPackage
+                data-target="#modalFile">Upload VNF Package(s)
         </button>
     </div>
 </div>
@@ -44,11 +44,10 @@
         </alert>
         <div class="table-responsive" ng-show="vnfpackages.length>0">
 
-            <table
-                    class="table table-bordered table-striped table-hover tablesorter">
+            <table ng-table="tableParamspaginationpkg" class="table table-bordered table-striped table-hover tablesorter">
                 <thead>
                 <tr>
-                    <td><input type="checkbox" ng-change="selectAll()" ng-model="mainCheckbox"></td>
+                    <td><input type="checkbox" ng-change="selectAll()" ng-model="main.checkbox"></td>
                     <th ng-click="predicate = 'id'; reverse = !reverse">Id <i class="fa fa-sort"></i></th>
                     <th ng-click="predicate = 'name'; reverse = !reverse">Name <i class="fa fa-sort"></i></th>
                     <th ng-click="predicate = 'version'; reverse = !reverse">Version <i class="fa fa-sort"></i></th>
@@ -57,7 +56,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr ng-repeat="data in vnfpackages| filter:search|orderBy:predicate:reverse">
+                <tr ng-repeat="data in $data | orderBy:predicate:reverse">
                     <td><input type="checkbox" ng-init="selection.ids[data.id] = false" ng-model="selection.ids[data.id]" name="group" id="{{data.id}}" /></td>
                     <td><a href="#packages/{{data.id}}">{{data.id}} </a></td>
                     <td>{{data.name}}</td>
@@ -95,12 +94,12 @@
             </div>
             <div class="modal-body">
                 <form role="form" id="my-dropzone" class="">
-                    <td><input type="checkbox" ng-model="csarPackage"/>Use CSAR parser</td>
                     <h4>Drag and drop files below</h4>
 
                     <div class="upload-drop-zone dz-clickable dz-default dz-message" id="drop-zone">
                         Just drag and drop files here
                     </div>
+                    <td><input type="checkbox" ng-model="csarPackage"/>Use CSAR parser</td>
 
                     <div class="table table-striped" class="files" id="previews">
 

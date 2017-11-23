@@ -15,11 +15,11 @@
  */
 
 var app = angular.module('app');
-app.controller('ProjectCtrl', function ($scope, serviceAPI, $routeParams, http, $cookieStore, AuthService, $window, $interval, $rootScope) {
+app.controller('ServiceCtrl', function ($scope, $interval, serviceAPI, $routeParams, http, $cookieStore, AuthService, $http) {
 
-    var url = $cookieStore.get('URL') + "/api/v1/projects/";
-    $scope.adminRole = "ADMIN";
-    $scope.superProject = "*";
+    var url = $cookieStore.get('URL') + "/api/v1/components/services/";
+
+
     $scope.alerts = [];
     $scope.closeAlert = function (index) {
         $scope.alerts.splice(index, 1);
@@ -27,23 +27,13 @@ app.controller('ProjectCtrl', function ($scope, serviceAPI, $routeParams, http, 
 
     loadTable();
 
-    $scope.projectObj = {
+
+    $scope.serviceObj = {
         'name': '',
-        'description': ''
+        'roles': []
     };
-    console.log("")
+
     /* -- multiple delete functions Start -- */
-    $scope.admin = function () {
-        //console.log($scope.userLogged);
-        if (typeof $scope.userLogged != 'undefined') {
-            if ($scope.userLogged.roles[0].project === $scope.superProject && $scope.userLogged.roles[0].role === $scope.adminRole) {
-                return true;
-            } else {
-                return false;
-            }
-        }
-        return false;
-    };
 
     $scope.multipleDeleteReq = function () {
         var ids = [];
@@ -55,7 +45,7 @@ app.controller('ProjectCtrl', function ($scope, serviceAPI, $routeParams, http, 
         //console.log(ids);
         http.post(url + 'multipledelete', ids)
             .success(function (response) {
-                showOk('Project: ' + ids.toString() + ' deleted.');
+                showOk('Service: ' + ids.toString() + ' deleted.');
                 loadTable();
             })
             .error(function (response, status) {
@@ -68,13 +58,11 @@ app.controller('ProjectCtrl', function ($scope, serviceAPI, $routeParams, http, 
     };
 
     $scope.main = {checkbox: false};
+
     $scope.$watch('main', function (newValue, oldValue) {
         ////console.log(newValue.checkbox);
         ////console.log($scope.selection.ids);
         angular.forEach($scope.selection.ids, function (value, k) {
-            if (k === $scope.defaultID) {
-                return;
-            }
             $scope.selection.ids[k] = newValue.checkbox;
         });
         //console.log($scope.selection.ids);
@@ -105,12 +93,12 @@ app.controller('ProjectCtrl', function ($scope, serviceAPI, $routeParams, http, 
     $scope.selection.ids = {};
     /* -- multiple delete functions END -- */
 
-
     $scope.types = ['REST', 'RABBIT'];
-    $scope.deleteEvent = function (data) {
+
+    $scope.deleteService = function (data) {
         http.delete(url + data.id)
             .success(function (response) {
-                showOk('Project: ' + data.name + ' is being deleted.');
+                showOk('Service: ' + data.name + ' deleted.');
                 loadTable();
             })
             .error(function (response, status) {
@@ -124,69 +112,81 @@ app.controller('ProjectCtrl', function ($scope, serviceAPI, $routeParams, http, 
 
 
     $scope.save = function () {
-        //console.log($scope.projectObj);
-        http.post(url, $scope.projectObj)
+        console.log("" + $scope.serviceObj);
+        var customHeader = {};
+        customHeader['Content-type'] = 'application/json';
+        customHeader['Accept'] = 'application/octet-stream';
+        http.post_with_header(url + "/create", $scope.serviceObj, customHeader)
             .success(function (response) {
-                showOk('Project: ' + $scope.projectObj.name + ' saved.');
+                var rc = document.createElement("a");
+                rc.download = $scope.serviceObj.name + '.txt';
+                rc.href = 'data:application/x-shellscript,' + encodeURIComponent(response);
+                document.body.appendChild(rc);
+                rc.click();
+                document.body.removeChild(rc);
+                showOk('Service: ' + $scope.serviceObj.name + ' saved.');
                 loadTable();
-                $scope.projectObj = {
-                    'name': '',
-                    'description': ''
-                };
-                //location.reload();
             })
             .error(function (response, status) {
                 showError(response, status);
             });
+
+        // var url2 = "" + url + "/create";
+        // console.log(url2)
+        //
+        // $('#modalSend').modal('show');
+        // $http({
+        //     url: url2,
+        //     method: 'POST',
+        //     data: $scope.serviceObj,
+        //     headers: {
+        //         'Content-type': 'application/json',
+        //         'Accept': "application/octet-stream"
+        //     }
+        // }).success(function (data, status, headers, config) {
+        //     console.log(data);
+        //     console.log(status);
+        //     console.log(headers);
+        //     console.log(config);
+        //     var rc = document.createElement("a");
+        //     rc.download = "openbaton" + '.rc';
+        //     rc.href = 'data:application/x-shellscript,' + encodeURIComponent(response);
+        //     document.body.appendChild(rc);
+        //     rc.click();
+        //     document.body.removeChild(rc);
+        // })
     };
-    $scope.defaultID = "";
+
     function loadTable() {
-        http.get(url)
-            .success(function (response) {
-                $scope.projects = response;
-                //console.log(response);
-                for (i = 0; i < $scope.projects.length; i++) {
-                    if ($scope.projects[i].name === 'default') {
-                        $scope.defaultID = $scope.projects[i].id;
-                    }
-                }
-                changeProject();
-                //console.log($scope.defaultID);
-            })
-            .error(function (data, status) {
-                showError(data, status);
-            });
-    }
+        if (!angular.isUndefined($routeParams.serviceId))
+            http.get(url + $routeParams.serviceId)
+                .success(function (response, status) {
+                    //console.log(response);
+                    $scope.service = response;
+                    $scope.serviceJSON = JSON.stringify(response, undefined, 4);
 
-    function changeProject() {
-        if (arguments.length === 0) {
-            http.syncGet(url)
-                .then(function (response) {
-                    if (response === 401) {
-                        console.log(status + ' Status unauthorized')
-                        AuthService.logout();
-                    }
-                    if (angular.isUndefined($cookieStore.get('project')) || $cookieStore.get('project').id == '') {
-                        $rootScope.projectSelected = response[0];
-                        $cookieStore.put('project', response[0]);
-                        localStorage.setItem("LastProject", JSON.stringify(response[0]));
-                    } else {
-                        $rootScope.projectSelected = $cookieStore.get('project');
-                    }
-                    $rootScope.projects = response;
                 })
-
-        }
+                .error(function (data, status) {
+                    showError(data, status);
+                });
         else {
-            $rootScope.projectSelected = project;
-            console.log(project);
-            $cookieStore.put('project', project);
-            localStorage.setItem("LastProject", JSON.stringify(project));
-            $window.location.reload();
+            http.get(url)
+                .success(function (response) {
+                    $scope.services = response;
+                    //console.log(response);
+                })
+                .error(function (data, status) {
+                    showError(data, status);
+                });
         }
 
-
-    };
+        if ($scope.projectChoice === undefined) {
+            $scope.projectChoice = [];
+            $scope.projectChoice = $scope.projects;
+            if ($scope.projectChoice !== undefined)
+                $scope.projectChoice.push({"name": "*"})
+        }
+    }
 
     function showError(data, status) {
         if (status === 500) {
@@ -203,6 +203,7 @@ app.controller('ProjectCtrl', function ($scope, serviceAPI, $routeParams, http, 
         }
 
         $('.modal').modal('hide');
+
         if (status === 401) {
             console.log(status + ' Status unauthorized')
             AuthService.logout();
@@ -220,16 +221,18 @@ app.controller('ProjectCtrl', function ($scope, serviceAPI, $routeParams, http, 
         }, 5000);
         loadTable();
         $('.modal').modal('hide');
-        //location.reload();
     }
 
-    $scope.admin = function () {
-        //console.log($cookieStore.get('userName'));
-        if ($cookieStore.get('userName') === 'admin') {
-            return true;
-        } else {
-            return false;
-        }
+    $scope.addRole = function () {
+        console.log($scope.projects);
+
+        $scope.projectChoice = [];
+        angular.forEach($scope.projects, function (value, key) {
+            $scope.projectChoice.push(value.name)
+        });
+        $scope.projectChoice.push("*")
+
+        $scope.serviceObj.roles.push("");
     };
 // to Store current page into local storage
     if (typeof(Storage) !== "undefined") {

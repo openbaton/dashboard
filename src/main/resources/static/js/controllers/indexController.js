@@ -15,7 +15,6 @@
  */
 
 
-
 var app = angular.module('app');
 
 /**
@@ -24,12 +23,13 @@ var app = angular.module('app');
  *
  */
 
-app.controller('LoginController', function ($scope, AuthService, Session, $rootScope, $location, $cookieStore, $http) {
+app.controller('LoginController', function ($scope, AuthService, Session, $rootScope, $location, $cookieStore, $http, http) {
     $scope.currentUser = null;
-    //$scope.URL = 'http://lore:8080';
+    // $scope.URL = 'http://localhost:8080';
     $scope.URL = '';
     $scope.alerts = [];
     $scope.NFVOVersion = "";
+    $scope.oldUrl = localStorage.LastURL;
     $scope.credential = {
         "username": '',
         "password": '',
@@ -42,17 +42,36 @@ app.controller('LoginController', function ($scope, AuthService, Session, $rootS
     }
 
     else if ($cookieStore.get('logged')) {
-        $scope.logged = $cookieStore.get('logged');
-        $rootScope.logged = $cookieStore.get('logged');
+        if ($scope.oldUrl == undefined || $scope.oldUrl == null) {
+            $scope.logged = $cookieStore.get('logged');
+            $rootScope.logged = $cookieStore.get('logged')
+        }
+        else {
+            http.syncGet($cookieStore.get('URL') + '/api/v1/projects/')
+                .then(function (response) {
+                    if (response === 401) {
+                        console.log(status + ' Status unauthorized');
+                        AuthService.logout();
+                    }
+                });
+            // console.log(localStorage.LastProject);
+            // console.log($cookieStore.get('project'));
+            $scope.logged = $cookieStore.get('logged');
+            $rootScope.logged = $cookieStore.get('logged');
+            // console.log("redirecting to " + $scope.oldUrl);
+            //  window.location.href = $scope.oldUrl;
+            $scope.redirectionVar = $cookieStore.get('redirection');
+            if ($scope.redirectionVar === true) {
+                window.location.href = $scope.oldUrl;
+                $cookieStore.put('redirection', false);
+            }
+        }
     }
-    $location.replace();
-    //console.log($scope.logged);
+    // $location.replace();
+    // console.log($scope.logged);
     $scope.loggedF = function () {
-
         return $scope.logged;
     };
-
-
     $scope.checkSecurity = function () {
         //console.log($scope.URL + "/api/v1/security");
         AuthService.removeSession();
@@ -65,12 +84,12 @@ app.controller('LoginController', function ($scope, AuthService, Session, $rootS
                 }
             })
             .error(function (data, status) {
-                if (status == 404) {
+                if (status === 404 || status === 400) {
                     return;
                 }
                 console.info(('status != 404'));
                 console.error('Response error', status, data);
-            })
+            });
 
     };
 
@@ -81,8 +100,12 @@ app.controller('LoginController', function ($scope, AuthService, Session, $rootS
      * @returns {undefined}
      */
     $scope.login = function (credential) {
-        AuthService.login(credential, $scope.URL);
-        setTimeout(showLoginError, 10000);
+        var loginRes = AuthService.login(credential, $scope.URL).loginRes();
+        loginRes.then(function (result) {
+            if (!result) {
+                setTimeout(showLoginError, 10);
+            }
+        });
     };
 
 
@@ -96,6 +119,7 @@ app.controller('LoginController', function ($scope, AuthService, Session, $rootS
             .error(function (status, data) {
             });
     };
+
     function showLoginError() {
         $scope.$apply(function () {
             $scope.loginError = angular.isUndefined($cookieStore.get('logged'));
@@ -108,8 +132,6 @@ app.controller('LoginController', function ($scope, AuthService, Session, $rootS
 
 app.controller('IndexCtrl', function ($document, $scope, $compile, $routeParams, serviceAPI, $interval, $cookieStore, $location, AuthService, http, $rootScope, $window, $route) {
     $('#side-menu').metisMenu();
-
-
     $scope.adminRole = "ADMIN";
     $scope.superProject = "*";
     $scope.numberNSR = 0;
@@ -126,10 +148,43 @@ app.controller('IndexCtrl', function ($document, $scope, $compile, $routeParams,
     $scope.userLogged;
     $location.replace();
 
+
     //this is here for mozilla browser to redirect user to main overview after login, mozilla does not do it automatically
     if ($cookieStore.get('logged') && (window.location.href.substring(window.location.href.length - 'login'.length) === 'login')) {
         window.location.href = window.location.href.substring(0, window.location.href.length - 'login'.length) + 'main';
 
+    }
+
+    function sortList() {
+        var list, i, switching, b, shouldSwitch;
+        list = document.getElementById("id01");
+        switching = true;
+        /*Make a loop that will continue until
+         no switching has been done:*/
+        while (switching) {
+            //start by saying: no switching is done:
+            switching = false;
+            b = list.getElementsByTagName("LI");
+            //Loop through all list items:
+            for (i = 0; i < (b.length - 1); i++) {
+                //start by saying there should be no switching:
+                shouldSwitch = false;
+                /*check if the next item should
+                 switch place with the current item:*/
+                if (b[i].innerHTML.toLowerCase() > b[i + 1].innerHTML.toLowerCase()) {
+                    /*if next item is alphabetically lower than current item,
+                     mark as a switch and break the loop:*/
+                    shouldSwitch = true;
+                    break;
+                }
+            }
+            if (shouldSwitch) {
+                /*If a switch has been marked, make the switch
+                 and mark the switch as done:*/
+                b[i].parentNode.insertBefore(b[i + 1], b[i]);
+                switching = true;
+            }
+        }
     }
 
     function getVersion() {
@@ -139,10 +194,9 @@ app.controller('IndexCtrl', function ($document, $scope, $compile, $routeParams,
                 $scope.NFVOversion = response
             })
             .error(function (response, status) {
-                showError(status, response);
+                showError(response, status);
             });
     }
-
 
 
     function loadCurrentUser() {
@@ -152,9 +206,9 @@ app.controller('IndexCtrl', function ($document, $scope, $compile, $routeParams,
                 $scope.userLogged = response
             })
             .error(function (response, status) {
-                showError(status, response);
+                showError(response, status);
             });
-    };
+    }
 
     function getConfig() {
 
@@ -165,7 +219,7 @@ app.controller('IndexCtrl', function ($document, $scope, $compile, $routeParams,
                     if (conf.name === "system") {
                         $scope.config = conf;
                     }
-                })
+                });
             });
     }
 
@@ -176,12 +230,13 @@ app.controller('IndexCtrl', function ($document, $scope, $compile, $routeParams,
     };
 
     $scope.logged = $cookieStore.get('logged');
+
     //console.log($scope.logged);
 
 
     function stop() {
         $interval.cancel(promise);
-    };
+    }
 
     function loadNumbers() {
         http.syncGet(url + '/ns-descriptors/').then(function (data) {
@@ -219,6 +274,7 @@ app.controller('IndexCtrl', function ($document, $scope, $compile, $routeParams,
         console.log(newValue);
         if (!angular.isUndefined(newValue) && !angular.isUndefined(oldValue)) {
             $cookieStore.put('project', newValue);
+            localStorage.setItem("LastProject", JSON.stringify(newValue));
             loadNumbers();
             if (window.location.href.indexOf('main') > -1) {
                 if (!$cookieStore.get('QUOTA')) {
@@ -237,8 +293,8 @@ app.controller('IndexCtrl', function ($document, $scope, $compile, $routeParams,
         }
         else if (!angular.isUndefined(newValue) && angular.isUndefined(oldValue)) {
             $cookieStore.put('project', newValue);
+            localStorage.setItem("LastProject", JSON.stringify(newValue));
             loadNumbers();
-            console
             if (window.location.href.indexOf('main') > -1) {
                 if (!$cookieStore.get('QUOTA')) {
                     console.log("No quota information stored");
@@ -261,27 +317,46 @@ app.controller('IndexCtrl', function ($document, $scope, $compile, $routeParams,
     console.log($rootScope.projectSelected);
 
     $scope.changeProject = function (project) {
+
+        var lastProject = angular.fromJson(localStorage.getItem('LastProject'));
+        if (lastProject && !angular.isUndefined(lastProject.id)) {
+            $rootScope.projectSelected = lastProject;
+            $cookieStore.put('project', lastProject);
+
+        }
         if (arguments.length === 0) {
             http.syncGet(url + '/projects/')
                 .then(function (response) {
                     if (response === 401) {
-                        console.log(status + ' Status unauthorized')
+                        console.log(status + ' Status unauthorized');
                         AuthService.logout();
                     }
-                    if (angular.isUndefined($cookieStore.get('project')) || $cookieStore.get('project').id == '') {
+                    if (!lastProject || response.filter(function (f) {
+                            return f.id === lastProject.id
+                        }).length <= 0) {
                         $rootScope.projectSelected = response[0];
-                        $cookieStore.put('project', response[0])
+                        $cookieStore.put('project', response[0]);
+                        localStorage.setItem("LastProject", JSON.stringify(response[0]));
+                        if (lastProject) {
+                            window.location.reload();
+                        }
+                    }
+                    else if (angular.isUndefined($cookieStore.get('project')) || $cookieStore.get('project').id === '') {
+                        $rootScope.projectSelected = response[0];
+                        $cookieStore.put('project', response[0]);
+                        localStorage.setItem("LastProject", JSON.stringify(response[0]));
                     } else {
                         $rootScope.projectSelected = $cookieStore.get('project');
                     }
                     $rootScope.projects = response;
                 })
-               
+
         }
         else {
             $rootScope.projectSelected = project;
             console.log(project);
             $cookieStore.put('project', project);
+            localStorage.setItem("LastProject", JSON.stringify(project));
             $window.location.reload();
         }
 
@@ -315,7 +390,7 @@ app.controller('IndexCtrl', function ($document, $scope, $compile, $routeParams,
     };
 
     if ($scope.logged)
-        //console.log('Ok Logged');
+    //console.log('Ok Logged');
         $location.replace();
     $scope.username = $cookieStore.get('userName');
 
@@ -344,22 +419,21 @@ app.controller('IndexCtrl', function ($document, $scope, $compile, $routeParams,
 
     $scope.$watchGroup(["newPassword", "newPassword1"], function (newValue, oldValue) {
         if ($scope.newPassword.length < 8 || !(/[a-z]/.test($scope.newPassword)) || !(/[A-Z]/.test($scope.newPassword)) || !(/[0-9]/.test($scope.newPassword))) {
-            $scope.newPasswordStyle = { 'background-color': 'pink' };
+            $scope.newPasswordStyle = {'background-color': 'pink'};
             $scope.newPasswordStrong = false;
         } else {
-            $scope.newPasswordStyle = { 'background-color': 'white' };
+            $scope.newPasswordStyle = {'background-color': 'white'};
             $scope.newPasswordStrong = true;
         }
 
         if ($scope.newPassword !== $scope.newPassword1) {
-            $scope.newPasswordRepeat = { 'background-color': 'pink' };
+            $scope.newPasswordRepeat = {'background-color': 'pink'};
             $scope.newPasswordSame = false;
         } else {
-            $scope.newPasswordRepeat = { 'background-color': 'white' };
+            $scope.newPasswordRepeat = {'background-color': 'white'};
             $scope.newPasswordSame = true;
         }
     }, true);
-
 
 
     $scope.postNew = function () {
@@ -396,14 +470,14 @@ app.controller('IndexCtrl', function ($document, $scope, $compile, $routeParams,
     };
 
 
-    $(document).ready(function () { });
+    $(document).ready(function () {
+    });
     $scope.refreshQuota = function () {
         $scope.quota = null;
         chartsHere = false;
         loadQuota();
 
     };
-
 
 
     function loadQuota() {
@@ -416,10 +490,16 @@ app.controller('IndexCtrl', function ($document, $scope, $compile, $routeParams,
                 //console.log($scope.quota.left.ram)
             })
             .error(function (response, status) {
-                showError(status, response);
+                //chartsHere = true;
+                $scope.quota = $scope.failedquota;
+                $cookieStore.put('QUOTA', $scope.failedquota);
+                showError({message: "Was not possible to retrieve the quota"}, "ERROR");
             });
     }
 
+    $scope.closeAlert = function (index) {
+        $scope.alerts.splice(index, 1);
+    };
     $scope.rcdownload = function () {
         http.getRC(url + '/main/openbaton-rc/')
             .success(function (response) {
@@ -435,7 +515,7 @@ app.controller('IndexCtrl', function ($document, $scope, $compile, $routeParams,
 
             })
             .error(function (response, status) {
-                showError(status, response);
+                showError(response, status);
             });
     }
 
@@ -447,27 +527,21 @@ app.controller('IndexCtrl', function ($document, $scope, $compile, $routeParams,
             }
         }
     }
-    function showError(data, status) {
-        $('.modal').modal('hide');
-        if (status === 401) {
-            console.log(status + ' Status unauthorized')
-            AuthService.logout();
-        }
-    }
+
     var urlPackages = $cookieStore.get('URL') + "/api/v1/projects/";
     $scope.projectObj = {
         'name': '',
         'description': ''
     };
-    $scope.createProject = function() {
-         $('#createProject').modal('show');
+    $scope.createProject = function () {
+        $('#createProject').modal('show');
     };
-     $scope.save = function () {
+    $scope.save = function () {
         //console.log($scope.projectObj);
         http.post(urlPackages, $scope.projectObj)
             .success(function (response) {
                 showOk('Project: ' + $scope.projectObj.name + ' saved.');
-                loadTable();
+                // loadTable();
                 $scope.projectObj = {
                     'name': '',
                     'description': ''
@@ -480,27 +554,51 @@ app.controller('IndexCtrl', function ($document, $scope, $compile, $routeParams,
     };
 
     function showError(data, status) {
+        if (status === 401) {
+            console.log(status + ' Status unauthorized')
+            AuthService.logout();
+        }
         if (status === 500) {
             $scope.alerts.push({
                 type: 'danger',
                 msg: 'An error occured and could not be handled properly, please, report to us and we will fix it as soon as possible'
             });
+            if ($scope.alerts.length > 1) {
+                $scope.alerts.splice(0, 1);
+            }
         } else {
             console.log('Status: ' + status + ' Data: ' + JSON.stringify(data));
             $scope.alerts.push({
                 type: 'danger',
-                msg: data.message + " Code: " + status
+                msg: data.message
             });
         }
 
         $('.modal').modal('hide');
-        if (status === 401) {
-            console.log(status + ' Status unauthorized')
-            AuthService.logout();
-        }
+
     }
+
+    $scope.failedquota = {
+        "total": {
+            "version": 1,
+            "cores": 1,
+            "floatingIps": 1,
+            "instances": 1,
+            "keyPairs": 1,
+            "ram": 1
+        },
+        "left": {
+            "version": 0,
+            "cores": 0,
+            "floatingIps": 0,
+            "instances": 0,
+            "keyPairs": 0,
+            "ram": 0
+        }
+    };
+
     function showOk(msg) {
-        $scope.alerts.push({ type: 'success', msg: msg });
+        $scope.alerts.push({type: 'success', msg: msg});
         window.setTimeout(function () {
             for (i = 0; i < $scope.alerts.length; i++) {
                 if ($scope.alerts[i].type == 'success') {
@@ -511,9 +609,11 @@ app.controller('IndexCtrl', function ($document, $scope, $compile, $routeParams,
         $scope.changeProject();
         $('.modal').modal('hide');
     }
+
     $scope.chartsLoaded = function () {
         return chartsHere;
     };
+
     function createCharts() {
         console.log("Creating charts");
 
@@ -524,12 +624,12 @@ app.controller('IndexCtrl', function ($document, $scope, $compile, $routeParams,
                 highlight: "#15BA67",
                 label: "Availaible"
             },
-            {
-                value: $scope.quota.total.ram - $scope.quota.left.ram,
-                color: "#B22222",
-                highlight: "#15BA67",
-                label: "Used"
-            }
+                {
+                    value: $scope.quota.total.ram - $scope.quota.left.ram,
+                    color: "#B22222",
+                    highlight: "#15BA67",
+                    label: "Used"
+                }
 
             ]
             if ($scope.quota.total.ram === 0) {
@@ -547,12 +647,12 @@ app.controller('IndexCtrl', function ($document, $scope, $compile, $routeParams,
                 highlight: "#15BA67",
                 label: "Availaible"
             },
-            {
-                value: $scope.quota.total.instances - $scope.quota.left.instances,
-                color: "#B22222",
-                highlight: "#15BA67",
-                label: "Used"
-            }
+                {
+                    value: $scope.quota.total.instances - $scope.quota.left.instances,
+                    color: "#B22222",
+                    highlight: "#15BA67",
+                    label: "Used"
+                }
 
             ]
 
@@ -571,12 +671,12 @@ app.controller('IndexCtrl', function ($document, $scope, $compile, $routeParams,
                 highlight: "#15BA67",
                 label: "Availaible"
             },
-            {
-                value: $scope.quota.total.cores - $scope.quota.left.cores,
-                color: "#B22222",
-                highlight: "#15BA67",
-                label: "Used"
-            }
+                {
+                    value: $scope.quota.total.cores - $scope.quota.left.cores,
+                    color: "#B22222",
+                    highlight: "#15BA67",
+                    label: "Used"
+                }
 
             ]
 
@@ -595,12 +695,12 @@ app.controller('IndexCtrl', function ($document, $scope, $compile, $routeParams,
                 highlight: "#15BA67",
                 label: "Availaible"
             },
-            {
-                value: $scope.quota.total.floatingIps - $scope.quota.left.floatingIps,
-                color: "#B22222",
-                highlight: "#15BA67",
-                label: "Used"
-            }
+                {
+                    value: $scope.quota.total.floatingIps - $scope.quota.left.floatingIps,
+                    color: "#B22222",
+                    highlight: "#15BA67",
+                    label: "Used"
+                }
 
             ]
 
@@ -620,31 +720,93 @@ app.controller('IndexCtrl', function ($document, $scope, $compile, $routeParams,
 
             //Get the context of the canvas element we want to select
             var c = $('#cpuChart');
-            var cp = c.get(0).getContext('2d');
-
-            cpuChart = new Chart(cp).Doughnut(cpuData, options);
+            if (c.size() > 0) {
+                var cp = c.get(0).getContext('2d');
+                cpuChart = new Chart(cp).Doughnut(cpuData, options);
+            }
 
             var r = $('#ramChart');
-            var ra = r.get(0).getContext('2d');
-
-            ramChart = new Chart(ra).Doughnut(ramData, options);
+            if (r.size() > 0) {
+                var ra = r.get(0).getContext('2d');
+                ramChart = new Chart(ra).Doughnut(ramData, options);
+            }
 
             var i = $('#ipChart');
-            var ip = i.get(0).getContext('2d');
-
-            ipChart = new Chart(ip).Doughnut(ipData, options);
-
+            if (i.size() > 0) {
+                var ip = i.get(0).getContext('2d');
+                ipChart = new Chart(ip).Doughnut(ipData, options);
+            }
             var h = $('#instChart');
-            var hd = h.get(0).getContext('2d');
-
-            hddChart = new Chart(hd).Doughnut(instData, options);
-
+            if (h.size() > 0) {
+                var hd = h.get(0).getContext('2d');
+                hddChart = new Chart(hd).Doughnut(instData, options);
+            }
         })
 
     };
 
+    $("input[type=password]").keyup(function () {
+        var ucase = new RegExp("[A-Z]+");
+        var lcase = new RegExp("[a-z]+");
+        var num = new RegExp("[0-9]+");
 
+        if ($("#newPassword").val().length >= 8) {
+            $("#8char").removeClass("glyphicon-remove");
+            $("#8char").addClass("glyphicon-ok");
+            $("#8char").css("color", "#00A41E");
+        } else {
+            $("#8char").removeClass("glyphicon-ok");
+            $("#8char").addClass("glyphicon-remove");
+            $("#8char").css("color", "#FF0004");
+        }
 
+        if (ucase.test($("#newPassword").val())) {
+            $("#ucase").removeClass("glyphicon-remove");
+            $("#ucase").addClass("glyphicon-ok");
+            $("#ucase").css("color", "#00A41E");
+        } else {
+            $("#ucase").removeClass("glyphicon-ok");
+            $("#ucase").addClass("glyphicon-remove");
+            $("#ucase").css("color", "#FF0004");
+        }
+
+        if (lcase.test($("#newPassword").val())) {
+            $("#lcase").removeClass("glyphicon-remove");
+            $("#lcase").addClass("glyphicon-ok");
+            $("#lcase").css("color", "#00A41E");
+        } else {
+            $("#lcase").removeClass("glyphicon-ok");
+            $("#lcase").addClass("glyphicon-remove");
+            $("#lcase").css("color", "#FF0004");
+        }
+
+        if (num.test($("#newPassword").val())) {
+            $("#num").removeClass("glyphicon-remove");
+            $("#num").addClass("glyphicon-ok");
+            $("#num").css("color", "#00A41E");
+        } else {
+            $("#num").removeClass("glyphicon-ok");
+            $("#num").addClass("glyphicon-remove");
+            $("#num").css("color", "#FF0004");
+        }
+
+        if (($("#newPassword").val() == $("#newPassword1").val() ) && $("#newPassword").val() != '' && $("#newPassword1").val() != '') {
+            $("#pwmatch").removeClass("glyphicon-remove");
+            $("#pwmatch").addClass("glyphicon-ok");
+            $("#pwmatch").css("color", "#00A41E");
+        } else {
+            $("#pwmatch").removeClass("glyphicon-ok");
+            $("#pwmatch").addClass("glyphicon-remove");
+            $("#pwmatch").css("color", "#FF0004");
+        }
+    });
+    // to Store current page into local storage
+    if (typeof(Storage) !== "undefined") {
+        // Store
+        localStorage.setItem("LastURL", location.href);
+    } else {
+        document.getElementById("result").innerHTML = "Sorry, your browser does not support Web Storage...";
+    }
 
 
 });

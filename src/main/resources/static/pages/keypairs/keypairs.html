@@ -1,17 +1,17 @@
- <!--Copyright (c) 2016 Open Baton (http://www.openbaton.org)
- 
-  Licensed under the Apache License, Version 2.0 (the "License");
-  you may not use this file except in compliance with the License.
-  You may obtain a copy of the License at
- 
-      http://www.apache.org/licenses/LICENSE-2.0
- 
-  Unless required by applicable law or agreed to in writing, software
-  distributed under the License is distributed on an "AS IS" BASIS,
-  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-  See the License for the specific language governing permissions and
- 
-  limitations under the License.-->
+<!--Copyright (c) 2016 Open Baton (http://www.openbaton.org)
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+
+ limitations under the License.-->
 <div class="row">
     <div class="col-lg-12">
         <h1>
@@ -31,11 +31,10 @@
                 title="Add a new key pair" data-toggle="modal"
                 data-target="#addKey">Import key
         </button>
-        <button id="btn_add_key" href="#" class="btn btn-primary"
+        <button style="margin-right: 20px;" id="btn_add_key" href="#" class="btn btn-primary right"
                 title="Add a new key pair" data-toggle="modal"
                 data-target="#createKey">Create key
         </button>
-
     </div>
 </div>
 <div class="row top-buffer">
@@ -50,25 +49,22 @@
                 <thead>
                 <tr>
                     <th ng-click="predicate = 'id'; reverse = !reverse">Id <i class="fa fa-sort"></i></th>
-                    <th ng-click="predicate = 'fingerprint'; reverse = !reverse">Fingerprint <i class="fa fa-sort"></i></th>
+                    <th ng-click="predicate = 'fingerprint'; reverse = !reverse">Fingerprint <i class="fa fa-sort"></i>
+                    </th>
                     <th ng-click="predicate = 'name'; reverse = !reverse">Name <i class="fa fa-sort"></i></th>
                     <th>Actions <i class="fa"></i></th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr ng-repeat="data in keypairs| filter:search|orderBy:predicate:reverse">
-                    <!--td><input type="checkbox"  ng-disabled="data.name==projectSelected.name"  ng-init="selection.ids[data.id] = false" ng-model="selection.ids[data.id]" name="group" id="{{data.id}}" /></td-->
-                    <!--<td><a href="#projects/{{data.id}}">{{data.id}} </a></td>-->
                     <td>{{data.id}}</td>
                     <td>{{data.fingerprint}}</td>
                     <td>{{data.name}}</td>
                     <td>
                         <div class="btn-group">
-                            <button type="button" class="btn btn-danger pull right" ng-disabled="data.name==projectSelected.name" ng-click="delete(data)"> Delete
-                              </button>
-                            <!--ul class="dropdown-menu" role="menu">
-                                <li ng-if="data.name!==projectSelected.name"><a href="" ng-click="deleteEvent(data)">Delete</a></li>
-                            </ul-->
+                            <button type="button" class="btn btn-danger pull right"
+                                    ng-disabled="data.name==projectSelected.name" ng-click="delete(data)"> Delete
+                            </button>
                         </div>
                     </td>
                 </tr>
@@ -76,12 +72,7 @@
             </table>
         </div>
     </div>
-
 </div>
-
-
-
-
 <div class="modal fade" tabindex="-1" role="dialog" id="addKey">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -112,13 +103,13 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" data-dismiss="modal" ng-disabled="!keyName || !pubKey" ng-click="importKey(keyName, pubKey)">Save</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal" ng-disabled="!keyName || !pubKey"
+                        ng-click="importKey(keyName, pubKey)">Save
+                </button>
             </div>
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
-
-
 <div class="modal fade" tabindex="-1" role="dialog" id="createKey">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -142,7 +133,9 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" data-dismiss="modal" ng-disabled="!generateKeyName" ng-click="generateKey(generateKeyName)">Generate</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal" ng-disabled="!generateKeyName"
+                        ng-click="generateKey(generateKeyName)">Generate
+                </button>
             </div>
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->

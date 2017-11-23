@@ -39,7 +39,7 @@
         </alert>
         <div>
         <div class="col-lg-6">
-          <a href="#" data-toggle="modal" data-target="#jsonInfo">Show JSON</a>
+          <a href="#" data-toggle="modal" data-target="#jsonInfo" ng-click="jsonrend()">Show JSON</a>
           <br/>
           
           <div class = "table-responsive">
@@ -60,6 +60,14 @@
                         <td>{{nsdinfo.version}}</td>
                       </tr>
                       <tr>
+                        <td>Created</td>
+                        <td>{{nsdinfo.createdAt}}</td>
+                      </tr>
+                      <tr>
+                        <td>Updated</td>
+                        <td>{{nsdinfo.updatedAt}}</td>
+                      </tr>
+                      <tr>
                         <td>Enabled</td>
                         <td>{{nsdinfo.enabled}}</td>
                       </tr>
@@ -69,28 +77,6 @@
           </div>
         </div>
         <div class="col-lg-12">
-            <!--h2>NSD name: {{nsdinfo.name}}</h2>
-            <a href="#" data-toggle="modal" data-target="#jsonInfo">Show JSON</a>
-            <br/>
-            <a href="#nsdescriptors/{{nsdinfo.id}}/graph">Show Graph</a>
-            <dl class="dl-horizontal">
-                <dt>id:</dt>
-                <dd>{{nsdinfo.id}}</dd>
-                <dt>Vendor:</dt>
-                <dd>{{nsdinfo.vendor}}</dd>
-                <dt>Version:</dt>
-                <dd>{{nsdinfo.version}}</dd>
-                <dt>Enabled:</dt>
-                <dd>{{nsdinfo.enabled}}</dd>
-            </dl-->
-            <!--<dt>Service Deployment Flavor:</dt>
-            <dd ng-repeat="sdf in nsdinfo.service_deployment_flavour">
-                <spam ng-repeat="(k,v) in sdf"><b>{{k}}</b>: {{v}}
-                    <spam ng-if="!$last">,</spam>
-                </spam>
-            </dd>
--->
-
             <tabset>
                 <tab heading="VNF Descriptors" ng-if="nsdinfo.vnfd.length > 0">
                     <div class="table-responsive">
@@ -181,8 +167,8 @@
                                 <td><a href="#nsdescriptors/{{nsdinfo.id}}/vnfdependencies/{{df.id}}"
                                        ng-click="showData(nsd)">{{df.id}}</a>
                                 </td>
-                                <td>{{df.source.name}}</td>
-                                <td>{{df.target.name}}</td>
+                                <td>{{df.source}}</td>
+                                <td>{{df.target}}</td>
                                 <td>
                                     <div class="btn-group">
                                         <button type="button" class="btn btn-primary dropdown-toggle"
@@ -190,10 +176,6 @@
                                             Action
                                             <span class="caret"></span></button>
                                         <ul class="dropdown-menu" role="menu">
-                                            <!--li><a href="" data-toggle="modal" data-target="#modalAdd"
-                                                   ng-click="launch(nsd)">Launch</a>
-                                            </li-->
-                                            <!--li class="divider"></li-->
                                             <li><a href="" ng-click="deleteVNFDependency(df)">Delete</a></li>
                                         </ul>
                                     </div>
@@ -212,17 +194,17 @@
 </div>
 
 
-<div class="modal" id="jsonInfo" tabindex="" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
+<div class="modal" id="jsonInfo" tabindex="" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false" >
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal"><span
                         aria-hidden="true">&times;</span><span
                         class="sr-only">Close</span></button>
-                <dt class="modal-title" id="myModalLabel">JSON of NSD: {{nsdInfo.name}}</dt>
+                <dt class="modal-title" id="myModalLabel"><span class="cursordefault">JSON of NSD: </span>{{nsdInfo.name}}</dt>
             </div>
             <div class="modal-body">
-                <pre id="json">{{nsdJSON}}</pre>
+                <div id="json"></div>
             </div>
             <div class="modal-footer">
                 <button type="button" id="closeModal" class="btn btn-default"
@@ -247,59 +229,12 @@
                     <tabset>
                         <tab heading="Info">
                             <div class="form-group" ng-repeat="(key,value) in editObj"
-                                 ng-if="key!='id' && isArray(value) && key!='hb_version' && key!='projectId' && key!='vnfPackageLocation'">
+                                 ng-if="key!='id' && isArray(value) && key!='hb_version' && key!='projectId' && key!='vnfPackageLocation' && key!='updatedAt' && key!='createdAt'">
                                 <label for="{{key}}" class="col-sm-4 control-label">{{key}}</label>
 
                                 <div class="col-sm-6">
                                     <input type="text" class="form-control" id="{{key}}" name="{{key}}"
                                            ng-model="editObj[key]"/>
-                                </div>
-                            </div>
-                        </tab>
-
-                        <tab heading="Configurations">
-                            <div class="row">
-                                <div class="col-lg-12">
-                                    <div ng-if="editObj.configurations===undefined">
-                                        Add a new Configuration <a href="" ng-click="addNewConfig()"><span class="fa fa-plus-square"></span></a>
-                                    </div>
-
-
-                                    <div class="form-group"
-                                         ng-repeat="cp in editObj.configurations.configurationParameters track by $index">
-                                        <div class="col-sm-6 ">
-                                            <label for="confKey" class="control-label">Key</label>
-                                            <div class="input-group">
-                                                <input type="text" class="form-control" id="confKey" name="confKey"
-                                                       ng-model="cp.confKey"/>
-                                                <span class="input-group-btn">
-                                                <button class="btn btn-default" ng-disabled="cp.confKey.length < 1 || cp.value.length < 1" ng-click="addNewConfig()" type="button"
-                                                        title="Add a new configuration">
-                                                    <span class="fa fa-plus" aria-hidden="true"></span>
-                                                </button>
-                                            </span>
-                                            </div>
-
-
-                                        </div>
-                                        <div class="col-sm-6 ">
-
-                                            <label for="value" class="control-label">Value</label>
-                                            <div class="input-group">
-                                                <input type="text" class="form-control" id="value" name="value"
-                                                       ng-model="cp.value"/>
-                                            <span class="input-group-btn">
-                                                <button class="btn btn-default" ng-disabled="editObj.configurations.configurationParameters.length < 2" ng-click="removeConfig($index)" type="button"
-                                                        title="Delete this configuration">
-                                                    <span class="fa fa-trash" aria-hidden="true"></span>
-                                                </button>
-                                            </span>
-                                            </div>
-                                        </div>
-
-                                    </div>
-
-
                                 </div>
                             </div>
                         </tab>
