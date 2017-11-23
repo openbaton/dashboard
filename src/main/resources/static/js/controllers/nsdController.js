@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-var app = angular.module('app')
+var app = angular.module('app');
 
 app.controller('NsdCtrl', function ($scope, $compile, $cookieStore, $routeParams, $filter, http, serviceAPI, $window, $route, $interval, $http, topologiesAPI, AuthService, NgTableParams, http) {
     var baseURL = $cookieStore.get('URL') + "/api/v1";
@@ -45,6 +45,7 @@ app.controller('NsdCtrl', function ($scope, $compile, $cookieStore, $routeParams
     $scope.vduLevelVim = [];
     $scope.vduToVIM = [];
     $scope.vduWithName = 0;
+    $scope.azVimInstance = {};
     $scope.tmpVnfd = [];
     $scope.elementName = "";
     $scope.basicConfiguration = {name: "", config: {name: "", configurationParameters: []}};
@@ -68,14 +69,14 @@ app.controller('NsdCtrl', function ($scope, $compile, $cookieStore, $routeParams
 
     });
 
-    var filteredLaunchKeys = []
+    var filteredLaunchKeys = [];
     $scope.tableParamsFilteredLaunchKeys = new NgTableParams({
             page: 1,
             count: 5,
             sorting: {
                 name: 'asc'     // initial sorting
             },
-            filter: {name: ""},
+            filter: {name: ""}
         },
         {
             counts: [],
@@ -195,7 +196,7 @@ app.controller('NsdCtrl', function ($scope, $compile, $cookieStore, $routeParams
         $scope.tableParamsFilteredLaunchPops.reload();
         $scope.tableParamsFilteredPops.reload();
         //console.log($scope.selectedVnfd);
-    }
+    };
 
     function loadKeys() {
 
@@ -234,14 +235,14 @@ app.controller('NsdCtrl', function ($scope, $compile, $cookieStore, $routeParams
         remove($scope.keys, key);
         $scope.tableParamsFilteredKeys.reload();
         $scope.tableParamsFilteredLaunchKeys.reload();
-    }
+    };
 
     $scope.removeLaunchKey = function (key) {
         $scope.keys.push(key);
         remove($scope.launchKeys, key);
         $scope.tableParamsFilteredKeys.reload();
         $scope.tableParamsFilteredLaunchKeys.reload();
-    }
+    };
 
     function remove(arr, item) {
         //console.log(arr);
@@ -254,24 +255,8 @@ app.controller('NsdCtrl', function ($scope, $compile, $cookieStore, $routeParams
         //console.log(arr);
     }
 
-    // http.get(urlVim)
-    //     .success(function (response, status) {
-    //         $scope.vimInstances = response;
-    //         //console.log(response);
-    //     })
-    //     .error(function (data, status) {
-    //         showError(data, status);
-    //
-    //     });
-
-
-    // $scope.tabs = [
-    //     {active: true},
-    //     {active: false},
-    //     {active: false}
-    // ];
-
     $scope.selection = [];
+
     function checkPresence(link, links) {
         console.log(links);
         for (i = 0; i < links.length; i++) {
@@ -283,7 +268,8 @@ app.controller('NsdCtrl', function ($scope, $compile, $cookieStore, $routeParams
         }
         return false;
 
-    };
+    }
+
     $scope.addTONSD = function (selectedVNFD) {
         console.log($scope.selectedVNFD);
         $scope.nsdCreateTmp.vnfd.push({id: selectedVNFD.id});
@@ -383,18 +369,6 @@ app.controller('NsdCtrl', function ($scope, $compile, $cookieStore, $routeParams
             });
     };
 
-    /*$scope.updateVDU = function () {
-     http.put(url + $routeParams.nsdescriptorId + '/vnfdescriptors/' + $routeParams.vnfdescriptorId + "/vdus/" + $scope.editObj.id, $scope.editObj)
-     .success(function (response) {
-     showOk('VDU updated!');
-     loadTable();
-     })
-     .error(function (data, status) {
-     console.error('STATUS: ' + status + ' DATA: ' + JSON.stringify(data));
-     showError(data, status);
-     });
-     };*/
-
     $scope.addNewConfig = function () {
         if (angular.isUndefined($scope.editObj.configurations)) {
             $scope.editObj.configurations = {};
@@ -476,7 +450,6 @@ app.controller('NsdCtrl', function ($scope, $compile, $cookieStore, $routeParams
         $scope.vnfdCreate.vdu.splice(index, 1);
     };
 
-
     $scope.deleteVNFDependency = function (vnfd) {
         http.delete(url + $scope.nsdinfo.id + '/vnfdependencies/' + vnfd.id)
             .success(function (response) {
@@ -523,7 +496,7 @@ app.controller('NsdCtrl', function ($scope, $compile, $cookieStore, $routeParams
         http.post(url, $scope.nsdCreateTmp)
             .success(function (response) {
                 showOk('Network Service Descriptor stored!');
-                setTimeout(function(){
+                setTimeout(function () {
                     //do what you need here
                     loadTable();
                 }, 500);
@@ -596,7 +569,7 @@ app.controller('NsdCtrl', function ($scope, $compile, $cookieStore, $routeParams
                     .success(function (response) {
                         showOk('Network Service Descriptors stored!');
                         // location.reload();
-                        setTimeout(function(){
+                        setTimeout(function () {
                             //do what you need here
                             loadTable();
                         }, 500);
@@ -639,7 +612,7 @@ app.controller('NsdCtrl', function ($scope, $compile, $cookieStore, $routeParams
         http.delete(url + data.id)
             .success(function (response) {
                 showOk('Deleted Network Service Descriptor with id: ' + data.id);
-                setTimeout(function(){
+                setTimeout(function () {
                     //do what you need here
                     loadTable();
                 }, 500);
@@ -699,10 +672,10 @@ app.controller('NsdCtrl', function ($scope, $compile, $cookieStore, $routeParams
     };
 
 
-
     $scope.removeConf = function (index, vnfdname) {
         $scope.launchConfiguration.configurations[vnfdname].configurationParameters.splice(index, 1);
     };
+
     function removeEmptyConfs() {
         for (var property in $scope.launchConfiguration.configurations) {
             if ($scope.launchConfiguration.configurations.hasOwnProperty(property)) {
@@ -756,34 +729,6 @@ app.controller('NsdCtrl', function ($scope, $compile, $cookieStore, $routeParams
                 //console.log($scope.nsdToSend.vnfd[i].vdu[j].id);
                 $scope.launchPops[$scope.nsdToSend.vnfd[i].name][$scope.nsdToSend.vnfd[i].vdu[j].name] = [];
             }
-            // for (i = 0; i < $scope.nsdToSend.vnfd.length; i++) {
-            //     newVNFD = {"vnfdname": $scope.nsdToSend.vnfd[i].name, "vim": [], "vduLevel": false, "vdu": []};
-            //     for (j = 0; j < $scope.nsdToSend.vnfd[i].vdu.length; j++) {
-            //         //console.log($scope.nsdToSend.vnfd[i].vdu[j].id);
-            //         newVDU = {"vduName": $scope.nsdToSend.vnfd[i].vdu[j].name, "vim": []};
-            //         if (newVDU.vduName) {
-            //             newVNFD.vdu.push(newVDU);
-            //         }
-            //     }
-            //     if (newVNFD.vdu.length > 0) {
-            //         $scope.vnfdToVIM.push(newVNFD);
-            //     }
-            // }
-            //console.log('your stuff again' + $scope.vnfdToVIM);
-            // $scope.vnfdLevelVim = false;
-            //
-            // for (i = 0; i < $scope.vnfdToVIM.length; i++) {
-            //     for (j = 0; j < $scope.vnfdToVIM[i].vdu.length; j++) {
-            //         //console.log($scope.vnfdToVIM[i].vdu[j].vduName);
-            //         if ($scope.vnfdToVIM[i].vdu[j].vduName) {
-            //             $scope.vduWithName++;
-            //         }
-            //
-            //     }
-            // }
-
-            //console.log($scope.vduWithName);
-            //$('#madalLaunch').modal('show');
         }
         for (i = 0; i < $scope.nsdToSend.vnfd.length; i++) {
             console.log($scope.vimInstances);
@@ -798,22 +743,39 @@ app.controller('NsdCtrl', function ($scope, $compile, $cookieStore, $routeParams
     };
     $scope.noVIMchoicePossible = false;
     $scope.vimForLaunch = {};
+
     $scope.changeIp = function (ip) {
         $scope.monitoringIp = ip;
-    }
+    };
+
+    $scope.changePort = function (port) {
+        $scope.monitoringPort = port;
+    };
+
     env();
+
     function env() {
         http.get($cookieStore.get('URL') + '/env')
             .success(function (response) {
                 // console.log(response);
                 monitoringIp = response['applicationConfig: [file:/etc/openbaton/openbaton-nfvo.properties]']['nfvo.monitoring.ip'];
                 // console.log(monitoringIp);
-                $scope.monitoringIp = monitoringIp;
+                if (monitoringIp.indexOf(':') > -1) {
+                    $scope.monitoringIp = monitoringIp.split(":")[0];
+                    $scope.monitoringPort = monitoringIp.split(":")[1];
+                } else {
+                    $scope.monitoringIp = monitoringIp;
+                    $scope.monitoringPort = "";
+                }
             })
             .error(function (response, status) {
                 showError(response, status);
             });
     }
+
+    $scope.isInt = function (value) {
+        return !isNaN(value) && (function(x) { return (x | 0) === x; })(parseFloat(value))
+    };
 
     $scope.launch = function () {
         //console.log($scope.launchConfiguration.configurations);
@@ -824,7 +786,10 @@ app.controller('NsdCtrl', function ($scope, $compile, $cookieStore, $routeParams
         //console.log($scope.nsdToSend);
         $scope.launchObj.keys = [];
         $scope.launchObj.vduVimInstances = $scope.vimForLaunch;
-        $scope.launchObj.monitoringIp = $scope.monitoringIp;
+        var monIp = $scope.monitoringIp;
+        if (isInt($scope.monitoringPort))
+            monIp += ":" + $scope.monitoringPort;
+        $scope.launchObj.monitoringIp = monIp;
         $scope.launchKeys.forEach(function (key) {
             $scope.launchObj.keys.push(key.name);
         });
@@ -855,69 +820,31 @@ app.controller('NsdCtrl', function ($scope, $compile, $cookieStore, $routeParams
     };
 
 
-    //@param bodyJson the body json is: { "vduVimInstances":{ "vduName":["viminstancename"],
-    //"vduName2":["viminstancename2"] }, "keys":["keyname1", "keyname2"] }
-
-
     function prepareVIMs() {
         $scope.vimForLaunch = {};
         for (var vnfdName in $scope.launchPops) {
             for (var vduName in $scope.launchPops[vnfdName]) {
-                if (vduName != "pops" && vduName != "undefined") {
+                if (vduName !== "pops" && vduName !== "undefined") {
                     $scope.vimForLaunch[vduName] = [];
                     $scope.launchPops[vnfdName].pops.forEach(
                         function (pop) {
-
-                            $scope.vimForLaunch[vduName].push(pop.name);
+                            var name = pop.name;
+                            console.log("pop.az === " + pop.az);
+                            if (pop.az !== undefined && pop.az !== ":random" && pop.az !== "" && pop.az !== null){
+                                name += pop.az;
+                            }
+                            $scope.vimForLaunch[vduName].push(name);
                         }
                     );
-                    // $scope.vimForLaunch[vduName].push($scope.launchPops[vnfdName].pops);
                 }
             }
         }
-
-
-        // if (!$scope.vnfdLevelVim && $scope.launchNsdVim.length === 0) {
-        //     return;
-        // }
-        //
-        // if (!$scope.vnfdLevelVim) {
-        //     //console.log("NSD level");
-        //     for (i = 0; i < $scope.vnfdToVIM.length; i++) {
-        //         for (j = 0; j < $scope.vnfdToVIM[i].vdu.length; j++) {
-        //             $scope.vimForLaunch[$scope.vnfdToVIM[i].vdu[j].vduName] = $scope.launchNsdVim;
-        //
-        //         }
-        //     }
-        // } else {
-        //     //console.log("VNFD level");
-        //     for (i = 0; i < $scope.vnfdToVIM.length; i++) {
-        //         for (j = 0; j < $scope.vnfdToVIM[i].vdu.length; j++) {
-        //             if (!$scope.vnfdToVIM[i].vduLevel) {
-        //                 if ($scope.vnfdToVIM[i].vim.length === 0) {
-        //                     continue;
-        //                 }
-        //                 $scope.vimForLaunch[$scope.vnfdToVIM[i].vdu[j].vduName] = $scope.vnfdToVIM[i].vim
-        //             } else {
-        //                 if ($scope.vnfdToVIM[i].vdu[j].vim.length === 0) {
-        //                     continue;
-        //                 }
-        //                 $scope.vimForLaunch[$scope.vnfdToVIM[i].vdu[j].vduName] = $scope.vnfdToVIM[i].vdu[j].vim;
-        //             }
-        //
-        //         }
-        //     }
-        // }
-
-
     }
 
     $scope.Jsplumb = function () {
         http.get(url + $routeParams.nsdescriptorId)
             .success(function (response, status) {
                 topologiesAPI.Jsplumb(response, 'descriptor');
-                //console.log(response);
-
             }).error(function (data, status) {
             showError(data, status);
         });
@@ -926,8 +853,7 @@ app.controller('NsdCtrl', function ($scope, $compile, $cookieStore, $routeParams
 
 
     $scope.returnUptime = function (longUptime) {
-        var string = serviceAPI.returnStringUptime(longUptime);
-        return string;
+        return serviceAPI.returnStringUptime(longUptime);
     };
 
     $scope.stringContains = function (k1, k2) {
@@ -965,12 +891,9 @@ app.controller('NsdCtrl', function ($scope, $compile, $cookieStore, $routeParams
 
     $scope.main = {checkbox: false};
     $scope.$watch('main', function (newValue, oldValue) {
-        ////console.log(newValue.checkbox);
-        ////console.log($scope.selection.ids);
         angular.forEach($scope.selection.ids, function (value, k) {
             $scope.selection.ids[k] = newValue.checkbox;
         });
-        //console.log($scope.selection.ids);
     }, true);
 
     $scope.$watch('selection', function (newValue, oldValue) {
@@ -996,6 +919,7 @@ app.controller('NsdCtrl', function ($scope, $compile, $cookieStore, $routeParams
 
     $scope.selection = {};
     $scope.selection.ids = {};
+
     /* -- multiple delete functions END -- */
 
     function showError(data, status) {
@@ -1077,33 +1001,39 @@ app.controller('NsdCtrl', function ($scope, $compile, $cookieStore, $routeParams
                 });
     }
 
+    function getSelectedText(name) {
+
+        var selectedText = $scope.azVimInstance[name];
+        if (selectedText === null || selectedText === undefined) {
+            return ""
+        }
+        return ":" + selectedText.trim();
+    }
+
     $scope.addPopToVnfd = function (vnfd, pop, launchPopTable) {
+        pop['az'] = getSelectedText(pop.name);
         $scope.launchPops[vnfd.name].pops.push(pop);
         console.log($scope.launchPops);
         for (j = 0; j < vnfd.vdu.length; j++) {
-            //console.log($scope.nsdToSend.vnfd[i].vdu[j].id);
             vduName = vnfd.vdu[j].name;
-            // $scope.launchPops[vnfd.name][vduName].push(pop);
         }
         remove($scope.launchPopsAvailable[vnfd.name].pops, pop);
         $scope.tableParamsFilteredLaunchPops.reload();
         $scope.tableParamsFilteredPops.reload();
 
         launchPopTable.expanded = true;
-    }
+    };
 
     $scope.removePopToVnfd = function (vnfd, pop) {
+        $scope.azVimInstance[pop.name] = "random";
         $scope.launchPopsAvailable[vnfd.name].pops.push(pop);
         for (j = 0; j < vnfd.vdu.length; j++) {
-            //console.log($scope.nsdToSend.vnfd[i].vdu[j].id);
             vduName = vnfd.vdu[j].name;
-            // $scope.launchPops[vnfd.name][vduName].push(pop);
         }
         remove($scope.launchPops[vnfd.name].pops, pop);
         $scope.tableParamsFilteredLaunchPops.reload();
         $scope.tableParamsFilteredPops.reload();
-    }
-
+    };
 
 
     $scope.vnfdJSON = "";
@@ -1112,37 +1042,31 @@ app.controller('NsdCtrl', function ($scope, $compile, $cookieStore, $routeParams
         $scope.vnfdJSONname = vnfd.name;
         $scope.vnfdJSON = vnfd;
         $scope.jsonrendVNFD()
-    }
+    };
 
     $scope.addPopToNsd = function (pop, launchPopTable) {
-        console.log($scope.launchPops)
+
         for (var vnfdname in $scope.launchPops) {
             console.log("Name is: " + vnfdname);
-            // for (i = 0; i < $scope.launchPops.length; i++) {
-            //     vnfdName = $scope.launchPops[i].name;
             var found = false;
             $scope.launchPops[vnfdname].pops.forEach(function (pop1) {
                 console.log(pop1.name + " = " + pop.name);
-                if (pop1.name == pop.name) {
+                if (pop1.name === pop.name) {
                     found = true;
                 }
             });
 
             if (!found) {
+                pop['az'] = getSelectedText(pop.name);
                 $scope.launchPops[vnfdname].pops.push(angular.copy(pop));
             }
-            // for (j = 0; j < vnfd.vdu.length; j++) {
-            //     //console.log($scope.nsdToSend.vnfd[i].vdu[j].id);
-            //     vduName = vnfd.vdu[j].name;
-            //     // $scope.launchPops[vnfd.name][vduName].push(pop);
-            // }
             remove($scope.launchPopsAvailable[vnfdname].pops, pop);
         }
-        ;
+        console.log($scope.launchPops);
         $scope.tableParamsFilteredLaunchPops.reload();
         $scope.tableParamsFilteredPops.reload();
         launchPopTable.expanded = true;
-    }
+    };
 
     $scope.loadVnfdTabs = function () {
         $scope.tabs = [];
@@ -1156,11 +1080,11 @@ app.controller('NsdCtrl', function ($scope, $compile, $cookieStore, $routeParams
             tab['title'] = $scope.nsdToSend.vnfd[i].name;
             tab['active'] = true;
             tab['disabled'] = false;
-            tab['vnfd'] = $scope.nsdToSend.vnfd[i]
+            tab['vnfd'] = $scope.nsdToSend.vnfd[i];
 
             $scope.tabs.push(tab);
         }
-    }
+    };
 
     angular.element(document).ready(function () {
 
@@ -1281,19 +1205,20 @@ app.controller('NsdCtrl', function ($scope, $compile, $cookieStore, $routeParams
         localStorage.setItem("LastURL", location.href);
     } else {
         document.getElementById("result").innerHTML = "Sorry, your browser does not support Web Storage...";
-    };
-    $('.btnNext').click(function(){
+    }
+    ;
+    $('.btnNext').click(function () {
         $('.nav-pills > .active').next('li').find('a').trigger('click');
     });
 
-    $('.btnPrevious').click(function(){
+    $('.btnPrevious').click(function () {
         $('.nav-pills > .active').prev('li').find('a').trigger('click');
     });
-    $(document).ready(function(){
-        $(".nav-pills a").click(function(){
+    $(document).ready(function () {
+        $(".nav-pills a").click(function () {
             $(this).tab('show');
         });
-        $('.nav-pills a').on('shown.bs.tab', function(event){
+        $('.nav-pills a').on('shown.bs.tab', function (event) {
             $scope.LastTabNSDLaunch = $(event.target).text();         // active tab
             console.log($scope.LastTabNSDLaunch);
         });
