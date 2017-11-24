@@ -576,10 +576,10 @@ app.controller('NsdCtrl', function ($scope, $compile, $cookieStore, $routeParams
             postNSD = $scope.file;
             if (postNSD.charAt(0) === '<')
                 type = 'definitions';
+            document.getElementById("formJson").reset();
         }
         else if (textTopologyJson !== '') {
             postNSD = textTopologyJson;
-
         }
 
         else {
@@ -602,7 +602,6 @@ app.controller('NsdCtrl', function ($scope, $compile, $cookieStore, $routeParams
                             //do what you need here
                             loadTable();
                         }, 500);
-
                         //                        window.setTimeout($scope.cleanModal(), 3000);
                     })
                     .error(function (data, status) {
