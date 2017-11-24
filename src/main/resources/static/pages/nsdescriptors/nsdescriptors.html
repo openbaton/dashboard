@@ -1058,7 +1058,8 @@
                                                                     </thead>
                                                                     <tr ng-repeat="vimInstance in $data track by $index">
                                                                         <td class="col-md-9">
-                                                                            {{vimInstance.name}} <span ng-show="vimInstance.az !== undefined || vimInstance.az !== ''">{{vimInstance.az}}</span>
+                                                                            {{vimInstance.name}} <span
+                                                                                ng-show="vimInstance.az !== undefined || vimInstance.az !== ''">{{vimInstance.az}}</span>
                                                                         </td>
                                                                         <td style="text-align: center;"
                                                                             class="col-md-3">
@@ -1452,8 +1453,7 @@
                                                    step="1"
                                                    name="monPort"
                                                    ng-change="changePort(monitoringPort)"
-                                                   ng-model="monitoringPort"
-                                                   ng-pattern="^([0-9]{1,4}|[1-5][0-9]{4}|6[0-4][0-9]{3}|65[0-4][0-9]{2}|655[0-2][0-9]|6553[0-5])$">
+                                                   ng-model="monitoringPort">
                                         </td>
                                     </tr>
                                 </table>
@@ -1462,7 +1462,8 @@
                                     <span class="error" ng-show="monForm.monIp.$touched && monForm.monIp.$invalid">
                                             Entered ip is not valid!
                                     </span>
-                                    <span class="error" ng-show="!isInt(monForm.monPort.value) || (parseInt(monForm.monPort.value) < 0 && parseInt(monForm.monPort.value) > 65535)">
+                                    <span class="error"
+                                          ng-show="monForm.monPort.$touched && !isValidPort(monitoringPort)">
                                        Entered port is not valid!
                                     </span>
                                 </div>
@@ -1477,6 +1478,7 @@
                    class="btn btnPrevious">Back</a>
                 <a ng-disabled="LastTabNSDLaunch==='Monitoring IP'" class="btn btn-primary btnNext">Next</a>
                 <button class="btn  btn-success"
+                        ng-disabled="(monForm.monPort.$touched && !isValidPort(monitoringPort)) || (monForm.monIp.$touched && monForm.monIp.$invalid)"
                         data-dismiss="modal" ng-click="launch()">Launch
                 </button>
             </div>

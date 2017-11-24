@@ -777,6 +777,10 @@ app.controller('NsdCtrl', function ($scope, $compile, $cookieStore, $routeParams
         return !isNaN(value) && (function(x) { return (x | 0) === x; })(parseFloat(value))
     };
 
+    $scope.isValidPort = function (value) {
+      return $scope.isInt(value) && (parseInt(value) > 0 && parseInt(value) < 65536)
+    };
+
     $scope.launch = function () {
         //console.log($scope.launchConfiguration.configurations);
         removeEmptyConfs();
@@ -787,7 +791,7 @@ app.controller('NsdCtrl', function ($scope, $compile, $cookieStore, $routeParams
         $scope.launchObj.keys = [];
         $scope.launchObj.vduVimInstances = $scope.vimForLaunch;
         var monIp = $scope.monitoringIp;
-        if (isInt($scope.monitoringPort))
+        if (parseInt($scope.monitoringPort) > 0)
             monIp += ":" + $scope.monitoringPort;
         $scope.launchObj.monitoringIp = monIp;
         $scope.launchKeys.forEach(function (key) {
