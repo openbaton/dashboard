@@ -268,10 +268,12 @@ app.controller('IndexCtrl', function ($document, $scope, $compile, $routeParams,
         http.syncGet(url + '/keys/').then(function (data) {
             $scope.numberKeys = data.length;
         });
+        http.syncGet(url + '/datacenters/').then(function (data) {
+            $scope.VIMs = data.length;
+             // console.log($scope.VIMs);
+        });
 
     }
-
-
     $scope.$watch('projectSelected', function (newValue, oldValue) {
         console.log(newValue);
         if (!angular.isUndefined(newValue) && !angular.isUndefined(oldValue)) {
@@ -480,8 +482,6 @@ app.controller('IndexCtrl', function ($document, $scope, $compile, $routeParams,
         loadQuota();
 
     };
-
-
     function loadQuota() {
         http.get(url + '/quotas')
             .success(function (response) {
@@ -809,6 +809,7 @@ app.controller('IndexCtrl', function ($document, $scope, $compile, $routeParams,
     } else {
         document.getElementById("result").innerHTML = "Sorry, your browser does not support Web Storage...";
     }
-
-
+    $("#NoVIMs").fadeTo(10000, 1000).slideUp(500, function(){
+        $("#NoVIMs").slideUp(500);
+    });
 });
