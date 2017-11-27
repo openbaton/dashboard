@@ -778,7 +778,7 @@ app.controller('NsdCtrl', function ($scope, $compile, $cookieStore, $routeParams
     };
 
     $scope.isValidPort = function (value) {
-      return $scope.isInt(value) && (parseInt(value) > 0 && parseInt(value) < 65536)
+      return value === null || value === "" || ($scope.isInt(value) && (parseInt(value) > 0 && parseInt(value) < 65536));
     };
 
     $scope.launch = function () {
