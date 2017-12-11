@@ -141,7 +141,6 @@ app.controller('NsdCtrl', function ($scope, $compile, $cookieStore, $routeParams
                 return paginationNSD;
             }
         });
-
     var filteredPops = []
     $scope.tableParamsFilteredPops = new NgTableParams({
             page: 1,
@@ -722,7 +721,6 @@ app.controller('NsdCtrl', function ($scope, $compile, $cookieStore, $routeParams
         }
 
     }
-
     $scope.launchOption = function (data) {
         env();
         $scope.launchConfiguration = null;
@@ -1089,8 +1087,7 @@ app.controller('NsdCtrl', function ($scope, $compile, $cookieStore, $routeParams
         remove($scope.launchPopsAvailable[vnfd.name].pops, pop);
         $scope.tableParamsFilteredLaunchPops.reload();
         $scope.tableParamsFilteredPops.reload();
-
-        launchPopTable.expanded = true;
+        // launchPopTable.expanded = true;
     }
 
     $scope.removePopToVnfd = function (vnfd, pop) {
@@ -1104,6 +1101,25 @@ app.controller('NsdCtrl', function ($scope, $compile, $cookieStore, $routeParams
         $scope.tableParamsFilteredLaunchPops.reload();
         $scope.tableParamsFilteredPops.reload();
     }
+    $scope.RemovePoPfromNSD = function (pop, launchPopTable) {
+        for (var vnfdname in $scope.launchPopsAvailable) {
+            var found = false;
+            $scope.launchPopsAvailable[vnfdname].pops.forEach(function (pop1) {
+                if (pop1.name == pop.name) {
+                    found = true;
+                }
+            });
+
+            if (!found) {
+                $scope.launchPopsAvailable[vnfdname].pops.push(angular.copy(pop));
+            }
+            remove($scope.launchPops[vnfdname].pops, pop);
+        }
+        ;
+        $scope.tableParamsFilteredLaunchPops.reload();
+        $scope.tableParamsFilteredPops.reload();
+        console.log($scope.launchPops);
+    };
 
 
 
@@ -1142,7 +1158,7 @@ app.controller('NsdCtrl', function ($scope, $compile, $cookieStore, $routeParams
         ;
         $scope.tableParamsFilteredLaunchPops.reload();
         $scope.tableParamsFilteredPops.reload();
-        launchPopTable.expanded = true;
+        // launchPopTable.expanded = true;
     }
 
     $scope.loadVnfdTabs = function () {

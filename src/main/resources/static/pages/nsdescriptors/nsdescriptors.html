@@ -955,16 +955,16 @@
                                                                                     aria-hidden="true"></i> Add
                                                                             </a>
                                                                         </td>
-                                                                        <td class="col-md-4"
-                                                                            style="text-align: center !important;">
-                                                                            <a ng-if="vimInstance.name.length"
-                                                                               title="Add a new PoP to this NSR" href=""
-                                                                               ng-click="addPopToNsd(vimInstance, launchPopTable)"><i
-                                                                                    class="fa fa-plus"
-                                                                                    aria-hidden="true"></i> Add
-                                                                                to all
-                                                                            </a>
-                                                                        </td>
+                                                                        <!--<td class="col-md-4"-->
+                                                                            <!--style="text-align: center !important;">-->
+                                                                            <!--<a ng-if="vimInstance.name.length"-->
+                                                                               <!--title="Add a new PoP to this NSR" href=""-->
+                                                                               <!--ng-click="addPopToNsd(vimInstance, launchPopTable)"><i-->
+                                                                                    <!--class="fa fa-plus"-->
+                                                                                    <!--aria-hidden="true"></i> Add-->
+                                                                                <!--to all-->
+                                                                            <!--</a>-->
+                                                                        <!--</td>-->
                                                                     </tr>
                                                                     <tr ng-show="!$data.length">
                                                                         <td>
@@ -1014,6 +1014,115 @@
                                                                                 <i class="fa fa-trash-o"
                                                                                    aria-hidden="true"></i> Del
                                                                             </a>
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr ng-show="!$data.length">
+                                                                        <td>
+                                                                            No PoPs are choosen for the selected VNFD.
+                                                                        </td>
+                                                                    </tr>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                            </tab>
+                                            <tab heading="General">
+                                                <p><br>
+                                                From this section, you can assign or remove PoPs to all VNFD.
+                                                </p>
+                                                <div  class="tab-text">
+                                                    <div class="col-md-6">
+                                                        <p>
+                                                            <br>
+                                                            The following list shows which PoPs are available.
+                                                            <br>
+                                                        </p>
+                                                        <div>
+                                                            <p style="font-size:20px">
+                                                                <!--<a href="" ng-if="popTable.expanded"-->
+                                                                   <!--ng-click="popTable.expanded = false">-</a>-->
+                                                                <!--<a href="" ng-if="!popTable.expanded"-->
+                                                                   <!--ng-click="popTable.expanded = true">+</a>-->
+                                                                Available
+                                                                <!--({{launchPopsAvailable[tab.vnfd.name].pops.length}})-->
+                                                            </p>
+                                                            <div>
+                                                                <table style="text-align: left;"
+                                                                       ng-table="tableParamsFilteredPops"
+                                                                       class="table table-bordered table-striped"
+                                                                       show-filter="true">
+                                                                    <thead>
+                                                                    <tr>
+                                                                        <td colspan="3" filter="{name: 'text'}"
+                                                                            sortable="'name'"><b>Name</b></td>
+                                                                    </tr>
+                                                                    </thead>
+                                                                    <tr ng-repeat="vimInstance in $data track by $index">
+                                                                        <td class="col-md-5">
+                                                                            {{vimInstance.name}}
+                                                                        </td>
+
+                                                                        <td class="col-md-4"
+                                                                            style="text-align: center !important;">
+                                                                            <a ng-if="vimInstance.name.length"
+                                                                               title="Add a new PoP to this NSR" href=""
+                                                                               ng-click="addPopToNsd(vimInstance, launchPopTable)"><i
+                                                                                    class="fa fa-plus"
+                                                                                    aria-hidden="true"></i> Add
+                                                                                to all
+                                                                            </a>
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr ng-show="!$data.length">
+                                                                        <td>
+                                                                            No more PoPs are available
+                                                                        </td>
+                                                                    </tr>
+                                                                </table>
+
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <p>
+                                                            <br/>
+                                                            The following list shows which PoPs are choosen for the
+                                                            selected VNFD.
+                                                        </p>
+                                                        <div >
+                                                            <p style="font-size:20px">
+                                                                <!--<a href="" ng-if="launchPopTable.expanded"-->
+                                                                   <!--ng-click="launchPopTable.expanded = false">-</a>-->
+                                                                <!--<a href="" ng-if="!launchPopTable.expanded"-->
+                                                                   <!--ng-click="launchPopTable.expanded = true">+</a>-->
+                                                                Assigned
+                                                                <!--({{launchPops[tab.vnfd.name].pops.length}})-->
+                                                            </p>
+                                                            <div>
+                                                                <table ng-table="tableParamsFilteredLaunchPops"
+                                                                       class="table table-bordered table-striped"
+                                                                       show-filter="true">
+                                                                    <thead>
+                                                                    <tr>
+                                                                        <td colspan="2" filter="{name: 'text'}"
+                                                                            sortable="'name'"><b>Name</b></td>
+                                                                    </tr>
+                                                                    </thead>
+                                                                     <tr ng-repeat="vimInstance in $data track by $index">
+                                                                        <td class="col-md-7">
+                                                                            {{vimInstance.name}}
+                                                                        </td>
+                                                                        <td style="text-align: center;"
+                                                                            class="col-md-5">
+                                                                            <a ng-if="vimInstance.name.length"
+                                                                               title="Add a new PoP to this NSR" href=""
+                                                                               ng-click="RemovePoPfromNSD(vimInstance, launchPopTable)">
+                                                                                <i class="fa fa-trash-o"
+                                                                                   aria-hidden="true"></i> Del from All
+                                                                            </a>
+
                                                                         </td>
                                                                     </tr>
                                                                     <tr ng-show="!$data.length">
