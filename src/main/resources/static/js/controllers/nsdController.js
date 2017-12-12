@@ -1008,6 +1008,15 @@ app.controller('NsdCtrl', function ($scope, $compile, $cookieStore, $routeParams
                 msg: mes
             });
         }
+        if (status === 403) {
+            var tmpData = JSON.parse(data);
+            console.log(tmpData.code + tmpData.message);
+                mes = tmpData.message;
+            $scope.alerts.push({
+                type: 'danger',
+                msg: mes
+            });
+        }
         else if (status === 400) {
             if (data !== undefined) {
                 $scope.alerts.push({
@@ -1035,7 +1044,6 @@ app.controller('NsdCtrl', function ($scope, $compile, $cookieStore, $routeParams
             AuthService.logout();
         }
     }
-
     function showOk(msg) {
 
         $scope.alerts.push({type: 'success', msg: msg});
