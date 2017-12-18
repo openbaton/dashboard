@@ -25,7 +25,7 @@ var app = angular.module('app');
 
 app.controller('LoginController', function ($scope, AuthService, Session, $rootScope, $location, $cookieStore, $http, http) {
     $scope.currentUser = null;
-    // $scope.URL = 'http://localhost:8080';
+    //$scope.URL = 'http://localhost:8080';
     $scope.URL = '';
     $scope.alerts = [];
     $scope.NFVOVersion = "";
@@ -44,7 +44,7 @@ app.controller('LoginController', function ($scope, AuthService, Session, $rootS
     }
 
     else if ($cookieStore.get('logged')) {
-        if ($scope.oldUrl == undefined || $scope.oldUrl == null) {
+        if ($scope.oldUrl === undefined || $scope.oldUrl === null) {
             $scope.logged = $cookieStore.get('logged');
             $rootScope.logged = $cookieStore.get('logged')
         }

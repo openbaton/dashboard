@@ -113,7 +113,7 @@ angular.module('app').controller('vimInstanceCtrl', function ($scope, $routePara
     };
     $scope.sendInfrastructure = function () {
         if (formInput) {
-            console.log("Using formInput")
+            console.log("Using formInput");
             //console.log($scope.newvim);
             checkKey();
             //console.log($scope.newvim);
@@ -132,7 +132,7 @@ angular.module('app').controller('vimInstanceCtrl', function ($scope, $routePara
                 });
         } else if (fileInput) {
             if ($scope.file !== '' && !angular.isUndefined($scope.file)) {
-                console.log("Using fileInput")
+                console.log("Using fileInput");
                 //console.log($scope.file);
                 http.post(url, $scope.file)
                     .success(function (response) {
@@ -278,44 +278,25 @@ angular.module('app').controller('vimInstanceCtrl', function ($scope, $routePara
         }
     }
 
-    $scope.loadVIM = function () {
-        if (!angular.isUndefined($routeParams.vimInstanceId))
-            http.get(url + $routeParams.vimInstanceId)
-                .success(function (response, status) {
-                    console.log(response);
-                    $scope.vimInstance = response;
-                    $scope.vimInstanceJSON = JSON.stringify(response, undefined, 4);
-
-                }).error(function (data, status) {
-                showError(data, status);
-            });
-        else {
-            http.get(url)
-                .success(function (response) {
-                    $scope.vimInstances = response;
-                })
-                .error(function (data, status) {
-                    showError(data, status);
-                });
-        }
-    }
-    var promise = $interval($scope.loadVIM, 10000);
+    var promise = $interval(loadVIM, 10000);
     $scope.$on('$destroy', function () {
         if (promise)
             $interval.cancel(promise);
     });
 
+    /**
+     * @return {boolean}
+     */
     $scope.ActiveVIM = function (status) {
-        if (status === 'ACTIVE') {
-            return true;
-        }
-        return false;
+        return status === 'ACTIVE';
+
     };
+    /**
+     * @return {boolean}
+     */
     $scope.PendingVIM = function (status) {
-        if (status != 'ACTIVE') {
-            return true;
-        }
-        return false;
+        return status !== 'ACTIVE';
+
     };
 
     function loadInstalled() {
@@ -362,7 +343,7 @@ angular.module('app').controller('vimInstanceCtrl', function ($scope, $routePara
         $scope.alerts.push({type: 'success', msg: msg});
         window.setTimeout(function () {
             for (i = 0; i < $scope.alerts.length; i++) {
-                if ($scope.alerts[i].type == 'success') {
+                if ($scope.alerts[i].type === 'success') {
                     $scope.alerts.splice(i, 1);
                 }
             }

@@ -46,6 +46,7 @@
         </div>
     </div>
 </div>
+
 <div class="row">
     <div class="col-lg-12 top-buffer">
         <alert ng-repeat="alert in alerts" type="alert.type" close="closeAlert($index)">
@@ -103,6 +104,40 @@
         </div>
     </div>
 </div>
+
+<div class="modal fade" id="modalFile" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Save a Network Service Descriptor</h4>
+            </div>
+            <div class="modal-body">
+                <form role="form" id="formJson">
+                    <div class="form-group">
+                        <br> <label for="jsonInputArea">Insert Your Json</label>
+                        <textarea name="textTopologyJson" ng-model="textTopologyJson"
+                                  ng-change="changeText(textTopologyJson)" id="jsonInputArea"
+                                  class="form-control" rows="5" placeholder="{ }"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="jsonInputFile">File input</label>
+                        <input type="file" id="jsonInputFile" onchange="angular.element(this).scope().setFile(this)">
+                        <p class="help-block">Example: NetworkServiceDescriptor.json </p>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close
+                </button>
+                <button type="button" id="storeNSD" ng-click="sendFile(textTopologyJson)" class="btn btn-primary">Store
+                    NSD
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div class="modal fade" id="addEditVDU" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -219,6 +254,7 @@
         </div>
     </div>
 </div>
+
 <div class="modal fade" id="modaladdDepFlavour" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -330,6 +366,7 @@
         </div>
     </div>
 </div>
+
 <div class="modal fade" id="addEditVNDF" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -512,6 +549,7 @@
         </div>
     </div>
 </div>
+
 <div class="modal fade" tabindex="-1" role="dialog" id="modalCreateNSD" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
@@ -782,6 +820,7 @@
         </div>
     </div>
 </div>
+
 <div class="modal" id="modalCreateNSDUploadjson" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -827,6 +866,7 @@
         <!--modal-dialog-->
     </div>
 </div>
+
 <div class="modal fade" tabindex="-1" role="dialog" id="editModal">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -884,9 +924,10 @@
     </div>
     <!-- /.modal-dialog -->
 </div>
+
 <div class="modal fade" tabindex="-1" role="dialog" id="launchForm" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog modal-lg">
-        <div class="modal-content">
+        <div class="modal-content" style="width: 120%">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
                 <h4 class="modal-title">Launch Network Service Descriptor</h4>
@@ -935,10 +976,9 @@
                                                                        ng-table="tableParamsFilteredPops"
                                                                        class="table table-bordered table-striped"
                                                                        show-filter="true">
-                                                                    <!--<tr ng-init="key.expanded=false" ng-repeat-start="key in $data">-->
                                                                     <thead>
                                                                     <tr>
-                                                                        <td colspan="3" filter="{name: 'text'}"
+                                                                        <td colspan="4" filter="{name: 'text'}"
                                                                             sortable="'name'"><b>Name</b></td>
                                                                     </tr>
                                                                     </thead>
@@ -946,14 +986,29 @@
                                                                         <td class="col-md-5">
                                                                             {{vimInstance.name}}
                                                                         </td>
+                                                                        <td class="col-md-5">
+                                                                            <select name="testId"
+                                                                                    class="form-control input-sm"
+                                                                                    ng-if="vimInstance.zones !== undefined"
+                                                                                    ng-init="azVimInstance[vimInstance.name] = 'random'"
+                                                                                    ng-model="azVimInstance[vimInstance.name]">
+                                                                                <!--ng-init="azVimInstance[vimInstance.name] = vimInstance.zones[0].name"-->
+                                                                                <option value="random"
+                                                                                        label="random">random
+                                                                                </option>
+                                                                                <option ng-repeat="az in vimInstance.zones">
+                                                                                    {{az.name}}
+                                                                                </option>
+                                                                            </select>
+                                                                        </td>
                                                                         <td class="col-md-3"
                                                                             style="text-align: center;">
-                                                                            <a ng-if="vimInstance.name.length"
-                                                                               title="Add a new PoP to this NSR" href=""
-                                                                               ng-click="addPopToVnfd(tab.vnfd, vimInstance, launchPopTable)"><i
-                                                                                    class="fa fa-plus"
-                                                                                    aria-hidden="true"></i> Add
-                                                                            </a>
+                                                                            <button ng-if="vimInstance.name.length"
+                                                                                    type="button"
+                                                                                    class="btn  btn-primary btn-sm"
+                                                                                    ng-click="addPopToVnfd(tab.vnfd, vimInstance, launchPopTable)">
+                                                                                +
+                                                                            </button>
                                                                         </td>
                                                                         <!--<td class="col-md-4"-->
                                                                             <!--style="text-align: center !important;">-->
@@ -995,7 +1050,6 @@
                                                                 <table ng-table="tableParamsFilteredLaunchPops"
                                                                        class="table table-bordered table-striped"
                                                                        show-filter="true">
-                                                                    <!--<tr ng-init="key.expanded=false" ng-repeat-start="key in $data">-->
                                                                     <thead>
                                                                     <tr>
                                                                         <td colspan="2" filter="{name: 'text'}"
@@ -1004,16 +1058,17 @@
                                                                     </thead>
                                                                     <tr ng-repeat="vimInstance in $data track by $index">
                                                                         <td class="col-md-9">
-                                                                            {{vimInstance.name}}
+                                                                            {{vimInstance.name}} <span
+                                                                                ng-show="vimInstance.az !== undefined || vimInstance.az !== ''">{{vimInstance.az}}</span>
                                                                         </td>
                                                                         <td style="text-align: center;"
                                                                             class="col-md-3">
-                                                                            <a ng-if="vimInstance.name.length"
-                                                                               title="Add a new PoP to this NSR" href=""
-                                                                               ng-click="removePopToVnfd(tab.vnfd, vimInstance)">
-                                                                                <i class="fa fa-trash-o"
-                                                                                   aria-hidden="true"></i> Del
-                                                                            </a>
+                                                                            <button ng-if="vimInstance.name.length"
+                                                                                    type="button"
+                                                                                    class="btn btn-warning btn-sm"
+                                                                                    ng-click="removePopToVnfd(tab.vnfd, vimInstance)">
+                                                                                -
+                                                                            </button>
                                                                         </td>
                                                                     </tr>
                                                                     <tr ng-show="!$data.length">
@@ -1145,6 +1200,7 @@
                             </div>
                             <!-- container -->
                         </div>
+
                         <div class="tab-pane" id="Keys">
                             <form role="form" class="form-horizontal">
                                 <br>
@@ -1336,6 +1392,7 @@
                                 </div>
                             </form>
                         </div>
+
                         <div class="tab-pane" id="ConfigurationParameters">
                             <div class="container-fluid">
                                 <p>
@@ -1469,6 +1526,7 @@
                                 </tabset>
                             </div>
                         </div>
+
                         <div class="tab-pane" id="MonitoringIP">
                             <br>
                             <p>Specify the IP of the monitoring server to which the VNFs should register. Open Baton
@@ -1476,9 +1534,49 @@
                                 Please refer to the documentation for understanding how to use a different monitoring
                                 system</p>
 
-                            <b>Monitoring IP: &nbsp;</b>
-                            <input style="width: 50%;display: inline;" class="form-control" type="text"
-                                   ng-change="changeIp(monitoringIp)" ng-model="monitoringIp">
+                            <form name="monForm">
+                                <table>
+                                    <tr>
+                                        <td style="width:30%">
+                                            <b>Monitoring IP: &nbsp;</b>
+                                        </td>
+                                        <td style="width:70%">
+
+                                            <input style="width: 100%;display: inline;"
+                                                   class="form-control"
+                                                   type="text"
+                                                   name="monIp"
+                                                   ng-change="changeIp(monitoringIp)" ng-model="monitoringIp"
+                                                   ng-pattern="/^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/">
+
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="width:30%">
+                                            <b>Monitoring Port: &nbsp;</b>
+                                        </td>
+                                        <td style="width:30%">
+                                            <input style="width: 100%;display: inline;"
+                                                   class="form-control"
+                                                   type="number"
+                                                   step="1"
+                                                   name="monPort"
+                                                   ng-change="changePort(monitoringPort)"
+                                                   ng-model="monitoringPort">
+                                        </td>
+                                    </tr>
+                                </table>
+
+                                <div role="alert">
+                                    <span class="error" ng-show="monForm.monIp.$touched && monForm.monIp.$invalid">
+                                            Entered ip is not valid!
+                                    </span>
+                                    <span class="error"
+                                          ng-show="monForm.monPort.$touched && !isValidPort(monitoringPort)">
+                                       Entered port is not valid!
+                                    </span>
+                                </div>
+                            </form>
                         </div>
                     </div><!-- tab content -->
                 </div><!-- end of container -->
@@ -1489,12 +1587,14 @@
                    class="btn btnPrevious">Back</a>
                 <a ng-disabled="LastTabNSDLaunch==='Monitoring IP'" class="btn btn-primary btnNext">Next</a>
                 <button class="btn  btn-success"
+                        ng-disabled="(monForm.monPort.$touched && !isValidPort(monitoringPort)) || (monForm.monIp.$touched && monForm.monIp.$invalid)"
                         data-dismiss="modal" ng-click="launch()">Launch
                 </button>
             </div>
         </div>
     </div>
 </div>
+
 <div class="modal fade" id="modalFileCSAR" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
