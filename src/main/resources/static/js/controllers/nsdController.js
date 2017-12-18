@@ -1031,9 +1031,6 @@ app.controller('NsdCtrl', function ($scope, $compile, $cookieStore, $routeParams
         remove($scope.launchPopsAvailable[vnfd.name].pops, pop);
         $scope.tableParamsFilteredLaunchPops.reload();
         $scope.tableParamsFilteredPops.reload();
-
-        launchPopTable.expanded = true;
-    };
         // launchPopTable.expanded = true;
     }
 
@@ -1047,7 +1044,6 @@ app.controller('NsdCtrl', function ($scope, $compile, $cookieStore, $routeParams
         $scope.tableParamsFilteredLaunchPops.reload();
         $scope.tableParamsFilteredPops.reload();
     };
-    }
     $scope.RemovePoPfromNSD = function (pop, launchPopTable) {
         for (var vnfdname in $scope.launchPopsAvailable) {
             var found = false;
@@ -1099,8 +1095,6 @@ app.controller('NsdCtrl', function ($scope, $compile, $cookieStore, $routeParams
         console.log($scope.launchPops);
         $scope.tableParamsFilteredLaunchPops.reload();
         $scope.tableParamsFilteredPops.reload();
-        launchPopTable.expanded = true;
-    };
         // launchPopTable.expanded = true;
     }
 
