@@ -750,4 +750,11 @@ var app = angular.module('app').controller('NsrCtrl', function ($scope, $http, $
         document.getElementById("result").innerHTML = "Sorry, your browser does not support Web Storage...";
     }
 
+    $scope.vduHasFloatingIp = function (vdu) {
+        for (vnfci in vdu.vnfc_instance) {
+            if (vdu.vnfc_instance[vnfci].floatingIps !== undefined && vdu.vnfc_instance[vnfci].floatingIps.length > 0)
+                return true;
+        }
+        return false;
+    }
 });
