@@ -525,7 +525,7 @@
             </div>
             <div class="modal-body">
                 <div class="container" style="width: 100%">
-                    <ul class="nav nav-pills tmp nav-stacked col-md-3">
+                    <ul class="nav nav-pills CompsNSD nav-stacked col-md-3">
                         <li class="active"><a href="#generalInfo" data-toggle="pill">General Information</a></li>
                         <li><a href="#VNFDSelection" data-toggle="pill">Virtual Network Function(s)</a></li>
                         <li><a href="#vldSelection" data-toggle="pill">Virtual Links</a></li>
@@ -772,9 +772,9 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <a class="btn btnPrevious"
-                   ng-disabled="createNSDfirstStep==='' || LastTabNSDLaunch1==='General Information' || LastTabNSDLaunch=== undefined ">Back</a>
-                <a class="btn btn-primary btnNext" ng-disabled="LastTabNSDLaunch==='Virtual Link Descriptor'">Next</a>
+                <a class="btn btnPreviousCompsNSD"
+                   ng-disabled="createNSDfirstStep==='' || LastTabCompsNSD==='General Information' || LastTabCompsNSD=== undefined">Back</a>
+                <a class="btn btn-primary btnNextCompNSD" ng-disabled="LastTabCompsNSD==='Virtual Links'">Next</a>
                 <button type="button" id="addService" class="btn btn-primary"
                         ng-disabled="nsdCreateTmp.name.length < 1 || nsdCreateTmp.vendor.length < 1 || nsdCreateTmp.vnfd.length < 1"
                         ng-click="sendNSDCreate()">Create
@@ -928,6 +928,7 @@
                                                             <br>
                                                             The following list shows which PoPs are available.
                                                             <br>
+                                                            <br>
                                                         </p>
                                                         <div ng-init="popTable.expanded=true">
                                                             <p style="font-size:20px">
@@ -1058,6 +1059,7 @@
                                                         <p>
                                                             <br>
                                                             The following list shows which PoPs are available.
+                                                            <br>
                                                             <br>
                                                         </p>
                                                         <div>

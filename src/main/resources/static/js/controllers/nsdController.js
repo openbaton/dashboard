@@ -1245,7 +1245,23 @@ app.controller('NsdCtrl', function ($scope, $compile, $cookieStore, $routeParams
         });
         $('.nav-pills a').on('shown.bs.tab', function (event) {
             $scope.LastTabNSDLaunch = $(event.target).text();         // active tab
-            console.log($scope.LastTabNSDLaunch);
+            // console.log($scope.LastTabNSDLaunch);
+        });
+    });
+    $('.btnNextCompNSD').click(function () {
+        $('.CompsNSD > .active').next('li').find('a').trigger('click');
+    });
+
+    $('.btnPreviousCompsNSD').click(function () {
+        $('.CompsNSD > .active').prev('li').find('a').trigger('click');
+    });
+    $(document).ready(function () {
+        $(".CompsNSD  a").click(function () {
+            $(this).tab('show');
+        });
+        $('.CompsNSD a').on('shown.bs.tab', function (event) {
+            $scope.LastTabCompsNSD = $(event.target).text();         // active tab
+            // console.log($scope.LastTabCompsNSD);
         });
     });
     $scope.generateKeyInWizard = function (generateKeyName) {
