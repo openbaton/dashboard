@@ -19,6 +19,7 @@ limitations under the License.-->
         </h1>
         <ol class="breadcrumb">
             <li class="active"><i class="fa fa-dashboard"></i> Overview</li>
+            <a class="right" ng-hide="VIMs === 0 " ng-click="refreshQuota().reload()" href=""><i class="fa fa-refresh"></i> Refresh Quota</a>
         </ol>
         <div id="topologyAlertOk" class="alert alert-success"
              style="display: none;">
@@ -130,8 +131,7 @@ limitations under the License.-->
         </div>
     </div>
 </div>
-
-<div class="row">
+<div class="row" ng-if="VIMs > 0 ">
     <div class="col-md-3">
         <div class="panel panelbox">
             <div class="panel-heading-white panel-heading text-center">
@@ -151,7 +151,6 @@ limitations under the License.-->
             </div>
         </div>
     </div>
-
     <div class="col-md-3">
         <div class="panel panelbox">
             <div class="panel-heading-white panel-heading text-center">
@@ -208,6 +207,8 @@ limitations under the License.-->
             </div>
         </div>
     </div>
-
-
+</div>
+<div ng-hide="VIMs > 0 " class="alert alert-warning alert-dismissable" id="NoVIMs">
+    <a href="#" class="close" data-dismiss="alert" aria-label="close">×</a>
+    No resources are available! Please upload the VIM first.
 </div>

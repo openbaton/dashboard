@@ -17,15 +17,15 @@
 var app = angular.module('app').controller('driverCtrl', function ($scope, serviceAPI, $routeParams, $http, $cookieStore, AuthService, $window, $interval, http) {
     var url = $cookieStore.get('URL');
     //var defaultUrl = "lore:8082"
-    var defaultUrl = "marketplace.openbaton.org:8082";
+    var defaultUrl = "marketplace.openbaton.org:8080";
     $scope.drivers = [];
     $scope.driversInstalled;
     $scope.installed = [];
     $scope.alerts = [];
+    // to avoid the order of tables while it refresh in the background
+    $scope.predicate = 'id';
     loadTable();
     loadInstalled();
-
-
     function loadTable() {
         //console.log($routeParams.userId);
         $http.get("http://" + defaultUrl + "/api/v1/vim-drivers")

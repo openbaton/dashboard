@@ -20,6 +20,8 @@ var app = angular.module('app').controller('keyPairsCtrl', function ($scope, ser
     var urlprojects = $cookieStore.get('URL') + "/api/v1/projects/";
     $scope.keypairs = "";
     $scope.alerts = [];
+    // to avoid the order of tables while it refresh in the background
+    $scope.predicate = 'id';
     loadTable();
     function loadTable() {
 

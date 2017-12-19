@@ -51,6 +51,8 @@ app.controller('NsdCtrl', function ($scope, $compile, $cookieStore, $routeParams
     $scope.basicConfiguration = {name: "", config: {name: "", configurationParameters: []}};
     $scope.LastTabNSDLaunch = '';
     $scope.basicConf = {description: "", confKey: "", value: ""};
+    // to avoid the order of tables while it refresh in the background
+    $scope.predicate = 'id';
     loadTable();
     loadKeys();
     loadVIMs();
@@ -140,7 +142,6 @@ app.controller('NsdCtrl', function ($scope, $compile, $cookieStore, $routeParams
                 return paginationNSD;
             }
         });
-
     var filteredPops = []
     $scope.tableParamsFilteredPops = new NgTableParams({
             page: 1,
@@ -547,10 +548,10 @@ app.controller('NsdCtrl', function ($scope, $compile, $cookieStore, $routeParams
             postNSD = $scope.file;
             if (postNSD.charAt(0) === '<')
                 type = 'definitions';
+            document.getElementById("formJson").reset();
         }
         else if (textTopologyJson !== '') {
             postNSD = textTopologyJson;
-
         }
 
         else {
@@ -573,7 +574,6 @@ app.controller('NsdCtrl', function ($scope, $compile, $cookieStore, $routeParams
                             //do what you need here
                             loadTable();
                         }, 500);
-
                         //                        window.setTimeout($scope.cleanModal(), 3000);
                     })
                     .error(function (data, status) {
@@ -694,7 +694,6 @@ app.controller('NsdCtrl', function ($scope, $compile, $cookieStore, $routeParams
         }
 
     }
-
     $scope.launchOption = function (data) {
         env();
         $scope.launchConfiguration = null;
@@ -937,6 +936,15 @@ app.controller('NsdCtrl', function ($scope, $compile, $cookieStore, $routeParams
                 msg: mes
             });
         }
+        if (status === 403) {
+            var tmpData = JSON.parse(data);
+            console.log(tmpData.code + tmpData.message);
+                mes = tmpData.message;
+            $scope.alerts.push({
+                type: 'danger',
+                msg: mes
+            });
+        }
         else if (status === 400) {
             if (data !== undefined) {
                 $scope.alerts.push({
@@ -964,7 +972,6 @@ app.controller('NsdCtrl', function ($scope, $compile, $cookieStore, $routeParams
             AuthService.logout();
         }
     }
-
     function showOk(msg) {
 
         $scope.alerts.push({type: 'success', msg: msg});
@@ -1024,9 +1031,8 @@ app.controller('NsdCtrl', function ($scope, $compile, $cookieStore, $routeParams
         remove($scope.launchPopsAvailable[vnfd.name].pops, pop);
         $scope.tableParamsFilteredLaunchPops.reload();
         $scope.tableParamsFilteredPops.reload();
-
-        launchPopTable.expanded = true;
-    };
+        // launchPopTable.expanded = true;
+    }
 
     $scope.removePopToVnfd = function (vnfd, pop) {
         $scope.azVimInstance[pop.name] = "random";
@@ -1038,6 +1044,26 @@ app.controller('NsdCtrl', function ($scope, $compile, $cookieStore, $routeParams
         $scope.tableParamsFilteredLaunchPops.reload();
         $scope.tableParamsFilteredPops.reload();
     };
+    $scope.RemovePoPfromNSD = function (pop, launchPopTable) {
+        for (var vnfdname in $scope.launchPopsAvailable) {
+            var found = false;
+            $scope.launchPopsAvailable[vnfdname].pops.forEach(function (pop1) {
+                if (pop1.name == pop.name) {
+                    found = true;
+                }
+            });
+
+            if (!found) {
+                $scope.launchPopsAvailable[vnfdname].pops.push(angular.copy(pop));
+            }
+            remove($scope.launchPops[vnfdname].pops, pop);
+        }
+        ;
+        $scope.tableParamsFilteredLaunchPops.reload();
+        $scope.tableParamsFilteredPops.reload();
+        console.log($scope.launchPops);
+    };
+
 
 
     $scope.vnfdJSON = "";
@@ -1069,8 +1095,8 @@ app.controller('NsdCtrl', function ($scope, $compile, $cookieStore, $routeParams
         console.log($scope.launchPops);
         $scope.tableParamsFilteredLaunchPops.reload();
         $scope.tableParamsFilteredPops.reload();
-        launchPopTable.expanded = true;
-    };
+        // launchPopTable.expanded = true;
+    }
 
     $scope.loadVnfdTabs = function () {
         $scope.tabs = [];

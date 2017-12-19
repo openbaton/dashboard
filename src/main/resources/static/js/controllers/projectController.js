@@ -21,6 +21,8 @@ app.controller('ProjectCtrl', function ($scope, serviceAPI, $routeParams, http, 
     $scope.adminRole = "ADMIN";
     $scope.superProject = "*";
     $scope.alerts = [];
+    // to avoid the order of tables while it refresh in the background
+    $scope.predicate = 'id';
     $scope.closeAlert = function (index) {
         $scope.alerts.splice(index, 1);
     };

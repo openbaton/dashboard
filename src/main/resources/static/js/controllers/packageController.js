@@ -22,7 +22,8 @@ app.controller('PackageCtrl', function ($scope, serviceAPI, $routeParams, http, 
     var dropzoneUrl = url;
     var myDropzone;
     $scope.csarPackage = false;
-
+    // to avoid the order of tables while it refresh in the background
+    $scope.predicate = 'id';
     $scope.alerts = [];
     $scope.closeAlert = function (index) {
         $scope.alerts.splice(index, 1);

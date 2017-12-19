@@ -20,6 +20,8 @@ app.controller('EventCtrl', function ($scope, $interval, serviceAPI, $routeParam
     var url = $cookieStore.get('URL') + "/api/v1/events/";
 
     $scope.alerts = [];
+    // to avoid the order of tables while it refresh in the background
+    $scope.predicate = 'id';
     $scope.closeAlert = function (index) {
         $scope.alerts.splice(index, 1);
     };

@@ -25,6 +25,8 @@ angular.module('app').controller('vimInstanceCtrl', function ($scope, $routePara
     $scope.newvim = {type: "openstack", securityGroups: []};
     $scope.driversinstalled = [];
     $scope.installed = [];
+    // to avoid the order of tables while it refresh in the background
+    $scope.predicate = 'id';
     var formInput = true;
     var fileInput = false;
     loadVIM();

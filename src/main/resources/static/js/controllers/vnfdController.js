@@ -44,6 +44,8 @@ var app = angular.module('app').controller('VnfdCtrl', function ($scope, $compil
     $scope.custom_images = [];
     $scope.lifecycle_event_type = ["INSTANTIATE", "CONFIGURE", "START", "TERMINATE", "SCALE_IN"];
     //$interval(loadTable, 2000);
+    // to avoid the order of tables while it refresh in the background
+    $scope.predicate = 'id';
     loadTable();
 
     $scope.alerts = [];
