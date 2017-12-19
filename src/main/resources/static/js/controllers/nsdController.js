@@ -571,7 +571,6 @@ app.controller('NsdCtrl', function ($scope, $compile, $cookieStore, $routeParams
                         showOk('Network Service Descriptors stored!');
                         // location.reload();
                         setTimeout(function () {
-                            //do what you need here
                             loadTable();
                         }, 500);
                         //                        window.setTimeout($scope.cleanModal(), 3000);
@@ -595,17 +594,13 @@ app.controller('NsdCtrl', function ($scope, $compile, $cookieStore, $routeParams
         }
 
         $scope.toggle = false;
-        $scope.file !== '';
-        //        $scope.packages = [];
     };
 
 
     $scope.isEmpty = function (obj) {
         if (angular.equals({}, obj))
             return true;
-        else if (angular.equals([], obj))
-            return true;
-        else return false;
+        else return angular.equals([], obj);
     };
 
     $scope.deleteNSD = function (data) {
