@@ -977,16 +977,6 @@
                                                                                 +
                                                                             </button>
                                                                         </td>
-                                                                        <!--<td class="col-md-4"-->
-                                                                            <!--style="text-align: center !important;">-->
-                                                                            <!--<a ng-if="vimInstance.name.length"-->
-                                                                               <!--title="Add a new PoP to this NSR" href=""-->
-                                                                               <!--ng-click="addPopToNsd(vimInstance, launchPopTable)"><i-->
-                                                                                    <!--class="fa fa-plus"-->
-                                                                                    <!--aria-hidden="true"></i> Add-->
-                                                                                <!--to all-->
-                                                                            <!--</a>-->
-                                                                        <!--</td>-->
                                                                     </tr>
                                                                     <tr ng-show="!$data.length">
                                                                         <td>
@@ -1025,8 +1015,7 @@
                                                                     </thead>
                                                                     <tr ng-repeat="vimInstance in $data track by $index">
                                                                         <td class="col-md-9">
-                                                                            {{vimInstance.name}} <span
-                                                                                ng-show="vimInstance.az !== undefined || vimInstance.az !== ''">{{vimInstance.az}}</span>
+                                                                            {{vimInstance.name}}->{{azVimInstance[vimInstance.name]}}
                                                                         </td>
                                                                         <td style="text-align: center;"
                                                                             class="col-md-3">
@@ -1052,9 +1041,9 @@
                                             </tab>
                                             <tab heading="General">
                                                 <p><br>
-                                                From this section, you can assign or remove PoPs to all VNFD.
+                                                    From this section, you can assign or remove PoPs to all VNFD.
                                                 </p>
-                                                <div  class="tab-text">
+                                                <div class="tab-text">
                                                     <div class="col-md-6">
                                                         <p>
                                                             <br>
@@ -1064,12 +1053,7 @@
                                                         </p>
                                                         <div>
                                                             <p style="font-size:20px">
-                                                                <!--<a href="" ng-if="popTable.expanded"-->
-                                                                   <!--ng-click="popTable.expanded = false">-</a>-->
-                                                                <!--<a href="" ng-if="!popTable.expanded"-->
-                                                                   <!--ng-click="popTable.expanded = true">+</a>-->
                                                                 Available
-                                                                <!--({{launchPopsAvailable[tab.vnfd.name].pops.length}})-->
                                                             </p>
                                                             <div>
                                                                 <table style="text-align: left;"
@@ -1086,16 +1070,29 @@
                                                                         <td class="col-md-5">
                                                                             {{vimInstance.name}}
                                                                         </td>
-
+                                                                        <td class="col-md-5">
+                                                                            <select name="testId"
+                                                                                    class="form-control input-sm"
+                                                                                    ng-if="vimInstance.zones !== undefined"
+                                                                                    ng-init="azVimInstance[vimInstance.name] = 'random'"
+                                                                                    ng-model="azVimInstance[vimInstance.name]">
+                                                                                <option value="random"
+                                                                                        label="random">random
+                                                                                </option>
+                                                                                <option ng-repeat="az in vimInstance.zones">
+                                                                                    {{az.name}}
+                                                                                </option>
+                                                                            </select>
+                                                                        </td>
                                                                         <td class="col-md-4"
                                                                             style="text-align: center !important;">
-                                                                            <a ng-if="vimInstance.name.length"
-                                                                               title="Add a new PoP to this NSR" href=""
-                                                                               ng-click="addPopToNsd(vimInstance, launchPopTable)"><i
-                                                                                    class="fa fa-plus"
-                                                                                    aria-hidden="true"></i> Add
-                                                                                to all
-                                                                            </a>
+                                                                            <button ng-if="vimInstance.name.length"
+                                                                                    type="button"
+                                                                                    title="Add a new PoP to this NSR"
+                                                                                    class="btn  btn-primary btn-sm"
+                                                                                    ng-click="addPopToNsd(vimInstance, launchPopTable)">
+                                                                                + Add to all
+                                                                            </button>
                                                                         </td>
                                                                     </tr>
                                                                     <tr ng-show="!$data.length">
@@ -1114,14 +1111,9 @@
                                                             The following list shows which PoPs are choosen for the
                                                             selected VNFD.
                                                         </p>
-                                                        <div >
+                                                        <div>
                                                             <p style="font-size:20px">
-                                                                <!--<a href="" ng-if="launchPopTable.expanded"-->
-                                                                   <!--ng-click="launchPopTable.expanded = false">-</a>-->
-                                                                <!--<a href="" ng-if="!launchPopTable.expanded"-->
-                                                                   <!--ng-click="launchPopTable.expanded = true">+</a>-->
                                                                 Assigned
-                                                                <!--({{launchPops[tab.vnfd.name].pops.length}})-->
                                                             </p>
                                                             <div>
                                                                 <table ng-table="tableParamsFilteredLaunchPops"
@@ -1133,19 +1125,19 @@
                                                                             sortable="'name'"><b>Name</b></td>
                                                                     </tr>
                                                                     </thead>
-                                                                     <tr ng-repeat="vimInstance in $data track by $index">
+                                                                    <tr ng-repeat="vimInstance in $data track by $index">
                                                                         <td class="col-md-7">
-                                                                            {{vimInstance.name}}
+                                                                            {{vimInstance.name}}->{{azVimInstance[vimInstance.name]}}
                                                                         </td>
                                                                         <td style="text-align: center;"
                                                                             class="col-md-5">
-                                                                            <a ng-if="vimInstance.name.length"
-                                                                               title="Add a new PoP to this NSR" href=""
-                                                                               ng-click="RemovePoPfromNSD(vimInstance, launchPopTable)">
-                                                                                <i class="fa fa-trash-o"
-                                                                                   aria-hidden="true"></i> Del from All
-                                                                            </a>
-
+                                                                            <button ng-if="vimInstance.name.length"
+                                                                                    title="Add a new PoP to this NSR"
+                                                                                    type="button"
+                                                                                    class="btn btn-warning btn-sm"
+                                                                                    ng-click="RemovePoPfromNSD(vimInstance, launchPopTable)">
+                                                                                - Del from All
+                                                                            </button>
                                                                         </td>
                                                                     </tr>
                                                                     <tr ng-show="!$data.length">
@@ -1157,7 +1149,6 @@
                                                             </div>
                                                         </div>
                                                     </div>
-
                                                 </div>
                                             </tab>
                                         </tabset>
@@ -1203,9 +1194,9 @@
                                                         <label for="Pub key" class="col-sm-2 control-label">Public
                                                             key</label>
                                                         <div class="col-sm-10">
-                            <textarea name="Pub key" ng-model="pubKey" id="Pub key"
-                                      class="form-control" rows="5" cols="50">
-                        </textarea>
+                                                            <textarea name="Pub key" ng-model="pubKey" id="Pub key"
+                                                                      class="form-control" rows="5" cols="50">
+                                                            </textarea>
                                                         </div>
                                                     </div>
                                                 </form>
@@ -1410,7 +1401,7 @@
                                         <table class="table table-bordered"
                                                id="vduTabletable">
                                             <tbody>
-                                            <form id="myForm">
+                                            <form id="myFormKey">
                                                 <tr>
                                                     <td>
                                                         <table class="col-md-12">
@@ -1430,7 +1421,7 @@
                                                                                 <input
                                                                                         type="text"
                                                                                         class="form-control"
-                                                                                        id="Configuration Name"
+                                                                                        id="ConfigKey"
                                                                                         ng-model="basicConf.confKey"
                                                                                 /></td>
 
@@ -1450,7 +1441,7 @@
                                                                                 style="padding-top: 0px !important; border: none !important; padding-bottom: 0px !important;">
                                                                                 <input
                                                                                         class="form-control"
-                                                                                        id="Configuration Name"
+                                                                                        id="ConfigVal"
                                                                                         ng-model="basicConf.value"
                                                                                 />
 
@@ -1469,7 +1460,7 @@
                                                                                         id="basicConf.description"
                                                                                         placeholder="Description"
                                                                                         class="form-control">
-                                </textarea>
+                                                                                </textarea>
                                                                                 <br>
                                                                                 <a type="button"
                                                                                    class="btn btn-primary right"

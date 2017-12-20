@@ -120,14 +120,14 @@ app.controller('NsdCtrl', function ($scope, $compile, $cookieStore, $routeParams
             }
         });
 
-    var paginationNSD = []
+    var paginationNSD = [];
     $scope.tableParamspaginationNSD = new NgTableParams({
             page: 1,
             count: 10,
             sorting: {
                 name: 'asc'     // initial sorting
             },
-            filter: {name: ""},
+            filter: {name: ""}
         },
         {
             counts: [],
@@ -142,14 +142,14 @@ app.controller('NsdCtrl', function ($scope, $compile, $cookieStore, $routeParams
                 return paginationNSD;
             }
         });
-    var filteredPops = []
+    var filteredPops = [];
     $scope.tableParamsFilteredPops = new NgTableParams({
             page: 1,
             count: 5,
             sorting: {
                 name: 'asc'     // initial sorting
             },
-            filter: {name: ""},
+            filter: {name: ""}
         },
         {
             counts: [],
@@ -751,10 +751,8 @@ app.controller('NsdCtrl', function ($scope, $compile, $cookieStore, $routeParams
     function env() {
         http.get($cookieStore.get('URL') + '/env')
             .success(function (response) {
-                // console.log(response);
                 monitoringIp = response['applicationConfig: [file:/etc/openbaton/openbaton-nfvo.properties]']['nfvo.monitoring.ip'];
-                // console.log(monitoringIp);
-                if (monitoringIp.indexOf(':') > -1) {
+                if (monitoringIp !== undefined && monitoringIp.indexOf(':') > -1) {
                     $scope.monitoringIp = monitoringIp.split(":")[0];
                     $scope.monitoringPort = monitoringIp.split(":")[1];
                 } else {
@@ -776,7 +774,6 @@ app.controller('NsdCtrl', function ($scope, $compile, $cookieStore, $routeParams
     };
 
     $scope.launch = function () {
-        //console.log($scope.launchConfiguration.configurations);
         removeEmptyConfs();
         prepareVIMs();
         console.log(JSON.stringify($scope.vimForLaunch));
@@ -828,7 +825,7 @@ app.controller('NsdCtrl', function ($scope, $compile, $cookieStore, $routeParams
                         function (pop) {
                             var name = pop.name;
                             console.log("pop.az === " + pop.az);
-                            if (pop.az !== undefined && pop.az !== ":random" && pop.az !== "" && pop.az !== null){
+                            if (pop.az !== undefined && pop.az.indexOf("random") !== -1 && pop.az !== "" && pop.az !== null){
                                 name += pop.az;
                             }
                             $scope.vimForLaunch[vduName].push(name);
