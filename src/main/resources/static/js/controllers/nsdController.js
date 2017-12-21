@@ -825,7 +825,7 @@ app.controller('NsdCtrl', function ($scope, $compile, $cookieStore, $routeParams
                         function (pop) {
                             var name = pop.name;
                             console.log("pop.az === " + pop.az);
-                            if (pop.az !== undefined && pop.az.indexOf("random") !== -1 && pop.az !== "" && pop.az !== null){
+                            if (pop.az !== undefined &&  pop.az !== ":random" && pop.az !== "" && pop.az !== null){
                                 name += pop.az;
                             }
                             $scope.vimForLaunch[vduName].push(name);
