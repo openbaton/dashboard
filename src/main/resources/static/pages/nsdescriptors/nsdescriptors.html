@@ -1288,10 +1288,10 @@
                                                             ng-attr-title="{{key.fingerprint}}">{{key.fingerprint}}
                                                         </td>
                                                         <td class="col-md-2">
-                                                            <a ng-if="key.name.length" title="Add a new key to this NSR"
+                                                            <button class="btn btn-primary btn-sm" ng-if="key.name.length" title="Add a new key to this NSR"
                                                                href=""
-                                                               ng-click="addLaunchKey(key)">Add
-                                                            </a>
+                                                               ng-click="addLaunchKey(key)">+
+                                                            </button>
                                                         </td>
                                                     </tr>
                                                     <tr ng-show="!keys.length">
@@ -1305,7 +1305,7 @@
                                     <div class="col-md-6">
                                         <p>
                                             <br> The following list shows all the Keys that will be imported to the VNF
-                                            Component Instances.<br> <br>
+                                            Component Instances.<br>
                                         </p>
                                         <div ng-init="list.expanded=true">
                                             <p style="font-size:20px">
@@ -1333,10 +1333,10 @@
                                                             ng-attr-title="{{key.fingerprint}}">{{key.fingerprint}}
                                                         </td>
                                                         <td class="col-md-2">
-                                                            <a ng-if="key.name.length"
+                                                            <button class="btn btn-warning btn-sm" ng-if="key.name.length"
                                                                title="Remove a key from this NSR" href=""
-                                                               ng-click="removeLaunchKey(key)">Del
-                                                            </a>
+                                                               ng-click="removeLaunchKey(key)">-
+                                                            </button>
                                                         </td>
                                                     </tr>
                                                     <tr ng-show="!$data.length">

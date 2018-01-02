@@ -1272,10 +1272,19 @@ app.controller('NsdCtrl', function ($scope, $compile, $cookieStore, $routeParams
                 document.body.appendChild(key);
                 key.click()
                 document.body.removeChild(key);
+                http.get(baseURL + '/keys')
+                    .success(function (response) {
+                        var keys = response;
+                        // console.log(keys);
+                        var allocatedKey = keys.find(function( obj ) {
+                            return obj.name == generateKeyName;
+                        });
+                        $scope.launchKeys.push(allocatedKey);
+                        remove($scope.keys, allocatedKey);
+                        $scope.tableParamsFilteredKeys.reload();
+                        $scope.tableParamsFilteredLaunchKeys.reload();
+                    });
                 delete key;
-                //document.location = 'title: key.pem, data:application/x-pem-file,' +
-                //  encodeURIComponent(response);
-                loadKeys();
                 $scope.KeyGenerateSuccess = false;
                 $scope.KeyGenerateSuccess = $scope.KeyGenerateSuccess ? false : true;
                 $scope.generateKeyName = null;
