@@ -185,8 +185,6 @@ app.controller('ServiceCtrl', function ($scope, $interval, serviceAPI, $routePar
         if ($scope.projectChoice === undefined) {
             $scope.projectChoice = [];
             $scope.projectChoice = $scope.projects;
-            if ($scope.projectChoice !== undefined)
-                $scope.projectChoice.push({"name": "*"})
         }
     }
 
