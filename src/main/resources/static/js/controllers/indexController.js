@@ -530,7 +530,7 @@ app.controller('IndexCtrl', function ($document, $scope, $compile, $routeParams,
         }
     }
 
-    var urlPackages = $cookieStore.get('URL') + "/api/v1/projects/";
+    var urlProjects = $cookieStore.get('URL') + "/api/v1/projects/";
     $scope.projectObj = {
         'name': '',
         'description': ''
@@ -540,7 +540,7 @@ app.controller('IndexCtrl', function ($document, $scope, $compile, $routeParams,
     };
     $scope.save = function () {
         //console.log($scope.projectObj);
-        http.post(urlPackages, $scope.projectObj)
+        http.post(urlProjects, $scope.projectObj)
             .success(function (response) {
                 showOk('Project: ' + $scope.projectObj.name + ' saved.');
                 // loadTable();

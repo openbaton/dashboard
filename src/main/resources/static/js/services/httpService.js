@@ -48,7 +48,9 @@ angular.module('app')
 
             }
 
-            customHeaders['project-id'] = $cookieStore.get('project').id;
+            if ($cookieStore.get('project') !== undefined && $cookieStore.get('project').id !== ''){
+                customHeaders['project-id'] = $cookieStore.get('project').id;
+            }
             //console.log(customHeaders);
             //console.log($cookieStore.get('project'));
 
