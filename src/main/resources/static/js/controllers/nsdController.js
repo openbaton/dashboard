@@ -497,10 +497,7 @@ app.controller('NsdCtrl', function ($scope, $compile, $cookieStore, $routeParams
         http.post(url, $scope.nsdCreateTmp)
             .success(function (response) {
                 showOk('Network Service Descriptor stored!');
-                setTimeout(function () {
-                    //do what you need here
-                    loadTable();
-                }, 500);
+                loadTable();
             })
             .error(function (data, status) {
                 console.error('STATUS: ' + status + ' DATA: ' + JSON.stringify(data));
@@ -569,11 +566,7 @@ app.controller('NsdCtrl', function ($scope, $compile, $cookieStore, $routeParams
                 http.post(url, postNSD)
                     .success(function (response) {
                         showOk('Network Service Descriptors stored!');
-                        // location.reload();
-                        setTimeout(function () {
-                            loadTable();
-                        }, 500);
-                        //                        window.setTimeout($scope.cleanModal(), 3000);
+                        loadTable();
                     })
                     .error(function (data, status) {
                         showError(data, status);
@@ -607,10 +600,7 @@ app.controller('NsdCtrl', function ($scope, $compile, $cookieStore, $routeParams
         http.delete(url + data.id)
             .success(function (response) {
                 showOk('Deleted Network Service Descriptor with id: ' + data.id);
-                setTimeout(function () {
-                    //do what you need here
-                    loadTable();
-                }, 500);
+                loadTable();
             })
             .error(function (data, status) {
                 showError(data, status);
@@ -987,6 +977,7 @@ app.controller('NsdCtrl', function ($scope, $compile, $cookieStore, $routeParams
                 .success(function (response, status) {
                     $scope.nsdescriptors = response;
                     //console.log(response);
+                    $scope.tableParamspaginationNSD.reload();
                 })
                 .error(function (data, status) {
                     showError(data, status);
