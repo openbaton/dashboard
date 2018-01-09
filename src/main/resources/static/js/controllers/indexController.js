@@ -156,7 +156,30 @@ app.controller('IndexCtrl', function ($document, $scope, $compile, $routeParams,
         window.location.href = window.location.href.substring(0, window.location.href.length - 'login'.length) + 'main';
 
     }
-
+    var LoadProjects = function () {
+        http.syncGet(url + '/projects/')
+            .then(function (response) {
+                var projects = response;
+                // console.log(projects);
+                var LastProject =  angular.fromJson(localStorage.getItem('LastProject'));
+                // console.log(LastProject.id);
+                $scope.AvailableProject = projects.find(function (obj){
+                    return obj.id === LastProject.id;
+                });
+                // console.log($scope.AvailableProject);
+                if (angular.isDefined($scope.AvailableProject)){
+                    $cookieStore.put('project', $scope.AvailableProject);
+                    // console.log( $cookieStore.get('project'));
+                }
+                else {
+                    $rootScope.projectSelected = response[0];
+                    $cookieStore.put('project', response[0]);
+                    localStorage.setItem("LastProject", JSON.stringify(response[0]));
+                    window.location.reload();
+                }
+            });
+    }
+    LoadProjects();
     function sortList() {
         var list, i, switching, b, shouldSwitch;
         list = document.getElementById("id01");
