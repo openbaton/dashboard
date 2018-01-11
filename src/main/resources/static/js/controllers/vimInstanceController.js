@@ -255,6 +255,57 @@ angular.module('app').controller('vimInstanceCtrl', function ($scope, $routePara
                 showError(data, status);
             });
     };
+    /* -- multiple delete functions Start -- */
+    $scope.multipleDeleteReq = function () {
+        var ids = [];
+        angular.forEach($scope.selection.ids, function (value, k) {
+            if (value) {
+                ids.push(k);
+            }
+        });
+        // console.log(ids);
+        http.post(url + 'multipledelete', ids)
+            .success(function (response) {
+                showOk('Vim Instance(s) deleted with id(s) ' + ids + '.');
+                loadVIM();
+            })
+            .error(function (response, status) {
+                showError(response, status);
+            });
+        $scope.multipleDelete = false;
+        $scope.selection = {};
+        $scope.selection.ids = {};
+    };
+    $scope.main = {checkbox: false};
+    $scope.$watch('main', function (newValue, oldValue) {
+        // console.log(newValue.checkbox);
+        // console.log($scope.selection.ids);
+        angular.forEach($scope.selection.ids, function (value, k) {
+            $scope.selection.ids[k] = newValue.checkbox;
+        });
+        // console.log($scope.selection.ids);
+    }, true);
+    $scope.$watch('selection', function (newValue, oldValue) {
+        // console.log(newValue);
+        var keepGoing = true;
+        angular.forEach($scope.selection.ids, function (value, k) {
+            if (keepGoing) {
+                if ($scope.selection.ids[k]) {
+                    $scope.multipleDelete = false;
+                    keepGoing = false;
+                }
+                else {
+                    $scope.multipleDelete = true;
+                }
+            }
+        });
+        if (keepGoing)
+            $scope.mainCheckbox = false;
+    }, true);
+    $scope.multipleDelete = true;
+    $scope.selection = {};
+    $scope.selection.ids = {};
+    /* -- multiple delete functions END -- */
 
     function loadVIM() {
         if (!angular.isUndefined($routeParams.vimInstanceId))
@@ -278,7 +329,7 @@ angular.module('app').controller('vimInstanceCtrl', function ($scope, $routePara
         }
     }
 
-    var promise = $interval(loadVIM, 10000);
+    var promise = $interval(loadVIM, 20000);
     $scope.$on('$destroy', function () {
         if (promise)
             $interval.cancel(promise);
