@@ -118,7 +118,7 @@ angular.module('app').factory('AuthService', function ($http, Session, $location
         $cookieStore.remove('userName');
         $cookieStore.remove('token');
         $cookieStore.remove('URL');
-        //$cookieStore.remove('project');
+        $cookieStore.remove('project');
     };
     return this;
 });
