@@ -114,7 +114,7 @@ app.controller('ServiceCtrl', function ($scope, $interval, serviceAPI, $routePar
 
 
     $scope.save = function () {
-        console.log("" + $scope.serviceObj);
+        // console.log(SON.stringify($scope.serviceObj));
         var customHeader = {};
         customHeader['Content-type'] = 'application/json';
         customHeader['Accept'] = 'application/octet-stream';
@@ -195,10 +195,9 @@ app.controller('ServiceCtrl', function ($scope, $interval, serviceAPI, $routePar
                 msg: 'An error occured and could not be handled properly, please, report to us and we will fix it as soon as possible'
             });
         } else {
-            console.log('Status: ' + status + ' Data: ' + JSON.stringify(data));
             $scope.alerts.push({
                 type: 'danger',
-                msg: data.message + " Code: " + status
+                msg: "Please input the service name and role properly. One of them is missing or entered incorrect." + data,
             });
         }
 
