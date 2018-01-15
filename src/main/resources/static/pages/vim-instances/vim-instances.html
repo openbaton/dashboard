@@ -222,7 +222,7 @@
             <div class="modal-body">
                 <form role="form" class="form-horizontal">
                     <div class="form-group" ng-repeat="(key,value) in editObj"
-                         ng-if="key!='id' && isArray(value) && key!='hb_version' && key!='projectId' && key!='active' && key!='version' && key!='type'">
+                         ng-if="key!='id' && isArray(value) && key!='hbVersion' && key!='projectId' && key!='active' && key!='version' && key!='type'">
                         <label for="{{key}}" class="col-sm-4 control-label">{{key}}</label>
                         <div class="col-sm-6">
                             <input type="text" class="form-control" id="{{key}}" name="{{key}}"
