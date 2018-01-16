@@ -138,6 +138,9 @@ angular.module('app', ['ngTable', 'ngRoute', 'ngSanitize', 'ui.bootstrap', 'ngCo
         }).when('/vimdrivers', {
             templateUrl: 'pages/vimdrivers/vimdrivers.html',
             controller: 'driverCtrl'
+        }).when('/history', {
+            templateUrl: 'pages/history/history.html',
+            controller: 'historyCtrl'
         }).otherwise({
             redirectTo: '/main'
         });

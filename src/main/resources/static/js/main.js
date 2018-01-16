@@ -59,7 +59,8 @@ require({
         vnfdController: "controllers/vnfdController",
         keyPairsController: "controllers/keyPairsController",
         marketCtrl:"controllers/marketCtrl",
-        driverCtrl:"controllers/driverCtrl"
+        driverCtrl:"controllers/driverCtrl",
+        historyController: "controllers/historyController",
     },
     shim: {
         jquery: {
@@ -166,6 +167,9 @@ require({
         indexController: {
             deps: ['app', 'httpService', 'servicesServices', 'morris', 'authService', 'angular_cookies']
         },
+        historyController: {
+            deps: ['app', 'httpService', 'servicesServices', 'morris', 'authService', 'angular_cookies']
+        },
         topologyServices: {
             deps: ['app', 'httpService', 'd3', 'jquery_jsPlumb', 'underscore','servicesServices']
         },
@@ -212,7 +216,8 @@ require({
     'vimInstanceController',
     'keyPairsController',
     'marketCtrl',
-    'driverCtrl'
+    'driverCtrl',
+    'historyController',
 ], function (require) {
     return require(['bootstrap']);
 });
