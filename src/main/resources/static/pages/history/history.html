@@ -20,31 +20,14 @@
 </div>
 <div class="top-buffer">
     <table ng-table="tableParamspaginationHistory" class="table table-bordered table-striped table-hover tablesorter">
-        <thead>
-        <tr>
-            <th class="leftalign" ng-click="predicate = 'id'; reverse = !reverse">Id <i class="fa fa-sort"></i></th>
-            <th class="leftalign" ng-click="predicate = 'username'; reverse = !reverse">User Name <i
-                    class="fa fa-sort"></i></th>
-            <th class="leftalign" ng-click="predicate = 'timestamp'; reverse = !reverse">Time Stamp <i
-                    class="fa fa-sort"></i></th>
-            <th class="leftalign" ng-click="predicate = 'method'; reverse = !reverse">Method <i class="fa fa-sort"></i>
-            </th>
-            <th class="leftalign" ng-click="predicate = 'path'; reverse = !reverse">Path <i class="fa fa-sort"></i></th>
-            <th class="leftalign" ng-click="predicate = 'result'; reverse = !reverse">Result <i class="fa fa-sort"></i>
-            </th>
-        </tr>
-        </thead>
         <tbody>
         <tr ng-repeat="data in $data | orderBy:predicate:reverse">
-            <td>{{data.id}}</td>
-            <td>{{data.username}}</td>
-            <td>{{data.timestamp}}</td>
-            <td>{{data.method}}</td>
-            <td>{{data.path}}</td>
-            <td>{{data.result}}</td>
+            <td data-title="'Time Stamp'" filter="{timestamp: 'text'}" sortable="'timestamp'">{{data.timestamp | date:'yyyy-MM-dd HH:mm:ss Z'}}</td>
+            <td data-title="'User Name'" filter="{username: 'text'}" sortable="'username'">{{data.username}}</td>
+            <td data-title="'Method'" filter="{method: 'text'}" sortable="'method'">{{data.method}}</td>
+            <td data-title="'Path'" filter="{path: 'text'}" sortable="'path'">{{data.path}}</td>
+            <td data-title="'Result'" filter="{result: 'text'}" sortable="'result'">{{data.result}}</td>
         </tr>
         </tbody>
     </table>
 </div>
-
-

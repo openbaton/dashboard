@@ -16,8 +16,6 @@
 var app = angular.module('app').controller('historyCtrl', function ($scope, serviceAPI, $routeParams, http, $cookieStore, AuthService, $interval, NgTableParams, $filter) {
     var url = $cookieStore.get('URL') + "/api/v1/history/";
     $scope.alerts = [];
-    // to avoid the order of tables while it refresh in the background
-    $scope.predicate = 'id';
     $scope.closeAlert = function (index) {
         $scope.alerts.splice(index, 1);
     };
@@ -33,23 +31,26 @@ var app = angular.module('app').controller('historyCtrl', function ($scope, serv
                 showError(data, status);
             });
     }
-
     $scope.tableParamspaginationHistory = "";
     function historyTable() {
         $scope.tableParamspaginationHistory = new NgTableParams({
                 page: 1,
                 count: 20,
                 sorting: {
-                    1514479113169: 'asc'
+                    timestamp: "desc"
                 },
-                filter: {name: ""}
+                // initial filters
+                filter: { username: "" },
+                filter: { method: "" },
+                filter: { path: "" },
+                filter: { result: "" },
+                filter: { timestamp: "" },
             },
             {
                 counts: [],
                 dataset: $scope.history
             });
     }
-
     function showError(data, status) {
         if (status === 500) {
             $scope.alerts.push({

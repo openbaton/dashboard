@@ -974,3 +974,6 @@ td p {
     /* symbol for "collapsed" panels */
     content: "\e080";    /* adjust as needed, taken from bootstrap.css */
 }
+.ng-table th.filter .input-filter{
+    border-radius: 0 4px 4px 0 !important;
+}
