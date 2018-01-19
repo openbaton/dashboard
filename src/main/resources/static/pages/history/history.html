@@ -1,0 +1,33 @@
+<div class="row">
+    <div class="col-lg-12">
+        <h1>
+            History
+            <small>List of executed actions</small>
+        </h1>
+        <ol class="breadcrumb">
+            <li><a href="#main"><i class="fa fa-dashboard"></i>
+                Overview</a></li>
+            <li class="active"><i class="fa fa-history"></i>
+                History
+            </li>
+        </ol>
+    </div>
+</div>
+<div class="row">
+    <alert ng-repeat="alert in alerts" type="alert.type" close="closeAlert($index)">
+        <div ng-bind-html="alert.msg"></div>
+    </alert>
+</div>
+<div class="top-buffer">
+    <table ng-table="tableParamspaginationHistory" class="table table-bordered table-striped table-hover tablesorter">
+        <tbody>
+        <tr ng-repeat="data in $data | orderBy:predicate:reverse">
+            <td data-title="'Time Stamp'" filter="{timestamp: 'text'}" sortable="'timestamp'">{{data.timestamp | date:'yyyy-MM-dd HH:mm:ss Z'}}</td>
+            <td data-title="'User Name'" filter="{username: 'text'}" sortable="'username'">{{data.username}}</td>
+            <td data-title="'Method'" filter="{method: 'text'}" sortable="'method'">{{data.method}}</td>
+            <td data-title="'Path'" filter="{path: 'text'}" sortable="'path'">{{data.path}}</td>
+            <td data-title="'Result'" filter="{result: 'text'}" sortable="'result'">{{data.result}}</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
