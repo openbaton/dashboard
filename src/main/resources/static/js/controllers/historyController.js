@@ -23,6 +23,10 @@ var app = angular.module('app').controller('historyCtrl', function ($scope, serv
     function loadTable() {
         http.get(url)
             .success(function (response) {
+                var DataArray = response
+                DataArray.forEach(function(el){
+                    el.timestamp = $filter('date')(el.timestamp, "yyyy-MM-dd HH:mm:ss Z");
+                });
                 $scope.history = response;
                 historyTable();
                 // console.log($scope.history);
@@ -39,12 +43,6 @@ var app = angular.module('app').controller('historyCtrl', function ($scope, serv
                 sorting: {
                     timestamp: "desc"
                 },
-                // initial filters
-                filter: { username: "" },
-                filter: { method: "" },
-                filter: { path: "" },
-                filter: { result: "" },
-                filter: { timestamp: "" },
             },
             {
                 counts: [],

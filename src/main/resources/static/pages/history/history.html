@@ -21,8 +21,8 @@
 <div class="top-buffer">
     <table ng-table="tableParamspaginationHistory" class="table table-bordered table-striped table-hover tablesorter">
         <tbody>
-        <tr ng-repeat="data in $data | orderBy:predicate:reverse">
-            <td data-title="'Time Stamp'" filter="{timestamp: 'text'}" sortable="'timestamp'">{{data.timestamp | date:'yyyy-MM-dd HH:mm:ss Z'}}</td>
+        <tr ng-repeat="data in $data track by $index">
+            <td data-title="'Date'" filter="{timestamp: 'text'}" sortable="'timestamp'">{{data.timestamp}}</td>
             <td data-title="'User Name'" filter="{username: 'text'}" sortable="'username'">{{data.username}}</td>
             <td data-title="'Method'" filter="{method: 'text'}" sortable="'method'">{{data.method}}</td>
             <td data-title="'Path'" filter="{path: 'text'}" sortable="'path'">{{data.path}}</td>
@@ -31,3 +31,4 @@
         </tbody>
     </table>
 </div>
+
