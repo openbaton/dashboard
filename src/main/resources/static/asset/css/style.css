@@ -6499,3 +6499,6 @@ ul li a:focus {
 
     }
 }
+.ng-table th{
+    text-align: left !important;
+}
