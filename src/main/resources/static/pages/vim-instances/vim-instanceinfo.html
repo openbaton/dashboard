@@ -46,6 +46,14 @@
                     <td>Name</td>
                     <td>{{vimInstance.name}}</td>
                 </tr>
+                <tr ng-if="vimInstance.accessKey !== undefined">
+                    <td>Access Key</td>
+                    <td>{{vimInstance.accessKey}}</td>
+                </tr>
+                <tr ng-if="vimInstance.vpcId !== undefined">
+                    <td>VPC ID</td>
+                    <td>{{vimInstance.vpcId}}</td>
+                </tr>
                 <tr ng-if="vimInstance.authUrl !== undefined">
                     <td>Authorisation URL</td>
                     <td>{{vimInstance.authUrl}}</td>
@@ -69,6 +77,14 @@
                 <tr ng-if="vimInstance.id !== undefined">
                     <td>ID</td>
                     <td>{{vimInstance.id}}</td>
+                </tr>
+                <tr ng-if="vimInstance.vpcName !== undefined">
+                    <td>VPC Name</td>
+                    <td>{{vimInstance.vpcName}}</td>
+                </tr>
+                <tr ng-if="vimInstance.region !== undefined">
+                    <td>Region</td>
+                    <td>{{vimInstance.region}}</td>
                 </tr>
                 <tr ng-if="vimInstance.location !== undefined && vimInstance.location.name !== undefined">
                     <td>Location</td>
