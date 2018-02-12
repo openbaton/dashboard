@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016 Open Baton (http://www.openbaton.org)
+ * Copyright (c) 2018 Open Baton (http://www.openbaton.org)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,17 +26,17 @@ require({
         underscore: "libs/underscore/underscore-min",
         raphael: "libs/raphael",
         morris: "morris/morris-0.4.3.min",
-        angular: "libs/angular/angular",
-        ngTable: "libs/angular/ng-table",
-        jQueryRotate: "libs/jquery/jQueryRotate",
+        angular: "libs/angular/angular.min",
+        ngTable: "libs/angular/ng-table.min",
+        jQueryRotate: "libs/jquery/jQueryRotate.min",
         angular_route: "libs/angular/angular-route.min",
-        angular_cookies: "libs/angular/angular-cookies",
-        angular_clipboard: "libs/angular/angular-clipboard",
+        angular_cookies: "libs/angular/angular-cookies.min",
+        angular_clipboard: "libs/angular/angular-clipboard.min",
         d3: "libs/d3.min",
         ui_bootstrap: "libs/angular/ui-bootstrap-tpls-0.10.0.min",
         app: "app",
         bootstrapSwitch: "../bower_components/bootstrap/dist/js/bootstrap-switch.min",
-        angular_sanitize: "libs/angular/angular-sanitize",
+        angular_sanitize: "libs/angular/angular-sanitize.min",
         tables: 'tablesorter/tables',
         tablesorter: 'tablesorter/jquery.tablesorter',
         httpService: "services/httpService",
