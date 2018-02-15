@@ -149,7 +149,7 @@ var app = angular.module('app').controller('NsrCtrl', function ($scope, $http, $
         body.imageName = image;
         http.post(url + $routeParams.nsrecordId + '/vnfrecords/' + vnfr.id + '/restart', body)
             .success(function (response) {
-                showOk('Added a Virtual Network Function Component Instance.');
+                showOk('The vnfr ' + vnfr.id + ' is being rebuilt.');
                 loadTable();
             })
             .error(function (data, status) {
