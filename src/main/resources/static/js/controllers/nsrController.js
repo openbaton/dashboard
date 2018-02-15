@@ -34,6 +34,9 @@ var app = angular.module('app').controller('NsrCtrl', function ($scope, $http, $
     $scope.lastActions = {};
     // to avoid the order of tables while it refresh in the background
     $scope.predicate = 'id';
+    $scope.script = '';
+    $scope.fileScript = '';
+    var vnfrForScript = '';
 
     $scope.getLastHistoryLifecycleEvent = function (vnfs) {
 
@@ -280,6 +283,40 @@ var app = angular.module('app').controller('NsrCtrl', function ($scope, $http, $
 
     };
 
+    $scope.changeText = function(text) {
+      $scope.script = text;
+    };
+
+    $scope.setVNFR = function(vnfr) {
+        vnfrForScript = vnfr;
+    };
+
+    $scope.executeScript = function() {
+        $('.modal').modal('hide');
+        var sendOK = false;
+        var script;
+        if ($scope.fileScript !== '') {
+            console.log("Reading file");
+            script = $scope.fileScript;
+            sendOK = true;
+        } else if($scope.script !== '') {
+            script = $scope.script;
+            sendOK = true;
+        }
+
+        if (sendOK) {
+            http.postPlain(url + $routeParams.nsrecordId + '/vnfrecords/' + vnfrForScript.id + '/execute-script/', script)
+                .success(function (response) {
+                    showOk('The script for  ' + vnfr.id + " is being executed");
+                })
+                .error(function (data, status) {
+                    showError(data, status);
+                });
+        } else {
+            showError({'message':'Cannot send empty script'}, '');
+        }
+        $scope.script = '';
+    };
 
     $scope.sendFile = function () {
 
@@ -334,6 +371,23 @@ var app = angular.module('app').controller('NsrCtrl', function ($scope, $http, $
             }
         }
 
+    };
+
+    $scope.setFile = function (element) {
+        $scope.$apply(function ($scope) {
+
+            var f = element.files[0];
+            if (f) {
+                var r = new FileReader();
+                r.onload = function (element) {
+                    var contents = element.target.result;
+                    $scope.fileScript = contents;
+                };
+                r.readAsText(f);
+            } else {
+                alert("Failed to load file");
+            }
+        });
     };
 
 
