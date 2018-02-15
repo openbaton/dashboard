@@ -135,6 +135,18 @@ var app = angular.module('app').controller('NsrCtrl', function ($scope, $http, $
             });
     };
 
+
+    $scope.updateVNFR = function(vnfr) {
+        http.post(url + $routeParams.nsrecordId + '/vnfrecords/' + vnfr.id + '/update/')
+            .success(function (response) {
+                showOk('The vnfr ' + vnfr.id + " is being updated");
+                loadTable();
+            })
+            .error(function (data, status) {
+                showError(data, status);
+            });
+    };
+
     function isInt(value) {
         return !isNaN(value) &&
             parseInt(Number(value)) == value &&
