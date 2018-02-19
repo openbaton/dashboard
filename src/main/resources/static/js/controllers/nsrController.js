@@ -26,8 +26,11 @@ var app = angular.module('app').controller('NsrCtrl', function ($scope, $http, $
 
     loadTable();
     loadVIMs();
+    loadVNFD();
 
-
+    $scope.vnfdForUpgrade = '';
+    $scope.vnfdAvailable = {};
+    var allVnfdescriptors = [];
     $scope.textTopologyJson = '';
     $scope.file = '';
     $scope.alerts = [];
@@ -470,6 +473,28 @@ var app = angular.module('app').controller('NsrCtrl', function ($scope, $http, $
             });
     };
 
+    $scope.upgradeVNFCI = function (vnfr) {
+        $scope.upgradeVNFR = vnfr;
+        $scope.vnfdAvailable = allVnfdescriptors.filter(function(el) {
+            return el.name === vnfr.name && el.version !== vnfr.version;
+        });
+        $('#vnfrUpgrade').modal('show');
+    }
+    $scope.sendUpgrade = function (vnfdId) {
+        body = {};
+        body.vnfdId = vnfdId;
+        http.post(url + $scope.nsrinfo.id + '/vnfrecords/' + $scope.upgradeVNFR.id + '/upgrade', body)
+            .success(function (response) {
+                showOk('Upgrading ' + vnfr.id);
+                loadTable();
+            })
+            .error(function (data, status) {
+                console.error('STATUS: ' + status + ' DATA: ' + data);
+                showError(data, status);
+            });
+
+    };
+
     /* -- multiple delete functions Start -- */
 
     $scope.multipleDeleteReq = function () {
@@ -575,6 +600,18 @@ var app = angular.module('app').controller('NsrCtrl', function ($scope, $http, $
         });
 
     };
+
+    function loadVNFD() {
+        http.get(urlVNFD)
+            .success(function (response, status) {
+                allVnfdescriptors = response;
+                //console.log(response);
+            })
+            .error(function (data, status) {
+                showError(data, status);
+
+            });
+    }
 
     function loadTable() {
         if (angular.isUndefined($routeParams.nsrecordId))

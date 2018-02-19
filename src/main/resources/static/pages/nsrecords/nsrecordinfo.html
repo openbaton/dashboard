@@ -129,6 +129,8 @@
                                             <li><a href="" ng-click="addVNFCIModal(vnfr)">Add VNFCI</a></li>
                                             <li><a href="" ng-click="removeVNFCI(vnfr)">Remove VNFCI</a></li>
                                             </li>
+                                            <li><a href="" ng-click="upgradeVNFCI(vnfr)">Upgrade VNFCI</a></li>
+                                            </li>
                                             <li class="divider"></li>
                                             <li><a href="" ng-click="deleteVNFR(vnfr)">Delete</a></li>
                                         </ul>
@@ -287,3 +289,40 @@
     <!-- /.modal-dialog -->
 </div>
 <!-- /.modal -->
+
+<div class="modal fade" tabindex="-1" role="dialog" id="vnfrUpgrade">
+    <div class="modal-dialog" style="width:50%;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Upgrade VNFR {{upgradeVNFR.name}}</h4>
+                <b>Please, choose the version of the VNFD to which you want to upgrade</b>
+            </div>
+            <div class="modal-body">
+                <div role="form" class="form-horizontal">
+
+                    <div class="form-group">
+                        <div  class="col-sm-4">
+                            <label class="control-label">VNFD version</label>
+                        </div>
+
+                        <div class="col-sm-3">
+                            <select name="vnfdSelect" class="form-control modal-select" id="vnfdselect"
+                                    ng-model="vnfdForUpgrade"
+                                    ng-options="vnf.id as vnf.version for vnf in vnfdAvailable"
+                                    ng-change="">
+                            </select>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" ng-disabled = "vnfdForUpgrade === '' || vnfdForUpgrade === undefined" ng-click="sendUpgrade(vnfdForUpgrade)"
+                        >Upgrade VNFR
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
