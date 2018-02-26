@@ -30,13 +30,14 @@ var app = angular.module('app').controller('NsrCtrl', function ($scope, $http, $
 
     $scope.vnfdForUpgrade = '';
     $scope.vnfdAvailable = {};
-    var allVnfdescriptors = [];
+    $scope.allVnfdescriptors = [];
     $scope.textTopologyJson = '';
     $scope.file = '';
     $scope.alerts = [];
     $scope.lastActions = {};
     // to avoid the order of tables while it refresh in the background
     $scope.predicate = 'id';
+    $scope.vnfdToAdd = {};
 
     $scope.getLastHistoryLifecycleEvent = function (vnfs) {
 
@@ -475,7 +476,7 @@ var app = angular.module('app').controller('NsrCtrl', function ($scope, $http, $
 
     $scope.upgradeVNFCI = function (vnfr) {
         $scope.upgradeVNFR = vnfr;
-        $scope.vnfdAvailable = allVnfdescriptors.filter(function(el) {
+        $scope.vnfdAvailable = $scope.allVnfdescriptors.filter(function(el) {
             return el.name === vnfr.name && el.version !== vnfr.version;
         });
         $('#vnfrUpgrade').modal('show');
@@ -604,7 +605,7 @@ var app = angular.module('app').controller('NsrCtrl', function ($scope, $http, $
     function loadVNFD() {
         http.get(urlVNFD)
             .success(function (response, status) {
-                allVnfdescriptors = response;
+                $scope.allVnfdescriptors = response;
                 //console.log(response);
             })
             .error(function (data, status) {
@@ -794,4 +795,10 @@ var app = angular.module('app').controller('NsrCtrl', function ($scope, $http, $
         }
         return false;
     }
+
+    //Additional tools for adding VNFR to NSR
+    $scope.extendedNSR = "";
+
+
+
 });

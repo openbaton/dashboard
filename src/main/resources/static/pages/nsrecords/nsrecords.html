@@ -72,6 +72,7 @@
                                 <li><a href="" data-toggle="modal" data-target="#modalAdd"
                                        ng-click="resumeNSR(data)">Resume</a>
                                 </li>
+                                <li><a href="" data-toggle="modal" data-target="#addVNF">Add VNF</a></li>
                                 <li class="divider"></li>
                                 <li><a href="" ng-click="deleteNSR(data)">Delete</a></li>
                             </ul>
@@ -813,3 +814,41 @@
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
 </div>
+
+ <div class="modal fade" tabindex="-1" role="dialog" id="addVNF">
+     <div class="modal-dialog" style="width:50%;">
+         <div class="modal-content">
+             <div class="modal-header">
+                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                         aria-hidden="true">&times;</span></button>
+                 <h4 class="modal-title">Add VNFR to {{extendedNSR.name}}</h4>
+                 <b>Please, choose the the VNFD which you want to NSR</b>
+             </div>
+             <div class="modal-body">
+                 <div role="form" class="form-horizontal">
+
+                     <div class="form-group">
+                         <div  class="col-sm-4">
+                             <label class="control-label">VNFD version</label>
+                         </div>
+
+                         <div class="col-sm-7">
+                             <select name="vnfdSelect" class="form-control modal-select" id="vnfdselect"
+                                     ng-model="vnfdToAdd"
+                                     ng-options="vnf as vnf.name + '/' + vnf.id for vnf in allVnfdescriptors"
+                                     ng-change="">
+                             </select>
+                         </div>
+                     </div>
+                     <hr>
+                     <div class="modal-footer">
+                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                         <button type="button" class="btn btn-primary" ng-disabled = "vnfdToAdd === '' || vnfdToAdd === undefined" ng-click="sendUpgrade(vnfdForUpgrade)"
+                         >Add VNFR
+                         </button>
+                     </div>
+                 </div>
+             </div>
+         </div>
+     </div>
+ </div>
