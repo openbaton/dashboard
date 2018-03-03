@@ -38,6 +38,34 @@ var app = angular.module('app').controller('NsrCtrl', function ($scope, $http, $
     // to avoid the order of tables while it refresh in the background
     $scope.predicate = 'id';
     $scope.vnfdToAdd = {};
+    $scope.vimInstances = [];
+    $scope.azVimInstance = {};
+    $scope.popsForLaunch = [];
+    $scope.monitoringIp = "";
+    $scope.monitoringPort = "";
+
+
+    //Adding VNFD stuff
+    $scope.addPopToLaunch = function(vim) {
+        $scope.popsForLaunch.push(vim);
+        $scope.vimInstances = $scope.vimInstances.filter(function(el) {
+            return el.id !== vim.id;
+        });
+    };
+    $scope.removePopToLaunch = function(vim) {
+        $scope.vimInstances.push(vim);
+        $scope.popsForLaunch = $scope.popsForLaunch.filter(function(el) {
+            return el.id !== vim.id;
+        });
+    };
+    $scope.changeIp = function(ip) {
+        $scope.monIp = ip;
+    };
+    $scope.changePort = function(port) {
+        $scope.monitoringPort = port;
+    }
+    //
+
 
     $scope.getLastHistoryLifecycleEvent = function (vnfs) {
 
@@ -765,6 +793,7 @@ var app = angular.module('app').controller('NsrCtrl', function ($scope, $http, $
         var promise = http.get(urlVim)
             .success(function (response) {
                 $scope.vimInstancesList = response;
+                $scope.vimInstances = response;
                 console.log($scope.vimInstancesList);
             })
             .error(function (data, status) {
