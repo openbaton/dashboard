@@ -21,12 +21,14 @@ var app = angular.module('app').controller('NsrCtrl', function ($scope, $http, $
     var urlVNFD = baseUrl + 'vnf-descriptors/';
     var urlLog = baseUrl + 'logs/';
     var urlVim = baseUrl + 'datacenters/';
+    var urlKeys = baseUrl + 'keys/';
     var lst = $('lst');
 
 
     loadTable();
     loadVIMs();
     loadVNFD();
+    loadKeys();
 
     $scope.vnfdForUpgrade = '';
     $scope.vnfdAvailable = {};
@@ -41,11 +43,34 @@ var app = angular.module('app').controller('NsrCtrl', function ($scope, $http, $
     $scope.vimInstances = [];
     $scope.azVimInstance = {};
     $scope.popsForLaunch = [];
+    $scope.keys = [];
+    $scope.keysForLaunch = [];
     $scope.monitoringIp = "";
     $scope.monitoringPort = "";
+    $scope.launchConfs = [];
+    $scope.basicConf = {description: "", confKey: "", value: ""};
+    $scope.basicConfiguration = {name: "", config: {name: "", configurationParameters: []}};
 
 
     //Adding VNFD stuff
+    $scope.initiateExtension = function(nsr) {
+        $scope.extendedNSR = nsr;
+    };
+
+    $scope.setConfs = function() {
+        console.log($scope.vnfdToAdd);
+        $scope.launchConfs = [];
+        if (!angular.isUndefined($scope.vnfdToAdd.configurations)) {
+        $scope.vnfdToAdd.configurations.configurationParameters.map(function(conf) {
+            $scope.launchConfs.push(angular.copy(conf));
+        })
+       
+    }
+    };
+
+
+
+    //PoPs
     $scope.addPopToLaunch = function(vim) {
         $scope.popsForLaunch.push(vim);
         $scope.vimInstances = $scope.vimInstances.filter(function(el) {
@@ -64,6 +89,57 @@ var app = angular.module('app').controller('NsrCtrl', function ($scope, $http, $
     $scope.changePort = function(port) {
         $scope.monitoringPort = port;
     }
+
+    //For keys
+    function swapper(addTo, removeFrom, member) {
+        $scope.addTo.push(member);
+        $scope.removeFrom = $scope.removeFrom.filter(function(el) {
+            return member !== member;
+        });
+    };
+    $scope.addKey = function(key) {
+        $scope.keysForLaunch.push(key);
+        $scope.keys = $scope.keys.filter(function(el) {
+            return el.id !== key.id;
+        });
+    };
+    $scope.removeKey = function(key) {
+        $scope.keys.push(key);
+        $scope.keysForLaunch = $scope.keysForLaunch.filter(function(el) {
+            return el.id !== key.id;
+        });
+    };
+
+    function loadKeys() {
+        
+                //console.log($routeParams.userId);
+                http.get(urlKeys)
+                    .success(function (response) {
+                        $scope.keys = response;
+                        //console.log($scope.users.length);
+        
+                        //console.log($scope.keypairs);
+                    })
+                    .error(function (data, status) {
+                        showError(status, data);
+                    });
+        
+        
+            }
+
+    //For configurations
+        $scope.removeConf = function(index) {
+            $scope.launchConfs.splice(index, 1);
+        };
+        
+        $scope.addConf = function() {
+            $scope.launchConfs.push(angular.copy($scope.basicConf));
+            $scope.basicConf = {description: "", confKey: "", value: ""};
+        };
+        
+        $scope.queryAddToNSR = function() {
+
+        };
     //
 
 

@@ -103,7 +103,7 @@
                                         <a href="" data-toggle="modal" data-target="#modalAdd" ng-click="resumeNSR(data)">Resume</a>
                                     </li>
                                     <li>
-                                        <a href="" data-toggle="modal" data-target="#addVNF">Add VNF</a>
+                                        <a href="" ng-click="initiateExtension(data)" data-toggle="modal" data-target="#addVNF">Add VNF</a>
                                     </li>
                                     <li class="divider"></li>
                                     <li>
@@ -780,19 +780,19 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
                 <h4 class="modal-title">Add VNFR to {{extendedNSR.name}}</h4>
-                <b>Please, choose the the VNFD which you want to NSR</b>
+                <b>Please, choose the the VNFD which you want to add to NSR</b>
             </div>
             <div class="modal-body">
                 <div role="form" class="form-horizontal">
 
                     <div class="form-group">
                         <div class="col-sm-4">
-                            <label class="control-label">VNFD version</label>
+                            <label class="control-label">VNFD name/id</label>
                         </div>
 
                         <div class="col-sm-7">
                             <select name="vnfdSelect" class="form-control modal-select" id="vnfdselect" ng-model="vnfdToAdd" ng-options="vnf as vnf.name + '/' + vnf.id for vnf in allVnfdescriptors"
-                                ng-change="">
+                                ng-change="setConfs()">
                             </select>
                         </div>
                     </div>
@@ -810,7 +810,10 @@
                                                     <th colspan="3">Name</th>                                                   
                                                 </tr>
                                                 <tbody>
-                                                    <tr ng-repeat="vim in vimInstances">
+                                                        <tr ng-if="vimInstances.length < 1">
+                                                                <td colspan="3">No PoPs left</td>
+                                                                </tr>  
+                                                    <tr ng-if="vimInstances.length > 0" ng-repeat="vim in vimInstances">
                                                         <td>{{vim.name}}</td>
                                                         <td class="col-md-4">
                                                             <select name="testId" class="form-control input-sm" ng-if="vim.zones !== undefined"
@@ -874,9 +877,211 @@
                                 </div>
                             </tab>
                             <tab heading="Keys">
+                                    <div class="col-sm-6">
+                                            <p>
+                                                    <br> The following list shows all the Keys that are available to put into
+                                                    the VNF Component Instances.
+                                                </p>
+                                            <div class="table-responsive">
+                                                <br>
+                                                
+                                                <table class="table table-bordered table-striped table-hover tablesorter">
+                                                    <thead>
+                                                        <tr>
+                                                            <th colspan="3">Key Name</th>                                                   
+                                                        </tr>
+                                                        <tbody>
+                                                                <tr ng-if="keys.length < 1">
+                                                                        <td colspan="3">No more keys were chosen yet</td>
+                                                                        </tr>  
+                                                            <tr ng-if="keys.length > 0"ng-repeat="key in keys">
+                                                                <td>{{key.name}}</td>
+                                                                <td style="max-width:100px;overflow:hidden;word-wrap:normal;text-overflow:ellipsis" class="col-md-4">
+                                                                    {{key.fingerprint}}
+                                                                </td>
+                                                                <td class="col-md-2"
+                                                                style="text-align: center;">
+                                                                <button 
+                                                                        type="button"
+                                                                        class="btn  btn-primary btn-sm"
+                                                                        ng-click="addKey(key)">
+                                                                    +
+                                                                </button>
+                                                            </td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </thead>
+                                                </table>
+        
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                                <p>
+                                                        <br> The following list shows all the Keys that will be imported to the VNF
+                                                        Component Instances.
+                                                    </p>
+                                            <div class="table-responsive">
+                                                <br>
+                                                <br>
+                                                <table class="table table-bordered table-striped table-hover tablesorter">
+                                                    <thead>
+                                                        <tr>
+                                                            <th colspan="3">Key Name</th>  
+                                                        </tr>
+                                                        <tbody>
+                                                        <tr ng-if="keysForLaunch.length < 1">
+                                                         <td colspan="3">No keys were chosen yet</td>
+                                                         </tr>  
+                                                         <tr ng-if="keysForLaunch.length > 0" ng-repeat="key in keysForLaunch">
+                            
+                                                                        <td>{{key.name}}</td>
+                                                                        <td  style="max-width:100px;overflow:hidden;word-wrap:normal;text-overflow:ellipsis" class="col-md-4">
+                                                                            {{key.fingerprint}}
+                                                                        </td>
+                                                                        <td class="col-md-2"
+                                                                        style="text-align: center;">
+                                                                        <button 
+                                                                                type="button"
+                                                                                class="btn  btn-danger btn-sm"
+                                                                                ng-click="removeKey(key)">
+                                                                            -
+                                                                        </button>
+                                                            </td>
+                                                            </tr>  
+                                                        </tbody>
+                                                    </thead>
+                                                </table>
+        
+                                            </div>
+                                        </div>
                             </tab>
                             <tab heading="Configuration Parameters">
-                            </tab>
+                                    <p>
+                                            <br>
+                                            Configuration parameters are the dynamic parameters and would be used during
+                                            lifecycle events
+                                        </p>
+                                            <br>
+                                            <table class="col-md-12">
+                                                <tr ng-repeat="conf in launchConfs track by $index">
+                                                    <td class="row"
+                                                        style="padding: 7px !important; border-top: none !important; border-bottom: none !important; border-right: none !important; border-left: none !important;width: 20%;">
+    
+                                                        <div class="col-md-10 row">
+                                                            <b for="keyName">{{conf.confKey}}
+                                                                <a style="color: black;" data-toggle="tooltip"
+                                                                   title="{{conf.description}}"><i
+                                                                        class="fa fa-question-circle"
+                                                                        aria-hidden="true"></i></a>:
+                                                            </b>
+                                                        </div>
+                                                    </td>
+                                                    <div>
+                                                        <td class="row"
+                                                            style="padding: 7px !important; border-top: none !important; border-bottom: none !important; border-right: none !important; border-left: none !important; width: 70%;">
+                                                            <input style="border: 1px solid #ccc; border-radius: 3px; padding: 5px;width: 90%;"
+                                                                   id="Configuration Name"
+                                                                   ng-model="conf.value"
+                                                            />
+                                                    </div>
+                                                    </td>
+                                                    <td class="row"
+                                                        style="padding: 7px !important; border-top: none !important; border-bottom: none !important; border-right: none !important; border-left: none !important;width: 10%;">
+                                                        <div class="col-md-2">
+                                                            <button data-toggle="tooltip" title='Delete'
+                                                                    class="btn btn-danger right"
+                                                                    ng-hide="conf.id.length > 0" type="button"
+                                                                    ng-click="removeConf($index)">
+                                                                -
+                                                            </button>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                            <table class="table table-bordered"
+                                                   id="vduTabletable">
+                                                <tbody>
+                                                <form id="myFormKey">
+                                                    <tr>
+                                                        <td>
+                                                            <table class="col-md-12">
+                                                                <tr>
+                                                                    <br>
+                                                                    <td style="padding-top: 0px !important; border: none !important; padding-bottom: 0px !important;">
+                                                                        <table class="col-md-12">
+                                                                            <tr>
+                                                                                <td class="col-md-4"
+                                                                                    style="padding-top: 0px !important; border: none !important; padding-bottom: 0px !important;">
+    
+    
+                                                                                    <label>Configuration Key</label>
+                                                                                </td>
+                                                                                <td class="col-md-8"
+                                                                                    style="padding-top: 0px !important; border: none !important; padding-bottom: 0px !important;">
+                                                                                    <input
+                                                                                            type="text"
+                                                                                            class="form-control"
+                                                                                            id="ConfigKey"
+                                                                                            ng-model="basicConf.confKey"
+                                                                                    /></td>
+    
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td style="border: none !important;padding: 0px !important;"
+                                                                                    colspan="2">
+                                                                                    &nbsp;
+                                                                                </td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td class="col-md-4"
+                                                                                    style="padding-top: 0px !important; border: none !important; padding-bottom: 0px !important;">
+                                                                                    <label>Configuration Key Value</label>
+                                                                                </td>
+                                                                                <td class="col-md-8"
+                                                                                    style="padding-top: 0px !important; border: none !important; padding-bottom: 0px !important;">
+                                                                                    <input
+                                                                                            class="form-control"
+                                                                                            id="ConfigVal"
+                                                                                            ng-model="basicConf.value"
+                                                                                    />
+    
+                                                                                </td>
+    
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td style="border: none !important;"
+                                                                                    colspan="2">
+                                                                                    <label>Description </label>
+                                                                                    <textarea
+                                                                                            ng-disabled="conf.id.length > 0"
+                                                                                            style="width:100%; resize:vertical;"
+                                                                                            name="Description"
+                                                                                            ng-model="basicConf.description"
+                                                                                            id="basicConf.description"
+                                                                                            placeholder="Description"
+                                                                                            class="form-control">
+                                                                                    </textarea>
+                                                                                    <br>
+                                                                                    <a type="button"
+                                                                                       class="btn btn-primary right"
+                                                                                       ng-click="addConf()">Add
+                                                                                        Parameter</a>
+                                                                                </td>
+                                                                            </tr>
+                                                                        </table>
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td style="border: none !important;padding-left: 20px !important;padding-right: 20px !important;">
+                                                                    </td>
+                                                                </tr>
+                                                            </table>
+                                                        </td>
+                                                    </tr>
+                                                </form>
+                                                </tbody>
+                                            </table>
+                                        </tab>
                             <tab heading="Monitoring IP">
                                     <br>
                                     <p>Specify the IP of the monitoring server to which the VNFs should register. Open Baton
@@ -932,7 +1137,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary" ng-disabled="vnfdToAdd === '' || vnfdToAdd === undefined" ng-click="sendUpgrade(vnfdForUpgrade)">Add VNFR
+                        <button type="button" class="btn btn-primary" ng-disabled="vnfdToAdd === '' || vnfdToAdd === undefined" ng-click="queryAddToNSR()">Add VNFR
                         </button>
                     </div>
                 </div>
