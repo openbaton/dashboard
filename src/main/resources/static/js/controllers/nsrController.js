@@ -39,7 +39,7 @@ var app = angular.module('app').controller('NsrCtrl', function ($scope, $http, $
     $scope.lastActions = {};
     // to avoid the order of tables while it refresh in the background
     $scope.predicate = 'id';
-    $scope.vnfdToAdd = {};
+    $scope.vnfdToAdd;
     $scope.vimInstances = [];
     $scope.azVimInstance = {};
     $scope.popsForLaunch = [];
@@ -84,7 +84,7 @@ var app = angular.module('app').controller('NsrCtrl', function ($scope, $http, $
         });
     };
     $scope.changeIp = function(ip) {
-        $scope.monIp = ip;
+        $scope.monitoringIp = ip;
     };
     $scope.changePort = function(port) {
         $scope.monitoringPort = port;
@@ -138,8 +138,54 @@ var app = angular.module('app').controller('NsrCtrl', function ($scope, $http, $
         };
         
         $scope.queryAddToNSR = function() {
+            var bodyToSend = {"keys": [], "configurations": {}, vduVimInstances: {}};
+            $scope.keysForLaunch.map(function(key) {
+                bodyToSend["keys"].push(key.name);
+            });
+            if ($scope.launchConfs.length > 0) {
+                bodyToSend["configurations"][$scope.vnfdToAdd.name] = {"configurationParameters":[]};
+                bodyToSend["configurations"][$scope.vnfdToAdd.name].configurationParameters = $scope.launchConfs;
+            }
 
+            //vim preparation
+            var vimsWithZones = [];
+            $scope.popsForLaunch.map(function(el) {
+            if ($scope.azVimInstance[el.name] !== undefined && $scope.azVimInstance[el.name] !== "" && $scope.azVimInstance[el.name] !== "random") {
+                vimsWithZones.push(el.name + ":" + $scope.azVimInstance[el.name]);
+            } else {
+                vimsWithZones.push(el.name);
+            }
+            });
+
+            var vduVims = {};
+            console.log($scope.vnfdToAdd);
+            $scope.vnfdToAdd.vdu.map(function (el) {
+                vduVims[el.name] = vimsWithZones;
+            });
+
+
+
+            bodyToSend["vduVimInstances"] = vduVims;
+            if ($scope.monitoringIp !== "" && $scope.monitoringPort !== "") {
+                bodyToSend.monitoringIp = $scope.monitoringIp + ":" + $scope.monitoringPort;
+            }
+            console.log(bodyToSend);
+            http.put(url + $scope.extendedNSR.id + '/vnfd/' + $scope.vnfdToAdd.id, bodyToSend)
+                .success(function (response) {
+                    showOk('Adding VNFD to NSR ' + $scope.extendedNSR.name);
+                    loadTable();
+                })
+                .error(function (data, status) {
+                    showError(data, status);
+                });
         };
+
+    $scope.isInt = function (value) {
+        return !isNaN(value) && (function(x) { return (x | 0) === x; })(parseFloat(value))
+    };
+    $scope.isValidPort = function (value) {
+        return value === null || value === "" || ($scope.isInt(value) && (parseInt(value) > 0 && parseInt(value) < 65536));
+    };
     //
 
 
