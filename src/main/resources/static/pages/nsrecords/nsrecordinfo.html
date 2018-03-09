@@ -131,6 +131,8 @@
                                             </li>
                                             <li><a href="" ng-click="upgradeVNFCI(vnfr)">Upgrade VNFCI</a></li>
                                             </li>
+                                            <li><a href="" ng-click="restartVNFRmodal(vnfr)">Restart VNFR</a></li>
+                                            </li>
                                             <li class="divider"></li>
                                             <li><a href="" ng-click="deleteVNFR(vnfr)">Delete</a></li>
                                         </ul>
@@ -319,6 +321,43 @@
                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                         <button type="button" class="btn btn-primary" ng-disabled = "vnfdForUpgrade === '' || vnfdForUpgrade === undefined" ng-click="sendUpgrade(vnfdForUpgrade)"
                         >Upgrade VNFR
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" tabindex="-1" role="dialog" id="vnfrRestart">
+    <div class="modal-dialog" style="width:50%;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Restart VNFR</h4>
+                <b>Please, choose the image with will be used to restart the VNFR</b>
+            </div>
+            <div class="modal-body">
+                <div role="form" class="form-horizontal">
+
+                    <div class="form-group">
+                        <div  class="col-sm-4">
+                            <label class="control-label">Image</label>
+                        </div>
+
+                        <div class="col-sm-3">
+                            <select name="imageSelect" class="form-control modal-select" id="imageselect"
+                                    ng-model="imageForRestart"
+                                    ng-options="im.name as im.name for im in availableImages"
+                                    ng-change="">
+                            </select>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" ng-click="restartVNFR(vnfrToRestart, imageForRestart)"
+                                >Restart VNFR
                         </button>
                     </div>
                 </div>

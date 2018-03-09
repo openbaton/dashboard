@@ -24,7 +24,6 @@ var app = angular.module('app').controller('NsrCtrl', function ($scope, $http, $
     var urlKeys = baseUrl + 'keys/';
     var lst = $('lst');
 
-
     loadTable();
     loadVIMs();
     loadVNFD();
@@ -289,6 +288,28 @@ var app = angular.module('app').controller('NsrCtrl', function ($scope, $http, $
             });
     };
 
+    $scope.restartVNFRmodal = function(vnfr) {
+        $scope.vnfrToRestart = vnfr;
+        $scope.vimForRestart = $scope.vimInstancesList.filter(function (vim) {
+            return vim.id == vnfr.vdu[0].vnfc_instance[0].vim_id;});
+        $scope.imageForRestart = vnfr.vdu[0].vm_image[0];
+        $scope.availableImages = $scope.vimForRestart[0].images;
+        $('#vnfrRestart').modal('show');
+
+    };
+
+    $scope.restartVNFR = function(vnfr, image) {
+        var body = {};
+        body.imageName = image;
+        http.post(url + $routeParams.nsrecordId + '/vnfrecords/' + vnfr.id + '/restart', body)
+            .success(function (response) {
+                showOk('The vnfr ' + vnfr.id + ' is being rebuilt.');
+                loadTable();
+            })
+            .error(function (data, status) {
+                showError(data, status);
+            });
+    }
     function isInt(value) {
         return !isNaN(value) &&
             parseInt(Number(value)) == value &&
