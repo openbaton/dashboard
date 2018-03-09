@@ -723,7 +723,7 @@ var app = angular.module('app').controller('NsrCtrl', function ($scope, $http, $
         body.vnfdId = vnfdId;
         http.post(url + $scope.nsrinfo.id + '/vnfrecords/' + $scope.upgradeVNFR.id + '/upgrade', body)
             .success(function (response) {
-                showOk('Upgrading ' + vnfr.id);
+                showOk('Upgrading ' + $scope.upgradeVNFR.id);
                 loadTable();
             })
             .error(function (data, status) {
