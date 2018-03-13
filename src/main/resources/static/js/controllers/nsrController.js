@@ -701,7 +701,7 @@ var app = angular.module('app').controller('NsrCtrl', function ($scope, $http, $
     };
 
     $scope.resumeNSR = function (data) {
-        http.post(url + data.id)
+        http.post(url + data.id + "/resume")
             .success(function (response) {
                 showOk('The resume of the NSR will be done shortly!');
                 window.setTimeout(loadTable, 500);
