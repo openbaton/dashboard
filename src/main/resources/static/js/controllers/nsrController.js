@@ -482,7 +482,7 @@ var app = angular.module('app').controller('NsrCtrl', function ($scope, $http, $
         if (sendOK) {
             http.postPlain(url + $routeParams.nsrecordId + '/vnfrecords/' + vnfrForScript.id + '/execute-script/', script)
                 .success(function (response) {
-                    showOk('The script for  ' + vnfr.id + " is being executed");
+                    showOk('The script for  ' + vnfrForScript.id + " is being executed");
                 })
                 .error(function (data, status) {
                     showError(data, status);
