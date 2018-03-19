@@ -612,6 +612,13 @@
                                     <i class="fa fa-plus-square"> Add </i></a>
                             </div>
                             <div ng-repeat="vnfc in vduCreate.vnfc track by $index">
+                                <div class="form-group">
+                                    <i class="fa fa-trash-o" title="Remove VNFC" style="wdith:10px; padding-top:10px"
+                                       href="" ng-click="removeVNFC($index)"></i>
+                                    <div class="col-sm-2">
+                                        <label class="control-label">VNFC</label>
+                                    </div>
+                                </div>
                                 <label for="connectionpoints" class="control-label"
                                        ng-show="vnfc.connection_point.length > 0">Connection Points</label>
                                 <div class="table-responsive">
