@@ -1065,7 +1065,7 @@
                                                                                             class="form-control">
                                                                                     </textarea>
                                                                                     <br>
-                                                                                    <a type="button"
+                                                                                    <a ng-disabled="basicConf.value.length < 1 || basicConf.confKey.length < 1" type="button"
                                                                                        class="btn btn-primary right"
                                                                                        ng-click="addConf()">Add
                                                                                         Parameter</a>
