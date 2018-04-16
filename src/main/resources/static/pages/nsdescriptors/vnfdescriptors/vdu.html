@@ -74,10 +74,6 @@
                                          <td>Scale In Out</td>
                                          <td>{{vdu.scale_in_out}}</td>
                                      </tr>
-                                     <tr>
-                                         <td>Version</td>
-                                         <td>{{vdu.version}}</td>
-                                     </tr>
                                      </tbody>
                                  </table>
                              </div>
@@ -147,7 +143,6 @@
                                              <thead>
                                              <tr>
                                                  <th>ID</th>
-                                                 <th>Version</th>
                                                  <!--th>Connection Point</th-->
                                                  <th>Virtual Link Reference</th>
                                                  <th>Floating IP</th>
@@ -156,7 +151,6 @@
                                              <tbody>
                                              <tr ng-repeat="n in vdu.vnfc track by $index">
                                                  <td>{{n.id}}</td>
-                                                 <td>{{n.version}}</td>
                                                  <!--td>{{n.connection_point}}</td-->
                                                  <td>{{n.connection_point[0].virtual_link_reference}}</td>
                                                  <td>{{n.connection_point[0].floatingIp}}</td>
@@ -225,8 +219,6 @@
                                          <tr>
                                              <th ng-click="predicate = 'hostname'; reverse = !reverse">Hostname <i
                                                      class="fa fa-sort"></i></th>
-                                             <th ng-click="predicate = 'version'; reverse = !reverse">version <i
-                                                     class="fa fa-sort"></i></th>
                                              <th ng-click="predicate = 'connection_point'; reverse = !reverse">connection
                                                  point
                                                  <i class="fa fa-sort"></i></th>
@@ -242,7 +234,6 @@
                                          <tr ng-repeat="vnfci in vdu.vnfc_instance | orderBy:predicate:reverse">
                                              <!--<td><a href="#nsrecords/{{nsrinfo.id}}/vnfdependencies/{{df.id}}" ng-click="showData(nsd)">{{df.id}}</a></td>-->
                                              <td>{{vnfci.hostname}}</td>
-                                             <td>{{vnfci.version}}</td>
                                              <td>
                                                  <p ng-repeat="cp in vnfci.connection_point"
                                                     title="virtual link reference">

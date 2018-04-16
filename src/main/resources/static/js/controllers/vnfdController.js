@@ -20,12 +20,11 @@ var app = angular.module('app').controller('VnfdCtrl', function ($scope, $compil
     var url = baseUrl + '/vnf-descriptors/';
     var urlVim = baseUrl + '/datacenters';
     var defaultvdu = {
-        version: 0,
         name: "",
         vm_image: [],
         vimInstanceName: [],
         scale_in_out: 2,
-        vnfc: [{version: "0", connection_point: []}]
+        vnfc: [{connection_point: []}]
     };
     var defaultVNFD = {
         vendor: "",
@@ -197,7 +196,7 @@ var app = angular.module('app').controller('VnfdCtrl', function ($scope, $compil
         return (value > 0);
     };
     $scope.addVNFC = function () {
-        var newVnfc = {version: "0", connection_point: [{floatingIp: "random", virtual_link_reference: "private"}]};
+        var newVnfc = {connection_point: [{floatingIp: "random", virtual_link_reference: "private"}]};
         $scope.vduCreate.vnfc.push(newVnfc);
     };
     $scope.addConnection = function (data) {

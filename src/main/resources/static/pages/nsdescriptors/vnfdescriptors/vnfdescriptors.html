@@ -240,9 +240,6 @@
                                                     <th ng-click="predicate = 'id'; reverse = !reverse">Id <i
                                                             class="fa fa-sort"></i>
                                                     </th>
-                                                    <th ng-click="predicate = 'version'; reverse = !reverse">Version <i
-                                                            class="fa fa-sort"></i>
-                                                    </th>
                                                     <th style="width:30%" ng-click="predicate = 'vm_image'; reverse = !reverse">VM
                                                         Image <i class="fa fa-sort"></i>
                                                     </th>
@@ -260,7 +257,6 @@
                                                     <td>
                                                         {{vdu.id}}
                                                     </td>
-                                                    <td>{{vdu.version}}</td>
                                                     <td>{{vdu.vm_image}}</td>
                                                     <td>{{vdu.vimInstanceName}}</td>
                                                     <td>
@@ -540,13 +536,6 @@
                                    ng-model="vduCreate.name"/>
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label for="vduVersion" class="col-sm-4 control-label">Version</label>
-                        <div class="col-sm-6">
-                            <input type="text" class="form-control" id="vduVersion" name="Version"
-                                   ng-model="vduCreate.version"/>
-                        </div>
-                    </div>
                     <tabset>
                         <tab heading="VM Image">
                             <br>
@@ -627,11 +616,7 @@
                                     <i class="fa fa-trash-o" title="Remove VNFC" style="wdith:10px; padding-top:10px"
                                        href="" ng-click="removeVNFC($index)"></i>
                                     <div class="col-sm-2">
-                                        <label for="vnfcVersion" class="control-label">Version</label>
-                                    </div>
-                                    <div class="col-sm-6">
-                                        <input type="text" class="form-control" id="vnfcVersion" name="Version"
-                                               ng-model="vnfc.version"/>
+                                        <label class="control-label">VNFC</label>
                                     </div>
                                 </div>
                                 <label for="connectionpoints" class="control-label"

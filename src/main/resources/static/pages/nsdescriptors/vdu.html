@@ -74,10 +74,6 @@
                                         <td>Scale In Out</td>
                                         <td>{{vdu.scale_in_out}}</td>
                                     </tr>
-                                    <tr>
-                                        <td>Version</td>
-                                        <td>{{vdu.version}}</td>
-                                    </tr>
                                     </tbody>
                                 </table>
                             </div>
@@ -227,8 +223,6 @@
                                         <tr>
                                             <th ng-click="predicate = 'hostname'; reverse = !reverse">Hostname <i
                                                     class="fa fa-sort"></i></th>
-                                            <th ng-click="predicate = 'version'; reverse = !reverse">version <i
-                                                    class="fa fa-sort"></i></th>
                                             <th ng-click="predicate = 'connection_point'; reverse = !reverse">connection
                                                 point
                                                 <i class="fa fa-sort"></i></th>
@@ -243,7 +237,6 @@
                                         <tbody>
                                         <tr ng-repeat="vnfci in vdu.vnfc_instance | orderBy:predicate:reverse">
                                             <td>{{vnfci.hostname}}</td>
-                                            <td>{{vnfci.version}}</td>
                                             <td>
                                                 <p ng-repeat="cp in vnfci.connection_point"
                                                    title="virtual link reference">
