@@ -146,7 +146,7 @@ app.controller('EventCtrl', function ($scope, $interval, serviceAPI, $routeParam
                     showError(data, status);
                 });
 
-            http.get(url + '/actions')
+            http.get(url + 'actions')
                 .success(function (response) {
                     $scope.actions = response;
                 })
