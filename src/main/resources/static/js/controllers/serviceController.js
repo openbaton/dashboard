@@ -118,7 +118,7 @@ app.controller('ServiceCtrl', function ($scope, $interval, serviceAPI, $routePar
         var customHeader = {};
         customHeader['Content-type'] = 'application/json';
         customHeader['Accept'] = 'application/octet-stream';
-        http.post_with_header(url + "/create", $scope.serviceObj, customHeader)
+        http.post_with_header(url + "create", $scope.serviceObj, customHeader)
             .success(function (response) {
                 var rc = document.createElement("a");
                 rc.download = $scope.serviceObj.name + '.txt';
