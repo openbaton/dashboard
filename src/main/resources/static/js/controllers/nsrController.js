@@ -21,19 +21,175 @@ var app = angular.module('app').controller('NsrCtrl', function ($scope, $http, $
     var urlVNFD = baseUrl + 'vnf-descriptors/';
     var urlLog = baseUrl + 'logs/';
     var urlVim = baseUrl + 'datacenters/';
+    var urlKeys = baseUrl + 'keys/';
     var lst = $('lst');
-
 
     loadTable();
     loadVIMs();
+    loadVNFD();
+    loadKeys();
 
-
+    $scope.vnfdForUpgrade = '';
+    $scope.vnfdAvailable = {};
+    $scope.allVnfdescriptors = [];
     $scope.textTopologyJson = '';
     $scope.file = '';
     $scope.alerts = [];
     $scope.lastActions = {};
     // to avoid the order of tables while it refresh in the background
     $scope.predicate = 'id';
+    $scope.vnfdToAdd;
+    $scope.vimInstances = [];
+    $scope.azVimInstance = {};
+    $scope.popsForLaunch = [];
+    $scope.keys = [];
+    $scope.keysForLaunch = [];
+    $scope.monitoringIp = "";
+    $scope.monitoringPort = "";
+    $scope.launchConfs = [];
+    $scope.basicConf = {description: "", confKey: "", value: ""};
+    $scope.basicConfiguration = {name: "", config: {name: "", configurationParameters: []}};
+
+
+    //Adding VNFD stuff
+    $scope.initiateExtension = function(nsr) {
+        $scope.extendedNSR = nsr;
+    };
+
+    $scope.setConfs = function() {
+        console.log($scope.vnfdToAdd);
+        $scope.launchConfs = [];
+        if (!angular.isUndefined($scope.vnfdToAdd.configurations)) {
+        $scope.vnfdToAdd.configurations.configurationParameters.map(function(conf) {
+            $scope.launchConfs.push(angular.copy(conf));
+        })
+
+    }
+    };
+
+
+
+    //PoPs
+    $scope.addPopToLaunch = function(vim) {
+        $scope.popsForLaunch.push(vim);
+        $scope.vimInstances = $scope.vimInstances.filter(function(el) {
+            return el.id !== vim.id;
+        });
+    };
+    $scope.removePopToLaunch = function(vim) {
+        $scope.vimInstances.push(vim);
+        $scope.popsForLaunch = $scope.popsForLaunch.filter(function(el) {
+            return el.id !== vim.id;
+        });
+    };
+    $scope.changeIp = function(ip) {
+        $scope.monitoringIp = ip;
+    };
+    $scope.changePort = function(port) {
+        $scope.monitoringPort = port;
+    }
+
+    //For keys
+    function swapper(addTo, removeFrom, member) {
+        $scope.addTo.push(member);
+        $scope.removeFrom = $scope.removeFrom.filter(function(el) {
+            return member !== member;
+        });
+    };
+    $scope.addKey = function(key) {
+        $scope.keysForLaunch.push(key);
+        $scope.keys = $scope.keys.filter(function(el) {
+            return el.id !== key.id;
+        });
+    };
+    $scope.removeKey = function(key) {
+        $scope.keys.push(key);
+        $scope.keysForLaunch = $scope.keysForLaunch.filter(function(el) {
+            return el.id !== key.id;
+        });
+    };
+
+    function loadKeys() {
+
+                //console.log($routeParams.userId);
+                http.get(urlKeys)
+                    .success(function (response) {
+                        $scope.keys = response;
+                        //console.log($scope.users.length);
+
+                        //console.log($scope.keypairs);
+                    })
+                    .error(function (data, status) {
+                        showError(status, data);
+                    });
+
+
+            }
+
+    //For configurations
+        $scope.removeConf = function(index) {
+            $scope.launchConfs.splice(index, 1);
+        };
+
+        $scope.addConf = function() {
+            $scope.launchConfs.push(angular.copy($scope.basicConf));
+            $scope.basicConf = {description: "", confKey: "", value: ""};
+        };
+
+        $scope.queryAddToNSR = function() {
+            var bodyToSend = {"keys": [], "configurations": {}, vduVimInstances: {}};
+            $scope.keysForLaunch.map(function(key) {
+                bodyToSend["keys"].push(key.name);
+            });
+            if ($scope.launchConfs.length > 0) {
+                bodyToSend["configurations"][$scope.vnfdToAdd.name] = {"configurationParameters":[]};
+                bodyToSend["configurations"][$scope.vnfdToAdd.name].configurationParameters = $scope.launchConfs;
+            }
+
+            //vim preparation
+            var vimsWithZones = [];
+            $scope.popsForLaunch.map(function(el) {
+            if ($scope.azVimInstance[el.name] !== undefined && $scope.azVimInstance[el.name] !== "" && $scope.azVimInstance[el.name] !== "random") {
+                vimsWithZones.push(el.name + ":" + $scope.azVimInstance[el.name]);
+            } else {
+                vimsWithZones.push(el.name);
+            }
+            });
+
+            var vduVims = {};
+            console.log($scope.vnfdToAdd);
+            $scope.vnfdToAdd.vdu.map(function (el) {
+                vduVims[el.name] = vimsWithZones;
+            });
+
+
+
+            bodyToSend["vduVimInstances"] = vduVims;
+            if ($scope.monitoringIp !== "" && $scope.monitoringPort !== "") {
+                bodyToSend.monitoringIp = $scope.monitoringIp + ":" + $scope.monitoringPort;
+            }
+            console.log(bodyToSend);
+            http.put(url + $scope.extendedNSR.id + '/vnfd/' + $scope.vnfdToAdd.id, bodyToSend)
+                .success(function (response) {
+                    showOk('Adding VNFD to NSR ' + $scope.extendedNSR.name);
+                    loadTable();
+                })
+                .error(function (data, status) {
+                    showError(data, status);
+                });
+        };
+
+    $scope.isInt = function (value) {
+        return !isNaN(value) && (function(x) { return (x | 0) === x; })(parseFloat(value))
+    };
+    $scope.isValidPort = function (value) {
+        return value === null || value === "" || ($scope.isInt(value) && (parseInt(value) > 0 && parseInt(value) < 65536));
+    };
+    //
+
+    $scope.script = '';
+    $scope.fileScript = '';
+    var vnfrForScript = '';
 
     $scope.getLastHistoryLifecycleEvent = function (vnfs) {
 
@@ -128,6 +284,40 @@ var app = angular.module('app').controller('NsrCtrl', function ($scope, $http, $
         http.delete(url + $routeParams.nsrecordId + '/vnfrecords/' + $routeParams.vnfrecordId + '/vdunits/' + vdu.id + '/vnfcinstances')
             .success(function (response) {
                 showOk('Removed the Virtual Network Function Component Instance to Vdu with id: ' + vdu.id + '.');
+                loadTable();
+            })
+            .error(function (data, status) {
+                showError(data, status);
+            });
+    };
+
+    $scope.restartVNFRmodal = function(vnfr) {
+        $scope.vnfrToRestart = vnfr;
+        $scope.vimForRestart = $scope.vimInstancesList.filter(function (vim) {
+            return vim.id == vnfr.vdu[0].vnfc_instance[0].vim_id;});
+        $scope.imageForRestart = vnfr.vdu[0].vm_image[0];
+        $scope.availableImages = $scope.vimForRestart[0].images;
+        $('#vnfrRestart').modal('show');
+
+    };
+
+    $scope.restartVNFR = function(vnfr, image) {
+        var body = {};
+        body.imageName = image;
+        http.post(url + $routeParams.nsrecordId + '/vnfrecords/' + vnfr.id + '/restart', body)
+            .success(function (response) {
+                showOk('The vnfr ' + vnfr.id + ' is being rebuilt.');
+                loadTable();
+            })
+            .error(function (data, status) {
+                showError(data, status);
+            });
+    }
+
+    $scope.updateVNFR = function(vnfr) {
+        http.post(url + $routeParams.nsrecordId + '/vnfrecords/' + vnfr.id + '/update/')
+            .success(function (response) {
+                showOk('The vnfr ' + vnfr.id + " is being updated");
                 loadTable();
             })
             .error(function (data, status) {
@@ -268,6 +458,40 @@ var app = angular.module('app').controller('NsrCtrl', function ($scope, $http, $
 
     };
 
+    $scope.changeText = function(text) {
+      $scope.script = text;
+    };
+
+    $scope.setVNFR = function(vnfr) {
+        vnfrForScript = vnfr;
+    };
+
+    $scope.executeScript = function() {
+        $('.modal').modal('hide');
+        var sendOK = false;
+        var script;
+        if ($scope.fileScript !== '') {
+            console.log("Reading file");
+            script = $scope.fileScript;
+            sendOK = true;
+        } else if($scope.script !== '') {
+            script = $scope.script;
+            sendOK = true;
+        }
+
+        if (sendOK) {
+            http.postPlain(url + $routeParams.nsrecordId + '/vnfrecords/' + vnfrForScript.id + '/execute-script/', script)
+                .success(function (response) {
+                    showOk('The script for  ' + vnfrForScript.id + " is being executed");
+                })
+                .error(function (data, status) {
+                    showError(data, status);
+                });
+        } else {
+            showError({'message':'Cannot send empty script'}, '');
+        }
+        $scope.script = '';
+    };
 
     $scope.sendFile = function () {
 
@@ -322,6 +546,23 @@ var app = angular.module('app').controller('NsrCtrl', function ($scope, $http, $
             }
         }
 
+    };
+
+    $scope.setFile = function (element) {
+        $scope.$apply(function ($scope) {
+
+            var f = element.files[0];
+            if (f) {
+                var r = new FileReader();
+                r.onload = function (element) {
+                    var contents = element.target.result;
+                    $scope.fileScript = contents;
+                };
+                r.readAsText(f);
+            } else {
+                alert("Failed to load file");
+            }
+        });
     };
 
 
@@ -460,7 +701,7 @@ var app = angular.module('app').controller('NsrCtrl', function ($scope, $http, $
     };
 
     $scope.resumeNSR = function (data) {
-        http.post(url + data.id)
+        http.post(url + data.id + "/resume")
             .success(function (response) {
                 showOk('The resume of the NSR will be done shortly!');
                 window.setTimeout(loadTable, 500);
@@ -468,6 +709,28 @@ var app = angular.module('app').controller('NsrCtrl', function ($scope, $http, $
             .error(function (data, status) {
                 showError(data, status);
             });
+    };
+
+    $scope.upgradeVNFCI = function (vnfr) {
+        $scope.upgradeVNFR = vnfr;
+        $scope.vnfdAvailable = $scope.allVnfdescriptors.filter(function(el) {
+            return el.name === vnfr.name && el.version !== vnfr.version;
+        });
+        $('#vnfrUpgrade').modal('show');
+    }
+    $scope.sendUpgrade = function (vnfdId) {
+        body = {};
+        body.vnfdId = vnfdId;
+        http.post(url + $scope.nsrinfo.id + '/vnfrecords/' + $scope.upgradeVNFR.id + '/upgrade', body)
+            .success(function (response) {
+                showOk('Upgrading ' + $scope.upgradeVNFR.id);
+                loadTable();
+            })
+            .error(function (data, status) {
+                console.error('STATUS: ' + status + ' DATA: ' + data);
+                showError(data, status);
+            });
+
     };
 
     /* -- multiple delete functions Start -- */
@@ -575,6 +838,18 @@ var app = angular.module('app').controller('NsrCtrl', function ($scope, $http, $
         });
 
     };
+
+    function loadVNFD() {
+        http.get(urlVNFD)
+            .success(function (response, status) {
+                $scope.allVnfdescriptors = response;
+                //console.log(response);
+            })
+            .error(function (data, status) {
+                showError(data, status);
+
+            });
+    }
 
     function loadTable() {
         if (angular.isUndefined($routeParams.nsrecordId))
@@ -727,6 +1002,7 @@ var app = angular.module('app').controller('NsrCtrl', function ($scope, $http, $
         var promise = http.get(urlVim)
             .success(function (response) {
                 $scope.vimInstancesList = response;
+                $scope.vimInstances = response;
                 console.log($scope.vimInstancesList);
             })
             .error(function (data, status) {
@@ -757,4 +1033,10 @@ var app = angular.module('app').controller('NsrCtrl', function ($scope, $http, $
         }
         return false;
     }
+
+    //Additional tools for adding VNFR to NSR
+    $scope.extendedNSR = "";
+
+
+
 });

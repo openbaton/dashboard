@@ -129,6 +129,14 @@
                                             <li><a href="" ng-click="addVNFCIModal(vnfr)">Add VNFCI</a></li>
                                             <li><a href="" ng-click="removeVNFCI(vnfr)">Remove VNFCI</a></li>
                                             </li>
+                                            <li><a href="" ng-click="upgradeVNFCI(vnfr)">Upgrade VNFR</a></li>
+                                            </li>
+                                            <li><a href="" ng-click="restartVNFRmodal(vnfr)">Restart VNFR</a></li>
+                                            </li>
+                                            <li><a href="" ng-click="updateVNFR(vnfr)">Update VNFR</a></li>
+                                            </li>
+                                            <li><a href="" ng-click="setVNFR(vnfr)" data-toggle="modal"  data-target="#modalExecuteScript">Execute Script</a></li>
+                                            </li>
                                             <li class="divider"></li>
                                             <li><a href="" ng-click="deleteVNFR(vnfr)">Delete</a></li>
                                         </ul>
@@ -287,3 +295,120 @@
     <!-- /.modal-dialog -->
 </div>
 <!-- /.modal -->
+
+<div class="modal fade" tabindex="-1" role="dialog" id="vnfrUpgrade">
+    <div class="modal-dialog" style="width:50%;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Upgrade VNFR {{upgradeVNFR.name}}</h4>
+                <b>Please, choose the version of the VNFD to which you want to upgrade</b>
+            </div>
+            <div class="modal-body">
+                <div role="form" class="form-horizontal">
+
+                    <div class="form-group">
+                        <div  class="col-sm-4">
+                            <label class="control-label">VNFD version</label>
+                        </div>
+
+                        <div class="col-sm-3">
+                            <select name="vnfdSelect" class="form-control modal-select" id="vnfdselect"
+                                    ng-model="vnfdForUpgrade"
+                                    ng-options="vnf.id as vnf.version for vnf in vnfdAvailable"
+                                    ng-change="">
+                            </select>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" ng-disabled = "vnfdForUpgrade === '' || vnfdForUpgrade === undefined" ng-click="sendUpgrade(vnfdForUpgrade)"
+                        >Upgrade VNFR
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" tabindex="-1" role="dialog" id="vnfrRestart">
+    <div class="modal-dialog" style="width:50%;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Restart VNFR</h4>
+                <b>Please, choose the image which will be used to restart the VNFR</b>
+            </div>
+            <div class="modal-body">
+                <div role="form" class="form-horizontal">
+
+                    <div class="form-group">
+                        <div  class="col-sm-4">
+                            <label class="control-label">Image</label>
+                        </div>
+
+                        <div class="col-sm-7">
+                            <select name="imageSelect" class="form-control modal-select" id="imageselect"
+                                    ng-model="imageForRestart"
+                                    ng-options="im.name as im.name for im in availableImages"
+                                    ng-change="">
+                            </select>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" ng-click="restartVNFR(vnfrToRestart, imageForRestart)"
+                                >Restart VNFR
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="modalExecuteScript" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header panel-heading">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <span class="modal-title" id="serviceFormLabel">Execute Script on VNF</span>
+            </div>
+
+                    <div class="modal-header">
+                        <h4 class="modal-title">Script contents</h4>
+                        You can type the script inside the textbox or send a file.
+                    </div>
+                    <div class="modal-body">
+                        <form role="form" id="formScript">
+                            <div class="form-group">
+
+                                <br> <label for="scriptInputArea">Insert Your Script</label>
+                                <textarea name="script" ng-model="script"
+                                          ng-change="changeText(script)" id="scriptInputArea"
+                                          class="form-control verticalresize" rows="5" placeholder="#!/bin/bash"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="scriptInputFile">File input</label>
+                                <input type="file" id="scriptInputFile"
+                                       onchange="angular.element(this).scope().setFile(this)">
+
+                                <p class="help-block">Example: script.sh </p>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close
+                        </button>
+                        <button type="button" id="scriptUp" ng-click="executeScript(script)"
+                                class="btn btn-primary">Execute Script
+                        </button>
+                    </div>
+                <!--modal-content-->
+        </div>
+        <!--modal-dialog-->
+    </div>
+</div>
