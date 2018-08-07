@@ -17,8 +17,8 @@
 var app = angular.module('app').controller('VnfdCtrl', function ($scope, $compile, $cookieStore, $routeParams, http, $http, $window, AuthService, clipboard, $interval, NgTableParams, $filter) {
 
     var baseUrl = $cookieStore.get('URL') + "/api/v1/";
-    var url = baseUrl + '/vnf-descriptors/';
-    var urlVim = baseUrl + '/datacenters';
+    var url = baseUrl + 'vnf-descriptors';
+    var urlVim = baseUrl + 'datacenters';
     var defaultvdu = {
         version: 0,
         name: "",
