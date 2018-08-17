@@ -65,7 +65,7 @@ angular.module('app').controller('vimInstanceCtrl', function ($scope, $routePara
 
     function updateObject(id) {
         console.log($scope.editObj);
-        http.put(url + '/' + id, $scope.editObj)
+        http.put(url + id, $scope.editObj)
             .success(function (response) {
                 showOk('VIM Instance updated!');
                 loadVIM();
