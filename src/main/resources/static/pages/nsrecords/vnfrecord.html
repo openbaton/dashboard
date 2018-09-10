@@ -462,7 +462,7 @@
                 <ul style="padding-left: 0px;">
                     <li style="display: inline;padding-right: 10px;"
                         ng-repeat="vimInstancesList in vimInstancesList track by $index">
-                        <input type="checkbox" ng-checked="item.checked"> {{vimInstancesList.name}}<br/>
+                        <input type="checkbox" ng-model=check ng-click="change(vimInstancesList)"> {{vimInstancesList.name}}<br/>
                     </li>
                 </ul>
                 </form>

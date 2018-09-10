@@ -383,6 +383,7 @@ var app = angular.module('app').controller('NsrCtrl', function ($scope, $http, $
         $scope.connection_point.VimInstances = "";
     };
     $scope.addVNFCItoVDU = function (vnfr, vdu) {
+        console.log($scope.vimInstancesList);
         $scope.connection_pointsVDU = [];
         $scope.vduSelected = angular.copy(vdu);
         console.log($scope.vduSelected);
@@ -393,7 +394,8 @@ var app = angular.module('app').controller('NsrCtrl', function ($scope, $http, $
                 "interfaceId": connection.interfaceId,
                 "virtual_link_reference": connection.virtual_link_reference,
                 "VimInstances": $scope.vimInstancesList
-            });
+            });       
+
         });
         if ($scope.connection_pointsVDU.lenght > 0) {
             $scope.connection_pointsVDU = $scope.connection_pointsVDU[0];
@@ -1011,12 +1013,15 @@ var app = angular.module('app').controller('NsrCtrl', function ($scope, $http, $
     }
 
     $scope.lst = [];
-
-    $scope.change = function (vimInstancesList, active) {
-        if (active)
+    $scope.check = false;
+    $scope.change = function (vimInstancesList) {
+        
+        if ($scope.lst.indexOf(vimInstancesList.name) == -1)
             $scope.lst.push(vimInstancesList.name);
+        
         else
             $scope.lst.splice($scope.lst.indexOf(vimInstancesList.name), 1);
+        console.log($scope.lst)
     };
 // to Store current page into local storage
     if (typeof(Storage) !== "undefined") {
