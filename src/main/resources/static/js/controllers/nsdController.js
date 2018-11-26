@@ -587,6 +587,10 @@ app.controller('NsdCtrl', function ($scope, $compile, $cookieStore, $routeParams
         }
 
         $scope.toggle = false;
+        scope.textTopologyJson = '';
+        $scope.file = '';
+      
+        $('#modalCreateNSDUploadjson').modal('hide');
     };
 
 
@@ -1311,4 +1315,8 @@ app.controller('NsdCtrl', function ($scope, $compile, $cookieStore, $routeParams
                 $scope.pubKey = null;
             });
     };
+    $('#modalCreateNSDUploadjson').on('hidden.bs.modal', function () {
+        $(this).find("input,textarea,select").val('').end();
+
+    });
 });

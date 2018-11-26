@@ -22,15 +22,45 @@ angular.module('app').controller('vimInstanceCtrl', function ($scope, $routePara
     $scope.datacenter = {};
     $scope.file = '';
     $scope.showPass = false;
-    $scope.newvim = {type: "openstack", securityGroups: []};
+    $scope.newvim = {type: "openstack", securityGroups: [], domain: "default"};
     $scope.driversinstalled = [];
     $scope.installed = [];
     // to avoid the order of tables while it refresh in the background
     $scope.predicate = 'id';
     var formInput = true;
     var fileInput = false;
+    $scope.tenantNeeded;
+    $scope.securityGroupsNeeded;
+    $scope.userNameNeeded; 
+    $scope.passwordNeeded; 
+    $scope.domainNeeded;
+    $scope.showDockerMessage = false;
     loadVIM();
     loadInstalled();
+    checkParams();
+    
+
+
+    function checkParams() {
+        $scope.tenantNeeded = $scope.newvim.type == "openstack";
+        $scope.securityGroupsNeeded = $scope.newvim.type == "openstack" || $scope.newvim.type == "amazon" || $scope.newvim.type == "test";
+        $scope.userNameNeeded = $scope.newvim.type == "openstack" || $scope.newvim.type == "test";
+        $scope.passwordNeeded = $scope.newvim.type == "openstack" || $scope.newvim.type == "test";
+        $scope.domainNeeded = $scope.newvim.type == "openstack";
+    }
+    $scope.$watch('newvim', function(newValue, oldValue) {
+        checkParams();   
+        if (oldValue.type != newValue.type) {
+            $scope.newvim = {type: newValue.type, securityGroups: []};            
+        }
+        if ($scope.newvim.type === "openstack") {
+            $scope.newvim.domain = "default";
+        }
+
+    }, true);
+
+
+
 
     $scope.textTopologyJson = '';
     $scope.setFormInput = function () {
@@ -276,6 +306,11 @@ angular.module('app').controller('vimInstanceCtrl', function ($scope, $routePara
         $scope.selection = {};
         $scope.selection.ids = {};
     };
+
+
+  
+
+
     $scope.main = {checkbox: false};
     $scope.$watch('main', function (newValue, oldValue) {
         // console.log(newValue.checkbox);
@@ -389,6 +424,7 @@ angular.module('app').controller('vimInstanceCtrl', function ($scope, $routePara
             AuthService.logout();
         }
     }
+
 
     function showOk(msg) {
         $scope.alerts.push({type: 'success', msg: msg});

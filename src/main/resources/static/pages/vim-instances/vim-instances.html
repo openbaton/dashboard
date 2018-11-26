@@ -91,7 +91,18 @@
                         Mandatory fields are marked with *.
                         </br>
                         </br>
+
                         <form role="form" class="form-horizontal">
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label">Type*</label>
+                                <div class="col-sm-6">
+                                    <select name="typeSelect" class="form-control modal-select"
+                                            ng-model="newvim.type"
+
+                                            ng-options="plugin.type as plugin.type for plugin in installed | orderBy:'name':false">
+                                    </select>
+                                </div>
+                            </div>
                             <div class="form-group">
                                 <label class="col-sm-4 control-label">PoP Name*</label>
                                 <div class="col-sm-6">
@@ -101,35 +112,31 @@
                             <div class="form-group">
                                 <label class="col-sm-4 control-label">URL*</label>
                                 <div class="col-sm-6">
-                                    <input type="text" class="form-control" ng-model="newvim.authUrl"/>
+                                     <input type="text" class="form-control" ng-model="newvim.authUrl"/>
                                 </div>
                             </div>
-                            <div class="form-group">
+                            <div class="form-group" ng-show="tenantNeeded">
                                 <label class="col-sm-4 control-label">Tenant*</label>
                                 <div class="col-sm-6">
                                     <input type="text" class="form-control" ng-model="newvim.tenant"/>
                                 </div>
                             </div>
+                            <div class="form-group" ng-show="domainNeeded">
+                                <label class="col-sm-4 control-label">Domain</label>
+                                <div class="col-sm-6">
+                                    <input type="text" class="form-control" ng-init="default" ng-model="newvim.domain"/>
+                                </div>
+                            </div>
                             <div class="form-group">
-                                <label class="col-sm-4 control-label">Username*</label>
+                                <label class="col-sm-4 control-label">Username<span ng-show="userNameNeeded">*</span></label>
                                 <div class="col-sm-6">
                                     <input type="text" class="form-control" ng-model="newvim.username"/>
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label class="col-sm-4 control-label">Password*</label>
+                                <label class="col-sm-4 control-label">Password<span ng-show="passwordNeeded">*</span></label>
                                 <div class="col-sm-6">
                                     <input type="text" class="form-control" ng-model="newvim.password"/>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-sm-4 control-label">Type*</label>
-                                <div class="col-sm-6">
-                                    <select name="typeSelect" class="form-control modal-select"
-                                            ng-model="newvim.type"
-
-                                            ng-options="plugin.type as plugin.type for plugin in installed | orderBy:'name':false">
-                                    </select>
                                 </div>
                             </div>
                             <div class="form-group">
@@ -157,7 +164,7 @@
                                     <input type="text" class="form-control" ng-model="newvim.location.longitude"/>
                                 </div>
                             </div>
-                            <div class="form-group">
+                            <div class="form-group" ng-show="securityGroupsNeeded">
                                 <div ng-repeat="secG in newvim.securityGroups track by $index">
                                     <label class="col-sm-4 control-label">Security Group </label>
                                     <div class="col-sm-6">
@@ -177,7 +184,7 @@
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                         <button type="button" title="Mandatory fields are marked with *" class="btn btn-primary"
-                                ng-disabled="!newvim.name || !newvim.authUrl || !newvim.tenant || !newvim.username || !newvim.password"
+                                ng-disabled="!newvim.name || !newvim.authUrl || (!newvim.tenant && tenantNeeded) || (!newvim.username && userNameNeeded) || (!newvim.password && passwordNeeded)"
                                 ng-click="sendInfrastructure()" data-dismiss="modal">Send
                         </button>
                     </div>
