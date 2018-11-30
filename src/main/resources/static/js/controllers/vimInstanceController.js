@@ -35,6 +35,7 @@ angular.module('app').controller('vimInstanceCtrl', function ($scope, $routePara
     $scope.passwordNeeded; 
     $scope.domainNeeded;
     $scope.showDockerMessage = false;
+    $scope.keyPairNeeded;
     loadVIM();
     loadInstalled();
     checkParams();
@@ -42,11 +43,12 @@ angular.module('app').controller('vimInstanceCtrl', function ($scope, $routePara
 
 
     function checkParams() {
-        $scope.tenantNeeded = $scope.newvim.type == "openstack";
+        $scope.tenantNeeded = $scope.newvim.type == "openstack" || $scope.newvim.type == "test";
         $scope.securityGroupsNeeded = $scope.newvim.type == "openstack" || $scope.newvim.type == "amazon" || $scope.newvim.type == "test";
         $scope.userNameNeeded = $scope.newvim.type == "openstack" || $scope.newvim.type == "test";
         $scope.passwordNeeded = $scope.newvim.type == "openstack" || $scope.newvim.type == "test";
         $scope.domainNeeded = $scope.newvim.type == "openstack";
+        $scope.keyPairNeeded = $scope.newvim.type == "openstack" || $scope.newvim.type == "test";
     }
     $scope.$watch('newvim', function(newValue, oldValue) {
         checkParams();   
@@ -146,7 +148,7 @@ angular.module('app').controller('vimInstanceCtrl', function ($scope, $routePara
             console.log("Using formInput");
             //console.log($scope.newvim);
             checkKey();
-            //console.log($scope.newvim);
+            console.log($scope.newvim);
             http.post(url, $scope.newvim)
                 .success(function (response) {
                     showOk('VIM Instance created.');
