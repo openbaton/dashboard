@@ -572,7 +572,7 @@
                             <div class="input-group">
                                 <span>VNFDs Catalogue</span>
                                 <select name="typeSelect" class="form-control input-margintop" ng-model="selectedVNFD"
-                                        ng-options="vnfd.name for vnfd in vnfdList| orderBy:'itemKey':false">
+                                        ng-options="vnfd.name + '/' + vnfd.vendor + '/' + vnfd.version for vnfd in vnfdList| orderBy:'itemKey':false">
                                 </select>
                                 <span class="input-group-btn">
                             <button class="btn btn-success radiusnone" ng-click="addTONSD(selectedVNFD)" type="button"

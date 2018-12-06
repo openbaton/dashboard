@@ -57,6 +57,12 @@
                         <th ng-click="predicate = 'name'; reverse = !reverse">NSR Name
                             <i class="fa fa-sort"></i>
                         </th>
+                        <th ng-click="predicate = 'name'; reverse = !reverse">Vendor
+                            <i class="fa fa-sort"></i>
+                        </th>
+                        <th ng-click="predicate = 'name'; reverse = !reverse">Version
+                            <i class="fa fa-sort"></i>
+                        </th>
                         <th ng-click="predicate = 'state'; reverse = !reverse">State
                             <i class="fa fa-sort"></i>
                         </th>
@@ -82,6 +88,8 @@
                                 href="#nsrecords/{{data.id}}">{{data.id}}</a>
                         </td>
                         <td>{{data.name}}</td>
+                        <td>{{data.vendor}}</td>
+                        <td>{{data.version}}</td>
                         <td>{{data.status}}
                             <span ng-show='ActiveNSrecords(data.status)'>
                                 <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
@@ -225,11 +233,11 @@
                         <div id="inputTemplateForm" class="inputTemplate" ng-show="toggle">
 
                             <div class="form-group form-horizontal ">
-                                <label for="nameTemplate" class="col-sm-4 control-label">Name Template
+                                <label for="nameTemplate1" class="col-sm-4 control-label">Name Template
                                 </label>
 
                                 <div class="col-sm-5">
-                                    <input type="text" class="form-control" id="nameTemplate" name="nameTemplate" ng-model="template.name" placeholder="Name Template"
+                                    <input type="text" class="form-control" id="nameTemplate1" name="nameTemplate" ng-model="template.name" placeholder="Name Template"
                                         value="">
 
                                 </div>
@@ -264,13 +272,13 @@
                                 <td class="container row">
                                     <div id="inputTemplateJson" class="col-sm-12 inputTemplate" style="display: none;">
                                         <div class="form-group ">
-                                            <label for="nameTemplate">Name Template</label>
-                                            <input type="text" class="form-control" id="nameTemplate"
+                                            <label for="nameTemplate2">Name Template</label>
+                                            <input type="text" class="form-control" id="nameTemplate2"
                                                 placeholder="Template">
                                         </div>
                                         <div class="form-group">
-                                            <label for="nameTemplate">flavour</label>
-                                            <input type="text" class="form-control" id="inputFlavorTemplate"
+                                            <label for="inputFlavorTemplate1">flavour</label>
+                                            <input type="text" class="form-control" id="inputFlavorTemplate1"
                                                 value="m1.small" placeholder="m1.small">
                                         </div>
 
@@ -307,7 +315,7 @@
                                                 placeholder="Template">
                                         </div>
                                         <div class="form-group">
-                                            <label for="nameTemplate">flavour</label>
+                                            <label for="inputFlavorTemplate">flavour</label>
                                             <input type="text" class="form-control" id="inputFlavorTemplate"
                                                 value="m1.small" placeholder="m1.small">
                                         </div>
