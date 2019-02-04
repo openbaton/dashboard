@@ -919,7 +919,7 @@
                                     </p>
                                     <div class="border-none">
                                         <tabset style="border: none !important;">
-                                            <tab heading="General" class="active">
+                                            <tab heading="General" ng-click="selectVnfd('General')" class="active">
                                                 <p><br>
                                                     From this section, you can assign or remove PoPs to all VNFD.
                                                 </p>
@@ -953,9 +953,9 @@
                                                                         <td class="col-md-5">
                                                                             <select name="testId"
                                                                                     class="form-control input-sm"
-                                                                                    ng-if="vimInstance.zones !== undefined"
-                                                                                    ng-init="azVimInstance[vimInstance.name] = 'random'"
-                                                                                    ng-model="azVimInstance[vimInstance.name]">
+                                                                                    ng-if="vimInstance.zones !== undefined && vimInstance.zones.length > 0"
+                                                                                    ng-init="initAz(vimInstance.name, 'General')"
+                                                                                    ng-model="azVimInstance[vimInstance.name]['General']">
                                                                                 <option value="random"
                                                                                         label="random">random
                                                                                 </option>
@@ -970,7 +970,7 @@
                                                                                     type="button"
                                                                                     title="Add a new PoP to this NSR"
                                                                                     class="btn  btn-primary btn-sm"
-                                                                                    ng-click="addPopToNsd(vimInstance, launchPopTable)">
+                                                                                    ng-click="addPopToNsd(vimInstance)">
                                                                                 + Add to all
                                                                             </button>
                                                                         </td>
@@ -1006,16 +1006,19 @@
                                                                     </tr>
                                                                     </thead>
                                                                     <tr ng-repeat="vimInstance in $data track by $index">
-                                                                        <td class="col-md-7">
-                                                                            {{vimInstance.name}}->{{azVimInstance[vimInstance.name]}}
+                                                                            <td class="col-md-7" ng-if = "vimInstance.az !== undefined && vimInstance.az !== ''">
+                                                                                    {{vimInstance.vim}}->{{vimInstance.az}}
+                                                                        </td>
+                                                                        <td class="col-md-7" ng-if="vimInstance.az === undefined || vimInstance.az === ''">
+                                                                            {{vimInstance.vim}}
                                                                         </td>
                                                                         <td style="text-align: center;"
                                                                             class="col-md-5">
-                                                                            <button ng-if="vimInstance.name.length"
+                                                                            <button ng-if="vimInstance.vim.length"
                                                                                     title="Add a new PoP to this NSR"
                                                                                     type="button"
                                                                                     class="btn btn-warning btn-sm"
-                                                                                    ng-click="RemovePoPfromNSD(vimInstance, launchPopTable)">
+                                                                                    ng-click="RemovePoPfromNSD(vimInstance)">
                                                                                 - Del from All
                                                                             </button>
                                                                         </td>
@@ -1048,7 +1051,7 @@
                                                                    ng-click="popTable.expanded = false">-</a>
                                                                 <a href="" ng-if="!popTable.expanded"
                                                                    ng-click="popTable.expanded = true">+</a>Available
-                                                                ({{launchPopsAvailable[tab.vnfd.name].pops.length}})
+                                                                ({{tableParamsFilteredPops.data.length}})
                                                             </p>
                                                             <div ng-if="popTable.expanded">
                                                                 <table style="text-align: left;"
@@ -1068,9 +1071,9 @@
                                                                         <td class="col-md-5">
                                                                             <select name="testId"
                                                                                     class="form-control input-sm"
-                                                                                    ng-if="vimInstance.zones !== undefined"
-                                                                                    ng-init="azVimInstance[vimInstance.name] = 'random'"
-                                                                                    ng-model="azVimInstance[vimInstance.name]">
+                                                                                    ng-if="vimInstance.zones !== undefined && vimInstance.zones.length > 0"
+                                                                                    ng-init="initAz(vimInstance.name, tab.vnfd.name)"
+                                                                                    ng-model="azVimInstance[vimInstance.name][tab.vnfd.name]">
                                                                                 <!--ng-init="azVimInstance[vimInstance.name] = vimInstance.zones[0].name"-->
                                                                                 <option value="random"
                                                                                         label="random">random
@@ -1113,7 +1116,7 @@
                                                                 <a href="" ng-if="!launchPopTable.expanded"
                                                                    ng-click="launchPopTable.expanded = true">+</a>
                                                                 Assigned
-                                                                ({{launchPops[tab.vnfd.name].pops.length}})
+                                                                ({{tableParamsFilteredLaunchPops.data.length}})
                                                             </p>
                                                             <div ng-if="launchPopTable.expanded">
                                                                 <table ng-table="tableParamsFilteredLaunchPops"
@@ -1126,12 +1129,15 @@
                                                                     </tr>
                                                                     </thead>
                                                                     <tr ng-repeat="vimInstance in $data track by $index">
-                                                                        <td class="col-md-9">
-                                                                            {{vimInstance.name}}->{{azVimInstance[vimInstance.name]}}
+                                                                        <td class="col-md-9" ng-if = "vimInstance.az !== undefined && vimInstance.az !== ''">
+                                                                                    {{vimInstance.vim}}->{{vimInstance.az}}
+                                                                        </td>
+                                                                        <td class="col-md-9" ng-if="vimInstance.az === undefined || vimInstance.az === ''">
+                                                                            {{vimInstance.vim}}
                                                                         </td>
                                                                         <td style="text-align: center;"
                                                                             class="col-md-3">
-                                                                            <button ng-if="vimInstance.name.length"
+                                                                            <button ng-if="vimInstance.vim.length"
                                                                                     type="button"
                                                                                     class="btn btn-warning btn-sm"
                                                                                     ng-click="removePopToVnfd(tab.vnfd, vimInstance)">
