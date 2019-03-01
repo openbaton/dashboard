@@ -140,6 +140,7 @@ app.controller('NsdCtrl', function ($scope, $compile, $cookieStore, $routeParams
     };
 
     function generateVPATuples() {
+        $scope.vnfdPopAzList = [];
         vnfds = angular.copy($scope.nsdToSend.vnfd);
         console.log(vnfds);
         vims = angular.copy($scope.vimInstances);
