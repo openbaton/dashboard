@@ -61,6 +61,7 @@ require({
         marketCtrl:"controllers/marketCtrl",
         driverCtrl:"controllers/driverCtrl",
         historyController: "controllers/historyController",
+        imagerepoctrl: "../pages/imagerepo/js/imagerepoctrl"
     },
     shim: {
         jquery: {
@@ -188,6 +189,9 @@ require({
         },
         driverCtrl: {
             deps: ['app', 'servicesServices', 'httpService', 'angular_cookies','authService']
+        },
+        imagerepoctrl: {
+            deps: ['app', 'servicesServices', 'httpService', 'angular_cookies','authService', 'dropzone']
         }
 
 
@@ -218,6 +222,7 @@ require({
     'marketCtrl',
     'driverCtrl',
     'historyController',
+    'imagerepoctrl'
 ], function (require) {
     return require(['bootstrap']);
 });

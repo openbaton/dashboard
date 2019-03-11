@@ -1,0 +1,192 @@
+<!--Copyright (c) 2016 Open Baton (http://www.openbaton.org)
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+
+ limitations under the License.-->
+<div class="row">
+    <div class="col-lg-12">
+        <h1>
+            Open Baton Image repository
+            <small> List of the images stored in Openbaton</small>
+        </h1>
+        <ol class="breadcrumb">
+            <li><a href="#main"><i class="fa fa-dashboard"></i>
+                    Overview</a></li>
+            <li class="active"><i class="fa fa-picture-o fa-fw"></i> Images</li>
+        </ol>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-12">
+        <button id="btn_add_key" href="#" class="btn btn-primary pull-right" title="Add a new key pair" data-toggle="modal"
+            data-target="#Addimage">Add Image
+        </button>
+    </div>
+</div>
+<div class="row top-buffer">
+    <div class="col-lg-12">
+        <alert ng-repeat="alert in alerts" type="alert.type" close="closeAlert($index)">
+            <div ng-bind-html="alert.msg"></div>
+        </alert>
+        <div class="table-responsive">
+
+            <table class="table table-bordered table-striped table-hover tablesorter" ng-show="images.length>0">
+                <thead>
+                    <tr>
+                        <th ng-click="predicate = 'id'; reverse = !reverse">Id <i class="fa fa-sort"></i>
+                        <th ng-click="predicate = 'name'; reverse = !reverse">Name <i class="fa fa-sort"></i></th>
+                        <th ng-click="predicate = 'created'; reverse = !reverse">Created <i class="fa fa-sort"></i>
+                        </th>
+                        <th>Actions <i class="fa"></i></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="data in images| filter:search|orderBy:predicate:reverse">
+                        <td><a href="#imagerepo/{{data.id}}">{{data.id}}</a></td>
+                        <td>{{data.name}}</td>
+                        <td>{{data.created}}</td>
+                        <td>
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-danger pull right" ng-click="deleteImage(data)"> Delete
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="Addimage" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Upload an Image</h4>
+                You can either provide a URL to download an image or an image file but not both
+
+            </div>
+            <div class="modal-body">
+                <div class="form-horizontal ng-pristine ng-valid">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">Image Name</label>
+
+                        <div class="col-sm-6">
+                            <input type="text" class="form-control" ng-model="imageDescription.name" />
+                        </div>
+                    </div>
+
+                    <div class="form-group" ng-if="!fileChosen">
+                            <label class="col-sm-4 control-label" title="URL from which the image file can be downloaded.">Download Url</label>
+    
+                            <div class="col-sm-6">
+                                <input type="text" class="form-control" ng-model="imageDescription.url" />
+                            </div>
+                        </div>
+
+
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label" title="The format of the disk image (e.g. qcow2, iso, raw, etc.).">Disk Format</label>
+
+                        <div class="col-sm-6">
+                            <input type="text" class="form-control" ng-model="imageDescription.diskFormat" />
+                        </div>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label" title="Indicates whether the file format contains metadata about the actual virtual machine (use bare if you are unsure about this).">Containter Format</label>
+
+                        <div class="col-sm-6">
+                            <input type="text" class="form-control" ng-model="imageDescription.containerFormat" />
+                        </div>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label" title="Defines the minimum amount of CPU cores required for using this image properly.">Minimum CPU</label>
+
+                        <div class="col-sm-6">
+                            <input type="text" class="form-control" ng-model="imageDescription.minCPU" />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label" title="Defines the minimum amount of RAM (in MB) required for using this image properly.">Minimum RAM</label>
+
+                        <div class="col-sm-6">
+                            <input type="text" class="form-control" ng-model="imageDescription.minRam" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                            <label class="col-sm-4 control-label" title="Defines the minimum amount of disk space (in GB) required for using this image properly.">Minimum Disk Space</label>
+    
+                            <div class="col-sm-6">
+                                <input type="text" class="form-control" ng-model="imageDescription.minDiskSpace" />
+                            </div>
+                        </div>
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label" title = "Defines whether the image will be available publicly to all tenants on the OpenStack VIM or not.">Is Public</label>
+                        <div class="col-sm-6">
+                                <input type="checkbox" ng-model="imageDescription.isPublic" />
+                            </div>
+                    </div>
+                </div>
+    
+                <div>
+                    <form role="form" id="my-dropzone">
+                        <h4 ng-show="(!imageDescription.url || !imageDescription.url.length > 0) && !fileChosen">Drag and drop files below</h4>
+
+                        <div class="upload-drop-zone dz-clickable dz-default dz-message" id="drop-zone" ng-show="(!imageDescription.url || !imageDescription.url.length > 0) && !fileChosen">
+                            Just drag and drop file here. You can only upload one file at a time
+                        </div>
+
+                        <div class="table table-striped" class="files" id="previews">
+
+                            <div id="template" class="file-row">
+                                <!-- This is used as the file preview template -->
+                                <div>
+                                    <span class="preview"><img data-dz-thumbnail /></span>
+                                </div>
+                                <div>
+                                    <p class="name" data-dz-name></p>
+                                    <strong class="error text-danger" data-dz-errormessage></strong>
+                                </div>
+                                <div>
+                                    <p class="size" data-dz-size></p>
+
+                                    <div id="total-progress" class="progress progress-striped active" role="progressbar"
+                                        aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+                                        <div class="progress-bar progress-bar-success" style="width:0%;"
+                                            data-dz-uploadprogress></div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <button data-dz-remove class="btn btn-warning cancel">
+                                        <i class="glyphicon glyphicon-ban-circle"></i>
+                                        <span>Cancel</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close
+                    </button>
+                    <button type="button" id="submit-all" class="btn btn-primary" ng-disabled="imageDescription.name.length < 1 || imageDescription.format.length < 1 || imageDescription.containerFormat < 1 || (imageDescription.url || imageDescription.url.length > 0) && !fileChosen">Send</button>
+                </div>
+            </div>
+        </div>
+    </div>

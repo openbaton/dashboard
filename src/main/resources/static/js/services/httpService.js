@@ -116,6 +116,21 @@ angular.module('app')
             });
 
         };
+        http.postWithParams = function (url, params) {
+            customHeaders['Accept'] = 'application/json';     
+            customHeaders['project-id'] = $cookieStore.get('project').id;
+            customHeaders ['Authorization'] = 'Bearer ' + $cookieStore.get('token');
+
+            //console.log(data);
+            $('#modalSend').modal('show');
+            return $http({
+                url: url,
+                method: 'POST',
+                params: params,
+                headers: customHeaders
+            });
+
+        };
         http.postImportKeys = function (url, data) {
             customHeaders['Accept'] = 'application/json';
             customHeaders['Content-type'] = 'application/json';
