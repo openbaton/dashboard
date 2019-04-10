@@ -7,9 +7,13 @@ var app = angular.module('app').controller('imagerepoctrl', function ($scope, se
     $scope.urlAllowed = true;
     $scope.image = [];
     loadImages();
-    baseimageDescription = { name: "", url: "", diskFormat: "", containerFormat: "", minCPU: 0, minRam: 0, minDiskSpace: 0, isPublic: false }
+    baseimageDescription = { name: "", url: "", diskFormat: "", containerFormat: "bare", minCPU: 0, minRam: 0, minDiskSpace: 0, isPublic: false }
     $scope.imageDescription = baseimageDescription;
     $scope.image = {};
+    $scope.uploadType = ['File', 'URL'];
+    $scope.uploadTypeChosen = {type:'URL'};
+
+
 
     function loadImages() {
         if (angular.isUndefined($routeParams.imageId)) {
@@ -111,7 +115,7 @@ var app = angular.module('app').controller('imagerepoctrl', function ($scope, se
 
                 submitButton.addEventListener("click", function () {
                     $scope.$apply(function ($scope) {
-                        if (myDropzone.options.params.url && myDropzone.options.params.url.length > 0) {
+                        if ($scope.uploadTypeChosen.type == "URL") {
                             myDropzone.removeAllFiles(true);
                             sendImage();
                         } else {

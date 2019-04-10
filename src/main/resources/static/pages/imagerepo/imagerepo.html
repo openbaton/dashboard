@@ -16,7 +16,7 @@
     <div class="col-lg-12">
         <h1>
             Open Baton Image repository
-            <small> List of the images stored in Openbaton</small>
+            <small> List of the images stored in Open Baton</small>
         </h1>
         <ol class="breadcrumb">
             <li><a href="#main"><i class="fa fa-dashboard"></i>
@@ -86,68 +86,84 @@
                         </div>
                     </div>
 
+                    
+
+
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label" >Disk Format</label>
+
+                        <div class="col-sm-6">
+                            <input type="text" title="The format of the disk image (e.g. qcow2, iso, raw, etc.)." class="form-control" ng-model="imageDescription.diskFormat" />
+                        </div>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label" >Containter Format</label>
+
+                        <div class="col-sm-6">
+                            <input type="text" title="Indicates whether the file format contains metadata about the actual virtual machine (use bare if you are unsure about this)." class="form-control" ng-model="imageDescription.containerFormat" />
+                        </div>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label" >Minimum CPU</label>
+
+                        <div class="col-sm-6">
+                            <input type="text" class="form-control" title="Defines the minimum amount of CPU cores required for using this image properly." ng-model="imageDescription.minCPU" />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label" >Minimum RAM</label>
+
+                        <div class="col-sm-6">
+                            <input type="text" title="Defines the minimum amount of RAM (in MB) required for using this image properly." class="form-control" ng-model="imageDescription.minRam" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                            <label class="col-sm-4 control-label" >Minimum Disk Space</label>
+    
+                            <div class="col-sm-6">
+                                <input title="Defines the minimum amount of disk space (in GB) required for using this image properly." type="text" class="form-control" ng-model="imageDescription.minDiskSpace" />
+                            </div>
+                        </div>
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label" >Is Public</label>
+                        <div class="col-sm-6">
+                                <input type="checkbox"  title = "Defines whether the image will be available publicly to all tenants on the OpenStack VIM or not." ng-model="imageDescription.isPublic" />
+                            </div>
+                    </div>
+
                     <div class="form-group" ng-if="!fileChosen">
-                            <label class="col-sm-4 control-label" title="URL from which the image file can be downloaded.">Download Url</label>
-    
-                            <div class="col-sm-6">
-                                <input type="text" class="form-control" ng-model="imageDescription.url" />
-                            </div>
-                        </div>
-
-
-                    <div class="form-group">
-                        <label class="col-sm-4 control-label" title="The format of the disk image (e.g. qcow2, iso, raw, etc.).">Disk Format</label>
+                        <label class="col-sm-4 control-label" title="Choose the type of upload, you can upload via providing a URL or a file">Upload Type</label>
 
                         <div class="col-sm-6">
-                            <input type="text" class="form-control" ng-model="imageDescription.diskFormat" />
+                            <select  title="Choose the type of upload, you can upload via providing a URL or a file" name="typeSelect" class="form-control modal-select"
+                            ng-model="uploadTypeChosen.type"
+
+                            ng-options="type for type in uploadType">
+                            </select>
                         </div>
                     </div>
-
-
-                    <div class="form-group">
-                        <label class="col-sm-4 control-label" title="Indicates whether the file format contains metadata about the actual virtual machine (use bare if you are unsure about this).">Containter Format</label>
+                    <div class="form-group" ng-if="uploadTypeChosen.type == 'URL'">
+                        <label class="col-sm-4 control-label" >Download Url</label>
 
                         <div class="col-sm-6">
-                            <input type="text" class="form-control" ng-model="imageDescription.containerFormat" />
+                            <input title="URL from which the image file can be downloaded." type="text" class="form-control" ng-model="imageDescription.url" />
                         </div>
-                    </div>
-
-
-                    <div class="form-group">
-                        <label class="col-sm-4 control-label" title="Defines the minimum amount of CPU cores required for using this image properly.">Minimum CPU</label>
-
-                        <div class="col-sm-6">
-                            <input type="text" class="form-control" ng-model="imageDescription.minCPU" />
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="col-sm-4 control-label" title="Defines the minimum amount of RAM (in MB) required for using this image properly.">Minimum RAM</label>
-
-                        <div class="col-sm-6">
-                            <input type="text" class="form-control" ng-model="imageDescription.minRam" />
-                        </div>
-                    </div>
-                    <div class="form-group">
-                            <label class="col-sm-4 control-label" title="Defines the minimum amount of disk space (in GB) required for using this image properly.">Minimum Disk Space</label>
-    
-                            <div class="col-sm-6">
-                                <input type="text" class="form-control" ng-model="imageDescription.minDiskSpace" />
-                            </div>
-                        </div>
-                    <div class="form-group">
-                        <label class="col-sm-4 control-label" title = "Defines whether the image will be available publicly to all tenants on the OpenStack VIM or not.">Is Public</label>
-                        <div class="col-sm-6">
-                                <input type="checkbox" ng-model="imageDescription.isPublic" />
-                            </div>
                     </div>
                 </div>
+
+
+                    
     
                 <div>
                     <form role="form" id="my-dropzone">
-                        <h4 ng-show="(!imageDescription.url || !imageDescription.url.length > 0) && !fileChosen">Drag and drop files below</h4>
+                        <h4 ng-show="uploadTypeChosen.type == 'File' && !fileChosen">Drag and drop files below</h4>
 
-                        <div class="upload-drop-zone dz-clickable dz-default dz-message" id="drop-zone" ng-show="(!imageDescription.url || !imageDescription.url.length > 0) && !fileChosen">
+                        <div class="upload-drop-zone dz-clickable dz-default dz-message" id="drop-zone" ng-show="uploadTypeChosen.type == 'File' && !fileChosen">
                             Just drag and drop file here. You can only upload one file at a time
                         </div>
 
@@ -181,11 +197,10 @@
                         </div>
                     </form>
                     </div>
-                </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close
                     </button>
-                    <button type="button" id="submit-all" class="btn btn-primary" ng-disabled="imageDescription.name.length < 1 || imageDescription.format.length < 1 || imageDescription.containerFormat < 1 || (imageDescription.url || imageDescription.url.length > 0) && !fileChosen">Send</button>
+                    <button type="button" id="submit-all" class="btn btn-primary" ng-disabled="imageDescription.name.length < 1 || imageDescription.format.length < 1 || imageDescription.containerFormat < 1 || ((!imageDescription.url || imageDescription.url.length < 1) && uploadTypeChosen.type == 'URL') || (!fileChosen && uploadTypeChosen.type == 'File')">Send</button>
                 </div>
             </div>
         </div>
