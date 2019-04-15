@@ -1,0 +1,582 @@
+<div class="modal-header">
+    <button type="button" class="close" ng-click="close()">&times;</button>
+    <h4 class="modal-title">Launch Network Service Descriptor</h4>
+</div>
+<div class="modal-body">
+    <div class="container" style="width: 100%">
+        <ul class="nav nav-pills nav-stacked col-md-2">
+            <li class="active"><a href="#PoPs" data-toggle="pill">PoPs</a></li>
+            <li><a href="#Keys" data-toggle="pill">Keys</a></li>
+            <li><a href="#ConfigurationParameters" data-toggle="pill">Configuration Parameters</a></li>
+            <li><a href="#MonitoringIP" data-toggle="pill">Monitoring IP</a></li>
+        </ul>
+        <div class="tab-content col-md-10">
+            <div class="tab-pane active" id="PoPs">
+                <div class="container-fluid">
+                    <div class="row">
+                        <p>
+                            <br />
+                            A Point-of-Presence (PoP) defines where to deploy a VNF Component. In the
+                            following you
+                            can choose where to deploy an NSD
+                            or VNFDs.
+                        </p>
+                        <div class="border-none">
+                            <uib-tabset style="border: none !important;">
+                                <uib-tab heading="General" ng-click="selectVnfd('General')" class="active">
+                                    <p><br>
+                                        From this section, you can assign or remove PoPs to all VNFD.
+                                    </p>
+                                    <div class="tab-text">
+                                        <div class="col-md-6">
+                                            <p>
+                                                <br>
+                                                The following list shows which PoPs are available.
+                                                <br>
+                                                <br>
+                                            </p>
+                                            <div>
+                                                <p style="font-size:20px">
+                                                    Available
+                                                </p>
+                                                <div>
+                                                    <table style="text-align: left;" ng-table="tableParamsFilteredPops"
+                                                        class="table table-bordered table-striped" show-filter="true">
+                                                        <thead>
+                                                            <tr>
+                                                                <td colspan="3" filter="{name: 'text'}" sortable="'name'"><b>Name</b></td>
+                                                            </tr>
+                                                        </thead>
+                                                        <tr ng-repeat="vimInstance in $data track by $index">
+                                                            <td class="col-md-5">
+                                                                {{vimInstance.name}}
+                                                            </td>
+                                                            <td class="col-md-5">
+                                                                <select name="testId" class="form-control input-sm"
+                                                                    ng-if="vimInstance.zones !== undefined && vimInstance.zones.length > 0"
+                                                                    ng-init="initAz(vimInstance.name, 'General')"
+                                                                    ng-model="azVimInstance[vimInstance.name]['General']">
+                                                                    <option value="random" label="random">random
+                                                                    </option>
+                                                                    <option ng-repeat="az in vimInstance.zones">
+                                                                        {{az.name}}
+                                                                    </option>
+                                                                </select>
+                                                            </td>
+                                                            <td class="col-md-4" style="text-align: center !important;">
+                                                                <button ng-if="vimInstance.name.length" type="button"
+                                                                    title="Add a new PoP to this NSR" class="btn  btn-primary btn-sm"
+                                                                    ng-click="addPopToNsd(vimInstance)">
+                                                                    + Add to all
+                                                                </button>
+                                                            </td>
+                                                        </tr>
+                                                        <tr ng-show="!$data.length">
+                                                            <td>
+                                                                No more PoPs are available
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <p>
+                                                <br />
+                                                The following list shows which PoPs are choosen for the
+                                                selected VNFD.
+                                            </p>
+                                            <div>
+                                                <p style="font-size:20px">
+                                                    Assigned
+                                                </p>
+                                                <div>
+                                                    <table ng-table="tableParamsFilteredLaunchPops" class="table table-bordered table-striped"
+                                                        show-filter="true">
+                                                        <thead>
+                                                            <tr>
+                                                                <td colspan="2" filter="{name: 'text'}" sortable="'name'"><b>Name</b></td>
+                                                            </tr>
+                                                        </thead>
+                                                        <tr ng-repeat="vimInstance in $data track by $index">
+                                                            <td class="col-md-7" ng-if="vimInstance.az !== undefined && vimInstance.az !== ''">
+                                                                {{vimInstance.vim}}->{{vimInstance.az}}
+                                                            </td>
+                                                            <td class="col-md-7" ng-if="vimInstance.az === undefined || vimInstance.az === ''">
+                                                                {{vimInstance.vim}}
+                                                            </td>
+                                                            <td style="text-align: center;" class="col-md-5">
+                                                                <button ng-if="vimInstance.vim.length" title="Add a new PoP to this NSR"
+                                                                    type="button" class="btn btn-warning btn-sm"
+                                                                    ng-click="RemovePoPfromNSD(vimInstance)">
+                                                                    - Del from All
+                                                                </button>
+                                                            </td>
+                                                        </tr>
+                                                        <tr ng-show="!$data.length">
+                                                            <td>
+                                                                No PoPs are choosen for the selected VNFD.
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </uib-tab>
+                                <uib-tab ng-repeat="tab in tabs" ng-attr-id="{{tab.id}}" heading="{{tab.title}}" disabled="tab.disabled"
+                                    select="selectTab(tab.id)" ng-click="selectVnfd(tab.vnfd)">
+                                    <div ng-init="selectVnfd(tab.vnfd)" class="tab-text">
+                                        <div class="col-md-6">
+                                            <p>
+                                                <br>
+                                                The following list shows which PoPs are available.
+                                                <br>
+                                                <br>
+                                            </p>
+                                            <div ng-init="popTable.expanded=true">
+                                                <p style="font-size:20px">
+                                                    <a href="" ng-if="popTable.expanded" ng-click="popTable.expanded = false">-</a>
+                                                    <a href="" ng-if="!popTable.expanded" ng-click="popTable.expanded = true">+</a>Available
+                                                    ({{tableParamsFilteredPops.data.length}})
+                                                </p>
+                                                <div ng-if="popTable.expanded">
+                                                    <table style="text-align: left;" ng-table="tableParamsFilteredPops"
+                                                        class="table table-bordered table-striped" show-filter="true">
+                                                        <thead>
+                                                            <tr>
+                                                                <td colspan="4" filter="{name: 'text'}" sortable="'name'"><b>Name</b></td>
+                                                            </tr>
+                                                        </thead>
+                                                        <tr ng-repeat="vimInstance in $data track by $index">
+                                                            <td class="col-md-5">
+                                                                {{vimInstance.name}}
+                                                            </td>
+                                                            <td class="col-md-5">
+                                                                <select name="testId" class="form-control input-sm"
+                                                                    ng-if="vimInstance.zones !== undefined && vimInstance.zones.length > 0"
+                                                                    ng-init="initAz(vimInstance.name, tab.vnfd.name)"
+                                                                    ng-model="azVimInstance[vimInstance.name][tab.vnfd.name]">
+                                                                    <!--ng-init="azVimInstance[vimInstance.name] = vimInstance.zones[0].name"-->
+                                                                    <option value="random" label="random">random
+                                                                    </option>
+                                                                    <option ng-repeat="az in vimInstance.zones">
+                                                                        {{az.name}}
+                                                                    </option>
+                                                                </select>
+                                                            </td>
+                                                            <td class="col-md-3" style="text-align: center;">
+                                                                <button ng-if="vimInstance.name.length" type="button"
+                                                                    class="btn  btn-primary btn-sm" ng-click="addPopToVnfd(tab.vnfd, vimInstance, launchPopTable)">
+                                                                    +
+                                                                </button>
+                                                            </td>
+                                                        </tr>
+                                                        <tr ng-show="!$data.length">
+                                                            <td>
+                                                                No more PoPs are available
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <p>
+                                                <br />
+                                                The following list shows which PoPs are choosen for the
+                                                selected VNFD.
+                                            </p>
+                                            <div ng-init="launchPopTable.expanded=true">
+                                                <p style="font-size:20px">
+                                                    <a href="" ng-if="launchPopTable.expanded" ng-click="launchPopTable.expanded = false">-</a>
+                                                    <a href="" ng-if="!launchPopTable.expanded" ng-click="launchPopTable.expanded = true">+</a>
+                                                    Assigned
+                                                    ({{tableParamsFilteredLaunchPops.data.length}})
+                                                </p>
+                                                <div ng-if="launchPopTable.expanded">
+                                                    <table ng-table="tableParamsFilteredLaunchPops" class="table table-bordered table-striped"
+                                                        show-filter="true">
+                                                        <thead>
+                                                            <tr>
+                                                                <td colspan="2" filter="{name: 'text'}" sortable="'name'"><b>Name</b></td>
+                                                            </tr>
+                                                        </thead>
+                                                        <tr ng-repeat="vimInstance in $data track by $index">
+                                                            <td class="col-md-9" ng-if="vimInstance.az !== undefined && vimInstance.az !== ''">
+                                                                {{vimInstance.vim}}->{{vimInstance.az}}
+                                                            </td>
+                                                            <td class="col-md-9" ng-if="vimInstance.az === undefined || vimInstance.az === ''">
+                                                                {{vimInstance.vim}}
+                                                            </td>
+                                                            <td style="text-align: center;" class="col-md-3">
+                                                                <button ng-if="vimInstance.vim.length" type="button"
+                                                                    class="btn btn-warning btn-sm" ng-click="removePopToVnfd(tab.vnfd, vimInstance)">
+                                                                    -
+                                                                </button>
+                                                            </td>
+                                                        </tr>
+                                                        <tr ng-show="!$data.length">
+                                                            <td>
+                                                                No PoPs are choosen for the selected VNFD.
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </uib-tab>
+                            </uib-tabset>
+                        </div>
+                        <!-- /col -->
+                    </div>
+                    <!-- /row -->
+                </div>
+                <!-- container -->
+            </div>
+
+            <div class="tab-pane" id="Keys">
+                <form role="form" class="form-horizontal">
+                    <br>
+                    <p> A key pair allows you to SSH into your VNF Component Instances. You may select an
+                        existing
+                        key pair,
+                        import a key pair, or generate a new key pair.</p>
+                    <div class="panel-group" id="accordion">
+                        <div class="panel panel-default">
+                            <div class="panel-heading" style="padding: 5px 15px;">
+                                <h4 class="panel-title">
+                                    <a style="font-size: 14px;" class="accordion-toggle" data-toggle="collapse"
+                                        data-parent="#accordion" href="#addKey">
+                                        Import Key
+                                    </a>
+                                </h4>
+                            </div>
+                            <div id="addKey" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    <form role="form" class="form-horizontal">
+                                        <div class="form-group">
+                                            <label for="keyName" class="col-sm-2 control-label">Key
+                                                Name</label>
+
+                                            <div class="col-sm-10">
+                                                <input type="text" class="form-control" id="keyName" name="importKeyName"
+                                                    ng-model="keyName" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="Pub key" class="col-sm-2 control-label">Public
+                                                key</label>
+                                            <div class="col-sm-10">
+                                                <textarea name="Pub key" ng-model="pubKey" id="Pub key" class="form-control"
+                                                    rows="5" cols="50">
+
+                                                                </textarea>
+                                            </div>
+                                        </div>
+                                    </form>
+                                    <button type="button" class="btn btn-primary right" ng-click="importKeyInWizard(keyName, pubKey)">Save
+                                    </button>
+                                    <div class="text-success" ng-show="KeyImportSuccess">
+                                        <i class="fa fa-check-circle" aria-hidden="true"></i> <strong>Key is
+                                            generated successfully.</strong>
+                                    </div>
+                                    <div class="text-danger" ng-show="KeyImportError">
+                                        <i class="fa fa-times-circle" aria-hidden="true"></i> <strong>key
+                                            already exists or look into console.</strong>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel panel-default">
+                            <div class="panel-heading" style="padding: 5px 15px;">
+                                <h4 class="panel-title">
+                                    <a style="font-size: 14px;" class="accordion-toggle" data-toggle="collapse"
+                                        data-parent="#accordion" href="#createKey">
+                                        Create key
+                                    </a>
+                                </h4>
+                            </div>
+                            <div id="createKey" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    <form role="form" class="form-horizontal">
+
+                                        <div class="form-group">
+                                            <label for="generateKeyName" class="col-sm-2 text-left">Key
+                                                Name</label>
+
+                                            <div class="col-sm-10">
+                                                <input type="text" class="form-control" id="generateKeyName" name="generateKeyName"
+                                                    ng-model="generateKeyName" />
+                                            </div>
+                                        </div>
+                                    </form>
+                                    <button class="btn btn-primary right" ng-click="generateKeyInWizard(generateKeyName)">Generate
+                                    </button>
+                                    <div class="text-success" ng-show="KeyGenerateSuccess">
+                                        <i class="fa fa-check-circle" aria-hidden="true"></i> <strong>Key is
+                                            generated successfully.</strong>
+                                    </div>
+                                    <div class="text-danger" ng-show="KeyGenerateError">
+                                        <i class="fa fa-times-circle" aria-hidden="true"></i> <strong>key
+                                            already exists or look into console.</strong>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p>
+                                <br> The following list shows all the Keys that are available to put into
+                                the VNF Component Instances.
+                            </p>
+                            <div ng-init="keys_exp.expanded=true">
+                                <p style="font-size:20px">
+                                    <a href="" ng-if="keys_exp.expanded" ng-click="keys_exp.expanded = false">-</a>
+                                    <a href="" ng-if="!keys_exp.expanded" ng-click="keys_exp.expanded = true">+</a>
+                                    Available
+                                    ({{keys.length}})
+                                </p>
+                                <div ng-if="keys_exp.expanded">
+                                    <table style="text-align: left;" ng-table="tableParamsFilteredKeys" class="table table-bordered table-striped">
+                                        <!--<tr ng-init="key.expanded=false" ng-repeat-start="key in $data">-->
+                                        <thead>
+                                            <tr>
+                                                <td colspan="3" filter="{name: 'text'}" sortable="'name'"><b>Name</b></td>
+                                            </tr>
+                                        </thead>
+                                        <tr ng-repeat="key in keys">
+                                            <td class="col-md-7" style="word-wrap: break-word">
+                                                {{key.name}}
+                                            </td>
+                                            <td class="col-md-3" style="word-wrap: normal; max-width: 100px; overflow: hidden; text-overflow: ellipsis;"
+                                                ng-attr-title="{{key.fingerprint}}">{{key.fingerprint}}
+                                            </td>
+                                            <td class="col-md-2">
+                                                <button class="btn btn-primary btn-sm" ng-if="key.name.length" title="Add a new key to this NSR"
+                                                    href="" ng-click="addLaunchKey(key)">+
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        <tr ng-show="!keys.length">
+                                            <td>No more keys are available.
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <p>
+                                <br> The following list shows all the Keys that will be imported to the VNF
+                                Component Instances.<br>
+                            </p>
+                            <div ng-init="list.expanded=true">
+                                <p style="font-size:20px">
+                                    <a href="" ng-if="list.expanded" ng-click="list.expanded = false">-</a>
+                                    <a href="" ng-if="!list.expanded" ng-click="list.expanded = true">+</a>
+                                    Allocated
+                                    ({{launchKeys.length}})
+                                </p>
+                                <div ng-if="list.expanded">
+                                    <table ng-table="tableParamsFilteredLaunchKeys" class="table  table-bordered table-striped"
+                                        show-filter="false">
+                                        <thead>
+                                            <tr>
+                                                <td colspan="3" filter="{name: 'text'}" sortable="'name'"><b>Name</b></td>
+                                            </tr>
+                                        </thead>
+                                        <tr ng-repeat="key in $data">
+
+                                            <td class="col-md-7" style="word-wrap: break-word" td>
+                                                {{key.name}}
+                                            </td>
+                                            <td class="col-md-3" style="word-wrap: normal; max-width: 100px; overflow: hidden; text-overflow: ellipsis;"
+                                                ng-attr-title="{{key.fingerprint}}">{{key.fingerprint}}
+                                            </td>
+                                            <td class="col-md-2">
+                                                <button class="btn btn-warning btn-sm" ng-if="key.name.length" title="Remove a key from this NSR"
+                                                    href="" ng-click="removeLaunchKey(key)">-
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        <tr ng-show="!$data.length">
+                                            <td>
+                                                No keys are allocated.
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <div class="tab-pane" id="ConfigurationParameters">
+                <div class="container-fluid">
+                    <p>
+                        <br>
+                        Configuration parameters are the dynamic parameters and would be used during
+                        lifecycle events
+                    </p>
+                    <uib-tabset>
+                        <uib-tab ng-repeat="vnfdname in vnfdnames track by $index"  heading={{vnfdname}}>
+                            <br>
+                            <table class="col-md-12">
+                                <tr ng-repeat="conf in launchConfiguration.configurations[vnfdname].configurationParameters track by $index">
+                                    <td class="row" style="padding: 7px !important; border-top: none !important; border-bottom: none !important; border-right: none !important; border-left: none !important;width: 20%;">
+
+                                        <div class="col-md-10 row">
+                                            <b for="keyName">{{conf.confKey}}
+                                                <a style="color: black;" data-toggle="tooltip" title="{{conf.description}}"><i
+                                                        class="fa fa-question-circle" aria-hidden="true"></i></a>:
+                                            </b>
+                                        </div>
+                                    </td>
+                                    <div>
+                                        <td class="row" style="padding: 7px !important; border-top: none !important; border-bottom: none !important; border-right: none !important; border-left: none !important; width: 70%;">
+                                            <input style="border: 1px solid #ccc; border-radius: 3px; padding: 5px;width: 90%;"
+                                                id="Configuration Name" ng-model="conf.value" />
+                                    </div>
+                                    </td>
+                                    <td class="row" style="padding: 7px !important; border-top: none !important; border-bottom: none !important; border-right: none !important; border-left: none !important;width: 10%;">
+                                        <div class="col-md-2">
+                                            <button data-toggle="tooltip" title='Delete' class="btn btn-danger right"
+                                                ng-hide="conf.id.length > 0" type="button" ng-click="removeConf($index, vnfdname)">
+                                                -
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+                            <table class="table table-bordered" id="vduTabletable">
+                                <tbody>
+                                    <form id="myFormKey">
+                                        <tr>
+                                            <td>
+                                                <table class="col-md-12">
+                                                    <tr>
+                                                        <br>
+                                                        <td style="padding-top: 0px !important; border: none !important; padding-bottom: 0px !important;">
+                                                            <table class="col-md-12">
+                                                                <tr>
+                                                                    <td class="col-md-4" style="padding-top: 0px !important; border: none !important; padding-bottom: 0px !important;">
+
+
+                                                                        <label>Configuration Key</label>
+                                                                    </td>
+                                                                    <td class="col-md-8" style="padding-top: 0px !important; border: none !important; padding-bottom: 0px !important;">
+                                                                        <input type="text" class="form-control" id="ConfigKey"
+                                                                            ng-model="basicConf.confKey" /></td>
+
+                                                                </tr>
+                                                                <tr>
+                                                                    <td style="border: none !important;padding: 0px !important;"
+                                                                        colspan="2">
+                                                                        &nbsp;
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td class="col-md-4" style="padding-top: 0px !important; border: none !important; padding-bottom: 0px !important;">
+                                                                        <label>Configuration Key Value</label>
+                                                                    </td>
+                                                                    <td class="col-md-8" style="padding-top: 0px !important; border: none !important; padding-bottom: 0px !important;">
+                                                                        <input class="form-control" id="ConfigVal"
+                                                                            ng-model="basicConf.value" />
+
+                                                                    </td>
+
+                                                                </tr>
+                                                                <tr>
+                                                                    <td style="border: none !important;" colspan="2">
+                                                                        <label>Description </label>
+                                                                        <textarea ng-disabled="conf.id.length > 0"
+                                                                            style="width:100%; resize:vertical;" name="Description"
+                                                                            ng-model="basicConf.description" id="basicConf.description"
+                                                                            placeholder="Description" class="form-control">
+
+                                                                                    </textarea>
+                                                                        <br>
+                                                                        <a ng-disabled="basicConf.value.length < 1 || basicConf.confKey.length < 1"
+                                                                            type="button" class="btn btn-primary right"
+                                                                            ng-click="addConftoLaunchTmp(vnfdname, basicConf)">Add
+                                                                            Parameter</a>
+                                                                    </td>
+                                                                </tr>
+                                                            </table>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td style="border: none !important;padding-left: 20px !important;padding-right: 20px !important;">
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                    </form>
+                                </tbody>
+                            </table>
+                        </uib-tab>
+                    </uib-tabset>
+                </div>
+            </div>
+
+            <div class="tab-pane" id="MonitoringIP">
+                <br>
+                <p>Specify the IP of the monitoring server to which the VNFs should register. Open Baton
+                    supports only Zabbix by default.
+                    Please refer to the documentation for understanding how to use a different monitoring
+                    system</p>
+
+                <form name="monForm">
+                    <table>
+                        <tr>
+                            <td style="width:30%">
+                                <b>Monitoring IP: &nbsp;</b>
+                            </td>
+                            <td style="width:70%">
+
+                                <input style="width: 100%;display: inline;" class="form-control" type="text" name="monIp"
+                                    ng-change="changeIp(monitoringIp)" ng-model="monitoringIp" ng-pattern="/^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/">
+
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="width:30%">
+                                <b>Monitoring Port: &nbsp;</b>
+                            </td>
+                            <td style="width:30%">
+                                <input style="width: 100%;display: inline;" class="form-control" type="number" step="1"
+                                    name="monPort" ng-change="changePort(monitoringPort)" ng-model="monitoringPort">
+                            </td>
+                        </tr>
+                    </table>
+
+                    <div role="alert">
+                        <span class="error" ng-show="monForm.monIp.$touched && monForm.monIp.$invalid">
+                            Entered ip is not valid!
+                        </span>
+                        <span class="error" ng-show="monForm.monPort.$touched && !isValidPort(monitoringPort)">
+                            Entered port is not valid!
+                        </span>
+                    </div>
+                </form>
+            </div>
+        </div><!-- tab content -->
+    </div><!-- end of container -->
+</div>
+<div class="modal-footer">
+    <a class="btn left btn-danger" ng-click="close()">Cancel</a>
+    <a ng-disabled="LastTabNSDLaunch==='' || LastTabNSDLaunch==='PoPs' || LastTabNSDLaunch=== undefined " class="btn btnPrevious">Back</a>
+    <a ng-disabled="LastTabNSDLaunch==='Monitoring IP'" class="btn btn-primary btnNext">Next</a>
+    <button class="btn  btn-success" ng-disabled="(monForm.monPort.$touched && !isValidPort(monitoringPort)) || (monForm.monIp.$touched && monForm.monIp.$invalid)"
+        data-dismiss="modal" ng-click="launch()">Launch
+    </button>
+</div>

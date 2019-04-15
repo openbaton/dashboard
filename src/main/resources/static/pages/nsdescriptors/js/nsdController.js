@@ -16,7 +16,7 @@
 
 var app = angular.module('app');
 
-app.controller('NsdCtrl', function ($scope, $compile, $cookieStore, $routeParams, $filter, http, serviceAPI, $window, $route, $interval, $http, topologiesAPI, AuthService, NgTableParams, http) {
+app.controller('NsdCtrl', function ($scope, $compile, $cookieStore, $routeParams, $filter, http, serviceAPI, $window, $route, $interval, $http, topologiesAPI, AuthService, NgTableParams, http, $uibModal) {
     var baseURL = $cookieStore.get('URL') + "/api/v1";
     var monitoringIp = [];
     var url = baseURL + '/ns-descriptors/';
@@ -24,11 +24,9 @@ app.controller('NsdCtrl', function ($scope, $compile, $cookieStore, $routeParams
     var urlVim = baseURL + '/datacenters/';
     var urlVNFD = baseURL + '/vnf-descriptors/';
     var dropzoneUrl = baseURL + '/csar-nsd/';
-    var basicConf = {description: "", confKey: "", value: ""};
-    var urlForKeys = $cookieStore.get('URL') + "/api/v1/keys/";
+    var urlForKeys = $cookieStore.get('URL') + "/api/v1/keys/"
     $scope.selectedVNFD = "";
     $scope.list = {};
-    $scope.keys_exp = {};
     $scope.nsdToSend = {};
     $scope.textTopologyJson = '';
     $scope.file = '';
@@ -61,228 +59,8 @@ app.controller('NsdCtrl', function ($scope, $compile, $cookieStore, $routeParams
     loadKeys();
     loadVIMs();
 
-    $.fn.bootstrapSwitch.defaults.size = 'mini';
-
-    $('#set-flavor').bootstrapSwitch();
-
-
-    $('#set-flavor').on('switchChange.bootstrapSwitch', function (event, state) {
-        $scope.showSetting = state;
-        //console.log($scope.showSetting);
-        $scope.$apply(function () {
-            $scope.showSetting;
-        });
-
-    });
     
-
-    function generateProduct(vnfdFiltered) {
-        vims = vnfdFiltered.map(vpa => vpa.vim);
-        vims = [...new Set(vims)];
-        product = [];
-        vims.forEach(function (vim) {
-            launchP = {name:vim, zones:[]};
-            p = vnfdFiltered.filter(vpa => vpa.vim == vim);
-            p.map(pa => launchP.zones.push({name:pa.az}));
-            if (launchP.zones.length == 1 && launchP.zones[0].name == "") {
-                launchP.zones = [];
-            }
-            product.push(launchP);
-        });
-        console.log(product);
-        return product;
-    };
-
-    function genUniqueVPAs(vpas) {
-            paS = [];
-            vpas.map(vpa => paS.push({vim: vpa.vim, az: vpa.az}));
-            seenVim = [];
-            seenAz = [];
-            uniquePas = [];
-
-            paS.forEach(function(pa) {
-                if (!(seenVim.includes(pa.vim) && seenAz.includes(pa.az))) {
-                    uniquePas.push(pa);
-                    seenAz.push(pa.az);
-                    seenVim.push(pa.vim);
-                }
-            });
-            return uniquePas;
-    };
-
-    function generateLaunchPopsVPA(vnfdname) {
-        vnfdFiltered = [];
-        if (vnfdname == "General") {
-            vnfdFiltered = genUniqueVPAs($scope.vnfdPopAzList);
-        } else {
-            vnfdFiltered = $scope.vnfdPopAzList.filter(vpa => vpa.vnfd === vnfdname);  
-        }
-        return generateProduct(vnfdFiltered);
- 
-    }
-
-    function generateLaunchPopsVPAAssiged(vnfdname) {
-        vnfdFiltered = [];
-        if (vnfdname === "General") {
-            uniqueAssigned = genUniqueVPAs($scope.vnfdPopAzListAssigned);
-            uniqueUnAssigned = genUniqueVPAs($scope.vnfdPopAzList);
-            console.log(uniqueAssigned);
-            console.log(uniqueUnAssigned);
-            uniqueAssigned.forEach(function (vpa) {
-                if (!(uniqueUnAssigned.some(vpa1 => vpa1.vim == vpa.vim && vpa1.az == vpa.az))) {
-                    vnfdFiltered.push(vpa);
-                } 
-            });    
-        } else {
-            vnfdFiltered = $scope.vnfdPopAzListAssigned.filter(vpa => vpa.vnfd == vnfdname);
-        }
-        return vnfdFiltered; 
-    };
-
-    function generateVPATuples() {
-        $scope.vnfdPopAzList = [];
-        vnfds = angular.copy($scope.nsdToSend.vnfd);
-        console.log(vnfds);
-        vims = angular.copy($scope.vimInstances);
-        vims.forEach(function(vim) {
-            if (angular.isUndefined(vim.zones)) {
-                vim.zones = [];
-            }
-        });
-        vnfds.forEach(function (vnfd) {
-            vims.forEach(function(vim) {
-                if (angular.isUndefined(vim.zones) || vim.zones.length < 1) {
-                    $scope.vnfdPopAzList.push({vnfd: vnfd.name, vim: vim.name, az:""});
-                }
-                vim.zones.forEach(function(zone) {
-                    $scope.vnfdPopAzList.push({vnfd: vnfd.name, vim: vim.name, az:zone.name});
-                });
-            });
-        });
-        console.log($scope.vnfdPopAzList);
-    };
-
-    $scope.initAz = function(vimName, vnfdName) {
-
-        if (angular.isUndefined($scope.azVimInstance[vimName])) {
-            $scope.azVimInstance[vimName] = {};     
-        }
-        $scope.azVimInstance[vimName][vnfdName] = "random";
-
-        console.log($scope.azVimInstance);
-    };
-
-
-    $scope.addPopToVnfd = function (vnfd, pop) {
-        
-        filtered = $scope.vnfdPopAzList.filter(vpa => vpa.vnfd == vnfd.name && vpa.vim == pop.name);
-        if (angular.isUndefined($scope.azVimInstance[pop.name]) || $scope.azVimInstance[pop.name][vnfd.name] == "" || $scope.azVimInstance[pop.name][vnfd.name].trim() === "random") {
-            
-            $scope.vnfdPopAzListAssigned = $scope.vnfdPopAzListAssigned.concat(filtered);
-            $scope.vnfdPopAzList = $scope.vnfdPopAzList.filter(vpa => vpa.vnfd != vnfd.name || vpa.vim != pop.name);
-            console.log("here");
-            
-        } else {
-            filtered = filtered.filter(vpa => vpa.az === $scope.azVimInstance[pop.name][vnfd.name].trim());
-            $scope.vnfdPopAzListAssigned = $scope.vnfdPopAzListAssigned.concat(filtered);
-            $scope.vnfdPopAzList = $scope.vnfdPopAzList.filter(vpa => vpa.vnfd != vnfd.name || vpa.vim != pop.name || vpa.az != $scope.azVimInstance[pop.name][vnfd.name].trim());
-
-        }
-        $scope.tableParamsFilteredLaunchPops.reload();
-        $scope.tableParamsFilteredPops.reload();
-        $scope.initAz(pop.name, vnfd.name);
-        // launchPopTable.expanded = true;
-    }
-
-    $scope.addPopToNsd = function (pop) {
-    
-        console.log($scope.azVimInstance);
-        $scope.nsdToSend.vnfd.forEach(function(vnfd) {
-                $scope.initAz(pop.name, vnfd.name);
-                if (angular.isUndefined($scope.azVimInstance[pop.name]) || $scope.azVimInstance[pop.name]['General'] == ""|| angular.isUndefined($scope.azVimInstance[pop.name]['General']) || $scope.azVimInstance[pop.name]['General'].trim() === "random") {
-                    $scope.azVimInstance[pop.name][vnfd.name] = "random";
-                } else {
-                    $scope.azVimInstance[pop.name][vnfd.name] = $scope.azVimInstance[pop.name]['General'];
-                }
-                $scope.addPopToVnfd(vnfd, pop);
-        });
-        $scope.tableParamsFilteredLaunchPops.reload();
-        $scope.tableParamsFilteredPops.reload();
-        $scope.initAz(pop.name, 'General');
-        // launchPopTable.expanded = true;
-    }
-
-
-
-    $scope.removePopToVnfd = function (vnfd, pop) {
-        $scope.vnfdPopAzList.push(pop);
-        $scope.vnfdPopAzListAssigned = $scope.vnfdPopAzListAssigned.filter(vpa => vpa.vim != pop.vim || vpa.vnfd != pop.vnfd || vpa.az != pop.az);
-
-        $scope.tableParamsFilteredLaunchPops.reload();
-        $scope.tableParamsFilteredPops.reload();
-    };
-    $scope.RemovePoPfromNSD = function (pop) {
-        $scope.nsdToSend.vnfd.forEach(vnfd => $scope.vnfdPopAzList.push({vnfd:vnfd.name, vim:pop.vim, az:pop.az}));
-        console.log($scope.vnfdPopAzList);
-        $scope.vnfdPopAzListAssigned = $scope.vnfdPopAzListAssigned.filter(vpa => vpa.vim != pop.vim ||  vpa.az != pop.az);
-
-        $scope.tableParamsFilteredLaunchPops.reload();
-        $scope.tableParamsFilteredPops.reload();
-        console.log($scope.launchPops);
-    };
-
-
-   
-
-
-    var filteredLaunchKeys = [];
-    $scope.tableParamsFilteredLaunchKeys = new NgTableParams({
-            page: 1,
-            count: 5,
-            sorting: {
-                name: 'asc'     // initial sorting
-            },
-            filter: {name: ""}
-        },
-        {
-            counts: [],
-            total: filteredLaunchKeys.length,
-            getData: function (params) {
-                filteredLaunchKeys = params.sorting() ? $filter('orderBy')($scope.launchKeys, params.orderBy()) : $scope.launchKeys;
-                // filteredLaunchKeys = params.filter() ? $filter('filter')(filteredLaunchKeys, params.filter()) : filteredLaunchKeys;
-                $scope.tableParamsFilteredLaunchKeys.total(filteredLaunchKeys.length);
-                filteredLaunchKeys = filteredLaunchKeys.slice((params.page() - 1) * params.count(), params.page() * params.count());
-                for (i = filteredLaunchKeys.length; i < params.count(); i++) {
-                    // filteredLaunchKeys.push({'name': ""})
-                }
-                return filteredLaunchKeys;
-            }
-        });
-
-    var filteredKeys = []
-    $scope.tableParamsFilteredKeys = new NgTableParams({
-            page: 1,
-            count: 5,
-            sorting: {
-                name: 'asc'     // initial sorting
-            },
-            filter: {name: ""},
-        },
-        {
-            counts: [],
-            total: filteredKeys.length,
-            getData: function (params) {
-                // console.log($scope.keys);
-                filteredKeys = params.sorting() ? $filter('orderBy')($scope.keys, params.orderBy()) : $scope.keys;
-                filteredKeys = params.filter() ? $filter('filter')(filteredKeys, params.filter()) : filteredKeys;
-                $scope.tableParamsFilteredKeys.total(filteredKeys.length);
-                filteredKeys = filteredKeys.slice((params.page() - 1) * params.count(), params.page() * params.count());
-                for (i = filteredKeys.length; i < params.count(); i++) {
-                    // filteredKeys.push({'name': ""})
-                }
-                return filteredKeys;
-            }
-        });
+    //Front table components
 
     var paginationNSD = [];
     $scope.tableParamspaginationNSD = new NgTableParams({
@@ -306,68 +84,12 @@ app.controller('NsdCtrl', function ($scope, $compile, $cookieStore, $routeParams
                 return paginationNSD;
             }
         });
-    var filteredPops = [];
-    $scope.tableParamsFilteredPops = new NgTableParams({
-            page: 1,
-            count: 5,
-            sorting: {
-                name: 'asc'     // initial sorting
-            },
-            filter: {name: ""}
-        },
-        {
-            counts: [],
-            total: filteredPops.length,
-            getData: function (params) {
-                vpa = generateLaunchPopsVPA($scope.selectedVnfd.name);
-                filteredPops = params.sorting() ? $filter('orderBy')(vpa, params.orderBy()) : vpa;
-                filteredPops = params.filter() ? $filter('filter')(filteredPops, params.filter()) : filteredPops;
-                $scope.tableParamsFilteredPops.total(filteredPops.length);
-                filteredPops = filteredPops.slice((params.page() - 1) * params.count(), params.page() * params.count());
-                for (i = filteredPops.length; i < params.count(); i++) {
-                    // filteredPops.push({'name': ""})
-                }
-                return filteredPops;
-            }
-        });
 
-    var filteredLaunchPops = [];
-    $scope.selectedVnfd = "";
-    $scope.tableParamsFilteredLaunchPops = new NgTableParams({
-            page: 1,
-            count: 5,
-            sorting: {
-                name: 'asc'     // initial sorting
-            },
-            filter: {name: ""},
-        },
-        {
-            counts: [],
-            total: filteredLaunchPops.length,
-            getData: function (params) {
-                vpa = generateLaunchPopsVPAAssiged($scope.selectedVnfd.name);
-                filteredLaunchPops = params.sorting() ? $filter('orderBy')(vpa, params.orderBy()) : vpa;
-                //filteredLaunchPops = params.filter() ? $filter('filter')(filteredLaunchPops, params.filter()) : filteredLaunchPops;
-                $scope.tableParamsFilteredLaunchPops.total(filteredLaunchPops.length);
-                filteredLaunchPops = filteredLaunchPops.slice((params.page() - 1) * params.count(), params.page() * params.count());
-                for (i = filteredLaunchPops.length; i < params.count(); i++) {
-                    // filteredLaunchPops.push({'name': ""})
-                }
-                return filteredLaunchPops;
-            }
-            
-        });
 
-    $scope.selectVnfd = function (vnfd) {
-        if (vnfd === 'General') {
-            vnfd = {'name':'General'}
-        }
-        $scope.selectedVnfd = vnfd;
-        $scope.tableParamsFilteredLaunchPops.reload();
-        $scope.tableParamsFilteredPops.reload();
-        //console.log($scope.selectedVnfd);
-    };
+    
+    
 
+    //Data load functions
     function loadKeys() {
         http.get(baseURL + '/keys')
             .success(function (response) {
@@ -392,6 +114,9 @@ app.controller('NsdCtrl', function ($scope, $compile, $cookieStore, $routeParams
         console.log($scope.vimInstances);
     }
 
+
+
+
     $scope.addLaunchKey = function (key) {
         $scope.launchKeys.push(key);
         console.log($scope.launchKeys);
@@ -407,6 +132,7 @@ app.controller('NsdCtrl', function ($scope, $compile, $cookieStore, $routeParams
         $scope.tableParamsFilteredLaunchKeys.reload();
     };
 
+    //Utils
     function remove(arr, item) {
         for (var i = arr.length; i--;) {
             if (arr[i].name === item.name) {
@@ -417,6 +143,8 @@ app.controller('NsdCtrl', function ($scope, $compile, $cookieStore, $routeParams
 
     $scope.selection = [];
 
+
+    //Network service descriptor creator
     function checkPresence(link, links) {
         console.log(links);
         for (i = 0; i < links.length; i++) {
@@ -454,7 +182,7 @@ app.controller('NsdCtrl', function ($scope, $compile, $cookieStore, $routeParams
         $scope.tmpVnfd.splice(index, 1);
         $scope.nsdCreateTmp.vnfd.splice(index, 1);
     };
-    $scope.selectedVNFD;
+   
     $scope.vnfdList = [];
 
     $scope.dependency = {};
@@ -522,16 +250,7 @@ app.controller('NsdCtrl', function ($scope, $compile, $cookieStore, $routeParams
             });
     };
 
-    $scope.addNewConfig = function () {
-        if (angular.isUndefined($scope.editObj.configurations)) {
-            $scope.editObj.configurations = {};
-            $scope.editObj.configurations.configurationParameters = [];
-        }
-        $scope.editObj.configurations.configurationParameters.push({'confKey': '', 'value': ''})
-    };
-    $scope.removeConfig = function (index) {
-        $scope.editObj.configurations.configurationParameters.splice(index, 1);
-    };
+    
 
     $scope.addLifecycleEvent = function (vdu) {
         vdu.lifecycle_event.push({'event': "CONFIGURE", 'lifecycle_events': []})
@@ -793,41 +512,8 @@ app.controller('NsdCtrl', function ($scope, $compile, $cookieStore, $routeParams
 
     };
 
-    $scope.addConftoLaunchTmp = function (vnfdname, conf) {
-
-        $scope.launchConfiguration.configurations[vnfdname].configurationParameters.push({
-            description: conf.description,
-            confKey: conf.confKey,
-            value: conf.value
-        });
-        $scope.basicConf = {description: "", confKey: "", value: ""};
-
-    };
-
-
-    $scope.removeConf = function (index, vnfdname) {
-        $scope.launchConfiguration.configurations[vnfdname].configurationParameters.splice(index, 1);
-    };
-
-    function removeEmptyConfs() {
-        for (var property in $scope.launchConfiguration.configurations) {
-            if ($scope.launchConfiguration.configurations.hasOwnProperty(property)) {
-                if (angular.isUndefined($scope.launchConfiguration.configurations[property].name) || $scope.launchConfiguration.configurations[property].name.length < 1) {
-                    delete $scope.launchConfiguration.configurations[property];
-                    continue;
-                }
-                for (i = $scope.launchConfiguration.configurations[property].configurationParameters.length - 1; i > -1; i--) {
-                    if (angular.isUndefined($scope.launchConfiguration.configurations[property].configurationParameters[i].confKey) || angular.isUndefined($scope.launchConfiguration.configurations[property].configurationParameters[i].value)
-                        || $scope.launchConfiguration.configurations[property].configurationParameters[i].confKey.length < 1 || $scope.launchConfiguration.configurations[property].configurationParameters[i].value.length < 1) {
-                        $scope.launchConfiguration.configurations[property].configurationParameters.splice(i, 1);
-
-                    }
-                }
-            }
-        }
-
-    }
-    $scope.launchOption = function (data) {
+   
+    /*$scope.launchOption = function (data) {
         env();
         $scope.launchConfiguration = null;
         $scope.launchConfiguration = {"configurations": {}};
@@ -864,17 +550,9 @@ app.controller('NsdCtrl', function ($scope, $compile, $cookieStore, $routeParams
         console.log($scope.nsdToSend)
 
        
-    };
+    };*/
     $scope.noVIMchoicePossible = false;
-    $scope.vimForLaunch = {};
 
-    $scope.changeIp = function (ip) {
-        $scope.monitoringIp = ip;
-    };
-
-    $scope.changePort = function (port) {
-        $scope.monitoringPort = port;
-    };
 
     env();
 
@@ -903,58 +581,8 @@ app.controller('NsdCtrl', function ($scope, $compile, $cookieStore, $routeParams
       return value === null || value === "" || ($scope.isInt(value) && (parseInt(value) > 0 && parseInt(value) < 65536));
     };
 
-    $scope.launch = function () {
-        removeEmptyConfs();
-        vimForLaunch = prepareVIMs();
-        console.log(JSON.stringify($scope.vimForLaunch));
-        //console.log($scope.nsdToSend);
-        $scope.launchObj.keys = [];
-        $scope.launchObj.vduVimInstances = vimForLaunch;
-        var monIp = $scope.monitoringIp;
-        if (parseInt($scope.monitoringPort) > 0)
-            monIp += ":" + $scope.monitoringPort;
-        $scope.launchObj.monitoringIp = monIp;
-        $scope.launchKeys.forEach(function (key) {
-            $scope.launchObj.keys.push(key.name);
-        });
-
-        // $scope.launchObj.vduVimInstances = $scope.vimForLaunch;
-        //console.log($scope.basicConfiguration.name);
-        $scope.launchObj.configurations = {};
-        $scope.launchObj.configurations = $scope.launchConfiguration.configurations;
-        console.log(JSON.stringify($scope.launchObj));
-        http.post(urlRecord + $scope.nsdToSend.id, $scope.launchObj)
-            .success(function (response) {
-                showOk("Created Network Service Record from Descriptor with id: \<a href=\'\#nsrecords\'>" + $scope.nsdToSend.id + "<\/a>");
-            })
-            .error(function (data, status) {
-                showError(data, status);
-            });
-
-        $scope.launchKeys = [];
-        $scope.launchObj = {};
-        $scope.launchPops = {};
-        $scope.vnfdToVIM.splice(0);
-        $scope.launchConfiguration = {"configurations": {}};
-        $scope.vnfdnames = [];
-        $scope.monitoringIp = undefined;
-        $scope.vnfdPopAzListAssigned = []
-        $scope.vnfdPopAzList = [];
-    };
-
-
-    function prepareVIMs() {
-        vimForLaunch = {};
-        $scope.nsdToSend.vnfd.forEach(function(vnfd) {
-            vnfd.vdu.forEach(function(vdu) {
-                vnfdFiltered = $scope.vnfdPopAzListAssigned.filter(pop => pop.vnfd === vnfd.name);
-                vimForLaunch[vdu.name] = [];
-                vnfdFiltered.map(pop => vimForLaunch[vdu.name].push(pop.vim + ":" + pop.az));
-            });
-        });
-        return vimForLaunch;
-        
-    }
+    
+    
 
     $scope.Jsplumb = function () {
         http.get(url + $routeParams.nsdescriptorId)
@@ -1152,24 +780,7 @@ app.controller('NsdCtrl', function ($scope, $compile, $cookieStore, $routeParams
       
     }
 
-    
-    $scope.loadVnfdTabs = function () {
-        $scope.tabs = [];
-        var i;
-        for (i = 0; i < $scope.nsdToSend.vnfd.length; i++) {
-            newVNFD = {"vnfdname": $scope.nsdToSend.vnfd[i].name, "vim": [], "vduLevel": false, "vdu": []};
-            console.log(newVNFD);
 
-            var tab = {};
-            tab['id'] = i;
-            tab['title'] = $scope.nsdToSend.vnfd[i].name;
-            tab['active'] = true;
-            tab['disabled'] = false;
-            tab['vnfd'] = $scope.nsdToSend.vnfd[i];
-
-            $scope.tabs.push(tab);
-        }
-    };
 
     angular.element(document).ready(function () {
 
@@ -1322,66 +933,32 @@ app.controller('NsdCtrl', function ($scope, $compile, $cookieStore, $routeParams
             // console.log($scope.LastTabCompsNSD);
         });
     });
-    $scope.generateKeyInWizard = function (generateKeyName) {
-        //console.log($scope.projectObj);
-        http.postPlainKeyGeneration(urlForKeys + 'generate', generateKeyName)
-            .success(function (response) {
-                setTimeout(loadTable(), 250);
-                var key = document.createElement("a");
-                key.download = generateKeyName + '.pem';
-                key.href = 'data:application/x-pem-file,' + encodeURIComponent(response);
-                document.body.appendChild(key);
-                key.click()
-                document.body.removeChild(key);
-                http.get(baseURL + '/keys')
-                    .success(function (response) {
-                        var keys = response;
-                        // console.log(keys);
-                        var allocatedKey = keys.find(function( obj ) {
-                            return obj.name == generateKeyName;
-                        });
-                        $scope.launchKeys.push(allocatedKey);
-                        remove($scope.keys, allocatedKey);
-                        $scope.tableParamsFilteredKeys.reload();
-                        $scope.tableParamsFilteredLaunchKeys.reload();
-                    });
-                delete key;
-                $scope.KeyGenerateSuccess = false;
-                $scope.KeyGenerateSuccess = $scope.KeyGenerateSuccess ? false : true;
-                $scope.generateKeyName = null;
-            })
-            .error(function (response, status) {
-                $scope.KeyGenerateError = false;
-                $scope.KeyGenerateError = $scope.KeyGenerateError ? false : true;
-                $scope.generateKeyName = null;
-            });
-    };
-    $scope.importKeyInWizard = function (keyName, pubKey) {
-        newKey = {name: "", publicKey: ""};
-        newKey.name = keyName;
-        newKey.publicKey = pubKey;
-        console.log(newKey);
-        http.postImportKeys(urlForKeys, newKey)
-            .success(function (response) {
-                // setTimeout(loadTable(), 250);
-                keyName = "";
-                pubKey = "";
-                //location.reload();
-                loadKeys();
-                $scope.KeyImportSuccess = false;
-                $scope.KeyImportSuccess = $scope.KeyImportSuccess ? false : true;
-                $scope.keyName = null;
-                $scope.pubKey = null;
-            })
-            .error(function (response, status) {
-                $scope.KeyImportError = false;
-                $scope.KeyImportError = $scope.KeyImportError ? false : true;
-                $scope.keyName = null;
-                $scope.pubKey = null;
-            });
-    };
-    $('#modalCreateNSDUploadjson').on('hidden.bs.modal', function () {
-        $(this).find("input,textarea,select").val('').end();
-
-    });
+    
+    $scope.openLaunchModal = function(nsd){
+        var modalInstance = $uibModal.open({
+          ariaLabelledBy: 'modal-title',
+          ariaDescribedBy: 'modal-body',
+          templateUrl: 'pages/nsdescriptors/modals/launchModal.html',
+          size: "lg",
+          controller: 'LaunchCtrl',
+          windowClass: 'app-nsdlaunch-modal-window',
+          resolve: {
+            passedNsd: function() {
+                return nsd;
+            }, 
+            passedVims: function() {
+                return $scope.vimInstances;
+            }, 
+            passedKeys: function() {
+                return $scope.keys;
+            }
+          }
+        });
+    
+        modalInstance.result.then(function (selectedItem) {
+          //$ctrl.selected = selectedItem;
+        }, function () {
+          //$log.info('Modal dismissed at: ' + new Date());
+        });
+      };
 });

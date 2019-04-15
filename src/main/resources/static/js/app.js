@@ -87,9 +87,6 @@ angular.module('app', ['ngTable', 'ngRoute', 'ngSanitize', 'ui.bootstrap', 'ngCo
         }).when('/nsdescriptors/:nsdescriptorId/vnfdependencies/:vnfdependencyId', {
             templateUrl: 'pages/nsdescriptors/vnfdependency.html',
             controller: 'NsdCtrl'
-        }).when('/nsdescriptors/:nsdescriptorId/vnfdependencies/', {
-            templateUrl: 'pages/nsdescriptors/vnfdependencies.html',
-            controller: 'NsdCtrl'
         }).when('/nsdescriptors/:nsdescriptorId/graph', {
             templateUrl: 'pages/nsdescriptors/graph.html',
             controller: 'NsdCtrl'

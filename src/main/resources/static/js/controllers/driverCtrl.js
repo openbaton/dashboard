@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-var app = angular.module('app').controller('driverCtrl', function ($scope, serviceAPI, $routeParams, $http, $cookieStore, AuthService, $window, $interval, http) {
+var app = angular.module('app').controller('driverCtrl', function ($scope, $uibModal, serviceAPI, $routeParams, $http, $cookieStore, AuthService, $window, $interval, http) {
     var url = $cookieStore.get('URL');
     //var defaultUrl = "lore:8082"
     var defaultUrl = "marketplace.openbaton.org:8080";
@@ -108,6 +108,22 @@ var app = angular.module('app').controller('driverCtrl', function ($scope, servi
     } else {
         document.getElementById("result").innerHTML = "Sorry, your browser does not support Web Storage...";
     }
+
+    $scope.OpenModal = function(){
+        var modalInstance = $uibModal.open({
+          ariaLabelledBy: 'modal-title',
+          ariaDescribedBy: 'modal-body',
+          templateUrl: 'pages/vimdrivers/myModalContent.html',
+          size: "lg",
+          controller: 'TestCtrl'
+        });
+    
+        modalInstance.result.then(function (selectedItem) {
+          //$ctrl.selected = selectedItem;
+        }, function () {
+          //$log.info('Modal dismissed at: ' + new Date());
+        });
+      };
 
 
 });

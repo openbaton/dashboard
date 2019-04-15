@@ -87,9 +87,8 @@
                                 <span class="caret"></span></button>
                             <ul class="dropdown-menu" role="menu">
                                 <li>
-                                    <a href="" data-toggle="modal" data-target="#launchForm" data-backdrop="static"
-                                       data-keyboard="false"
-                                       ng-click="launchOption(nsd)">Launch</a>
+                                    <a 
+                                       ng-click="openLaunchModal(nsd)">Launch</a>
                                 <li><a href="" data-toggle="modal" data-target="#editModal"
                                        ng-click="edit(nsd)">Edit</a>
                                 </li>
@@ -1616,3 +1615,8 @@
     </div>
 </div>
 
+<style type="text/css">
+    .app-nsdlaunch-modal-window .modal-dialog {
+    width: 70%;
+}
+</style>

@@ -26,14 +26,14 @@ require({
         underscore: "libs/underscore/underscore-min",
         raphael: "libs/raphael",
         morris: "morris/morris-0.4.3.min",
-        angular: "libs/angular/angular.min",
+        angular: "libs/angular/angular",
         ngTable: "libs/angular/ng-table.min",
         jQueryRotate: "libs/jquery/jQueryRotate.min",
         angular_route: "libs/angular/angular-route.min",
         angular_cookies: "libs/angular/angular-cookies.min",
         angular_clipboard: "libs/angular/angular-clipboard.min",
         d3: "libs/d3.min",
-        ui_bootstrap: "libs/angular/ui-bootstrap-tpls-0.10.0.min",
+        ui_bootstrap: "libs/angular/ui-bootstrap-tpls-1.2.4.min",
         app: "app",
         bootstrapSwitch: "../bower_components/bootstrap/dist/js/bootstrap-switch.min",
         angular_sanitize: "libs/angular/angular-sanitize.min",
@@ -49,7 +49,8 @@ require({
         projectController: "controllers/projectController",
         userController: "controllers/userController",
         vimInstanceController: "controllers/vimInstanceController",
-        nsdController: "controllers/nsdController",
+        nsdController: "../pages/nsdescriptors/js/nsdController",
+        launchCtrl: "../pages/nsdescriptors/js/launchCtrl",
         nsrController: "controllers/nsrController",
         jquery_jsPlumb: "libs/jquery/jquery.jsPlumb-1.5.3-min",
         dropzone: "libs/dropzone",
@@ -61,7 +62,8 @@ require({
         marketCtrl:"controllers/marketCtrl",
         driverCtrl:"controllers/driverCtrl",
         historyController: "controllers/historyController",
-        imagerepoctrl: "../pages/imagerepo/js/imagerepoctrl"
+        imagerepoctrl: "../pages/imagerepo/js/imagerepoctrl",
+        test:"../pages/vimdrivers/test"
     },
     shim: {
         jquery: {
@@ -187,8 +189,15 @@ require({
         marketCtrl: {
             deps: ['app', 'servicesServices', 'httpService', 'angular_cookies','authService']
         },
+        test: {
+            deps: ['app', 'servicesServices', 'httpService', 'angular_cookies','authService'],
+            exports: 'TestCtrl'
+        },
+        launchCtrl: {
+            deps: ['app', 'servicesServices', 'httpService', 'angular_cookies','authService'],
+        },
         driverCtrl: {
-            deps: ['app', 'servicesServices', 'httpService', 'angular_cookies','authService']
+            deps: ['app', 'servicesServices', 'httpService', 'angular_cookies','authService', 'test', 'ui_bootstrap']
         },
         imagerepoctrl: {
             deps: ['app', 'servicesServices', 'httpService', 'angular_cookies','authService', 'dropzone']
@@ -222,7 +231,9 @@ require({
     'marketCtrl',
     'driverCtrl',
     'historyController',
-    'imagerepoctrl'
+    'imagerepoctrl',
+    'test',
+    'launchCtrl'
 ], function (require) {
     return require(['bootstrap']);
 });

@@ -30,8 +30,8 @@
                 <a href="#nsdescriptors/{{nsdinfo.id}}"><i class="fa fa-pencil"></i>
                     NSD: {{nsdinfo.name}}</a>
             </li>
-            <li class="">
-                <a href="#nsdescriptors/{{nsdinfo.id}}/vnfdependencies"><i class="fa fa-pencil-square-o"></i>
+            <li class="">                 
+                <i class="fa fa-pencil-square-o"></i>
                     VNF Dependencies</a>
             </li>
             <li class="active"><i class="fa fa-pencil-square-o"></i>
@@ -42,22 +42,23 @@
 </div>
 <div class="row">
     <div class="col-lg-12 top-buffer" ng-show="nsdinfo">
-        <div class="col-lg-12">
+        <div class="col-lg-6">
             <div>
                 <div ng-repeat="vnfd in nsdinfo.vnf_dependency" ng-show="vnfd.id==vnfdependencyId">
                     <h2>VNF Dependency {{vnfd.name}}</h2>
-                    <dl class="dl-horizontal">
-                        <spam ng-repeat="(k,v) in vnfd" ng-if="k!='source' && k!='target'">
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-striped table-hover tablesorter">
+                            <thead>
 
-                            <dt>{{k}}</dt>
-                            <dd>{{v}}</dd>
-
-                        </spam>
-                        <dt>source</dt>
-                        <dd><a href="#nsdescriptors/{{nsdinfo.id}}/vnfdescriptors/{{vnfd.source.id}}">{{vnfd.source.name}}</a></dd>
-                        <dt>target</dt>
-                        <dd><a href="#nsdescriptors/{{nsdinfo.id}}/vnfdescriptors/{{vnfd.target.id}}">{{vnfd.target.name}}</a></dd>
-                    </dl>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="(k,v) in vnfd" ng-if="k!='source' && k!='target' && k!='hbVersion' && k!= 'metadata'">
+                                    <td>{{k.charAt(0).toUpperCase() + k.slice(1)}}</td>
+                                    <td>{{v.toString()}}</td>
+                                </tr>
+                            </tbody>
+                        </table>   
+                    </div>
                 </div>
             </div>
         </div>
