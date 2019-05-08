@@ -34,9 +34,9 @@ limitations under the License.-->
     </div>
 </div>
 <div class="row">
-    <alert ng-repeat="alert in alerts" type="alert.type" close="closeAlert($index)">
-        <div ng-bind-html="alert.msg"></div>
-    </alert>
+        <div uib-alert ng-repeat="alert in alerts" type="{{alert.type}}"  close="closeAlert($index)">
+                <div ng-bind-html="alert.msg"></div>
+            </div >
 </div>
 <!-- /.row -->
 <div class="row">

@@ -1,4 +1,4 @@
- <!--Copyright (c) 2016 Open Baton (http://www.openbaton.org)
+<!--Copyright (c) 2016 Open Baton (http://www.openbaton.org)
  
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.
@@ -20,7 +20,7 @@
         </h1>
         <ol class="breadcrumb">
             <li><a href="#main"><i class="fa fa-dashboard"></i>
-                Overview</a></li>
+                    Overview</a></li>
             <li class="">
                 <a href="#nsdescriptors/"><i class="fa fa-pencil"></i>
                     NS Descriptors</a></li>
@@ -38,56 +38,55 @@
 </div>
 <div class="row">
     <div class="col-lg-12">
-        <button id="deleteMultiple" href="#"  ng-disabled="multipleDelete" class="btn btn-danger pull-right"  ng-style="{'margin-left':'25px'}"
-                title="Delete all the items selected" data-target="#deleteModal" data-toggle="modal">Delete
+        <button id="deleteMultiple" href="#" ng-disabled="multipleDelete" class="btn btn-danger pull-right" ng-style="{'margin-left':'25px'}"
+            title="Delete all the items selected" data-target="#deleteModal" data-toggle="modal">Delete
         </button>
     </div>
 </div>
 <div class="row">
     <div class="col-lg-12 top-buffer">
-        <alert ng-repeat="alert in alerts" type="alert.type" close="closeAlert($index)">
+        <div uib-alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">
             <div ng-bind-html="alert.msg"></div>
-        </alert>
+        </div>
         <div class="table-responsive" ng-if="nsdinfo.vnfd.length > 0">
 
-            <table
-                    class="table table-bordered table-striped table-hover tablesorter"
-                    id="nsdTabletable">
+            <table class="table table-bordered table-striped table-hover tablesorter" id="nsdTabletable">
                 <thead>
-                <tr>
-                    <td><input type="checkbox"  ng-model="main.checkbox"></td>
-                    <th class="col-sm-4" ng-click="predicate = 'id'; reverse = !reverse">Id <i class="fa fa-sort"></i>
-                    </th>
-                    <th ng-click="predicate = 'name'; reverse = !reverse">VNFD name <i class="fa fa-sort"></i></th>
-                    <th ng-click="predicate = 'type'; reverse = !reverse">VNFD type <i class="fa fa-sort"></i></th>
-                    <th ng-click="predicate = 'vendor'; reverse = !reverse">Vendor <i class="fa fa-sort"></i></th>
-                    <th ng-click="predicate = 'verision'; reverse = !reverse">Version <i class="fa fa-sort"></i></th>
-                    <th>Actions <i class="fa"></i></th>
-                </tr>
+                    <tr>
+                        <td><input type="checkbox" ng-model="main.checkbox"></td>
+                        <th class="col-sm-4" ng-click="predicate = 'id'; reverse = !reverse">Id <i class="fa fa-sort"></i>
+                        </th>
+                        <th ng-click="predicate = 'name'; reverse = !reverse">VNFD name <i class="fa fa-sort"></i></th>
+                        <th ng-click="predicate = 'type'; reverse = !reverse">VNFD type <i class="fa fa-sort"></i></th>
+                        <th ng-click="predicate = 'vendor'; reverse = !reverse">Vendor <i class="fa fa-sort"></i></th>
+                        <th ng-click="predicate = 'verision'; reverse = !reverse">Version <i class="fa fa-sort"></i></th>
+                        <th>Actions <i class="fa"></i></th>
+                    </tr>
                 </thead>
                 <tbody>
-                <tr ng-repeat="vnfd in nsdinfo.vnfd| orderBy:predicate:reverse">
-                    <td><input type="checkbox" ng-init="selection.ids[vnfd.id] = false" ng-model="selection.ids[vnfd.id]" name="group" id="{{vnfd.id}}" /></td>
-                    <td><a href="#nsdescriptors/{{nsdinfo.id}}/vnfdescriptors/{{vnfd.id}}" ng-click="showData(vnfd)">{{vnfd.id}}</a>
-                    </td>
-                    <td>{{vnfd.name}}</td>
-                    <td>{{vnfd.type}}</td>
-                    <td>{{vnfd.vendor}}</td>
-                    <td>{{vnfd.version}}</td>
-                    <td>
-                        <div class="btn-group">
-                            <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown"> Action
-                                <span class="caret"></span></button>
-                            <ul class="dropdown-menu" role="menu">
-                                <li><a href="" data-toggle="modal" data-target="#modalAdd"
-                                       ng-click="edit(vnfd)">Edit</a>
-                                </li>
-                                <li class="divider"></li>
-                                <li><a href="" ng-click="deleteVNFD(vnfd)">Delete</a></li>
-                            </ul>
-                        </div>
-                    </td>
-                </tr>
+                    <tr ng-repeat="vnfd in nsdinfo.vnfd| orderBy:predicate:reverse">
+                        <td><input type="checkbox" ng-init="selection.ids[vnfd.id] = false" ng-model="selection.ids[vnfd.id]"
+                                name="group" id="{{vnfd.id}}" /></td>
+                        <td><a href="#nsdescriptors/{{nsdinfo.id}}/vnfdescriptors/{{vnfd.id}}" ng-click="showData(vnfd)">{{vnfd.id}}</a>
+                        </td>
+                        <td>{{vnfd.name}}</td>
+                        <td>{{vnfd.type}}</td>
+                        <td>{{vnfd.vendor}}</td>
+                        <td>{{vnfd.version}}</td>
+                        <td>
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+                                    Action
+                                    <span class="caret"></span></button>
+                                <ul class="dropdown-menu" role="menu">
+                                    <li><a href="" data-toggle="modal" data-target="#modalAdd" ng-click="edit(vnfd)">Edit</a>
+                                    </li>
+                                    <li class="divider"></li>
+                                    <li><a href="" ng-click="deleteVNFD(vnfd)">Delete</a></li>
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
                 </tbody>
             </table>
         </div>
@@ -99,19 +98,16 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                        aria-hidden="true">&times;</span></button>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title">Edit</h4>
             </div>
             <div class="modal-body">
                 <form role="form" class="form-horizontal">
-                    <div class="form-group" ng-repeat="(key,value) in editObj"
-                         ng-if="key!='id' && isArray(value) && key!='hbVersion'">
+                    <div class="form-group" ng-repeat="(key,value) in editObj" ng-if="key!='id' && isArray(value) && key!='hbVersion'">
                         <label for="{{key}}" class="col-sm-4 control-label">{{key}}</label>
 
                         <div class="col-sm-6">
-                            <input type="text" class="form-control" id="{{key}}" name="{{key}}"
-                                   ng-model="editObj[key]"/>
+                            <input type="text" class="form-control" id="{{key}}" name="{{key}}" ng-model="editObj[key]" />
                         </div>
                     </div>
 

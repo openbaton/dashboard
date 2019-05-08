@@ -574,9 +574,27 @@
 </div>
 <div class="modal-footer">
     <a class="btn left btn-danger" ng-click="close()">Cancel</a>
-    <a ng-disabled="LastTabNSDLaunch==='' || LastTabNSDLaunch==='PoPs' || LastTabNSDLaunch=== undefined " class="btn btnPrevious">Back</a>
+    <a class="btn btnPrevious">Back</a>
     <a ng-disabled="LastTabNSDLaunch==='Monitoring IP'" class="btn btn-primary btnNext">Next</a>
     <button class="btn  btn-success" ng-disabled="(monForm.monPort.$touched && !isValidPort(monitoringPort)) || (monForm.monIp.$touched && monForm.monIp.$invalid)"
         data-dismiss="modal" ng-click="launch()">Launch
     </button>
 </div>
+
+<script>
+  $('.btnNext').click(function () {
+    $('.nav-pills > .active').next('li').find('a').trigger('click');
+  });
+
+  $('.btnPrevious').click(function () {
+    $('.nav-pills > .active').prev('li').find('a').trigger('click');
+  });
+  $(document).ready(function () {
+    $(".nav-pills a").click(function () {
+      $(this).tab('show');
+    });
+    $('.nav-pills a').on('shown.bs.tab', function (event) {
+    });
+  });
+
+</script>

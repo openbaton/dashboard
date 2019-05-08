@@ -41,9 +41,9 @@
 </div>
 <div class="row">
     <div class="col-lg-12 top-buffer">
-        <alert ng-repeat="alert in alerts" type="alert.type" close="closeAlert($index)">
+        <div uib-alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">
             <div ng-bind-html="alert.msg"></div>
-        </alert>
+        </div>
         <div class="table-responsive" ng-if="nsrecords.length > 0">
             <table id="nsrTable" class="table table-bordered table-striped table-hover tablesorter">
                 <thead>
@@ -84,8 +84,8 @@
                                 name="group" id="{{data.id}}" />
                         </td>
                         <td>
-                            <a popover="Show Info for this NSR" popover-placement="right" popover-trigger="mouseenter" ng-click="getLastHistoryLifecycleEvent(data.vnfr)"
-                                href="#nsrecords/{{data.id}}">{{data.id}}</a>
+                            <a popover="Show Info for this NSR" popover-placement="right" popover-trigger="mouseenter"
+                                ng-click="getLastHistoryLifecycleEvent(data.vnfr)" href="#nsrecords/{{data.id}}">{{data.id}}</a>
                         </td>
                         <td>{{data.name}}</td>
                         <td>{{data.vendor}}</td>
@@ -103,7 +103,8 @@
 
                         <td>
                             <div class="btn-group">
-                                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown"> Action
+                                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+                                    Action
                                     <span class="caret"></span>
                                 </button>
                                 <ul class="dropdown-menu" role="menu">
@@ -111,7 +112,8 @@
                                         <a href="" data-toggle="modal" data-target="#modalAdd" ng-click="resumeNSR(data)">Resume</a>
                                     </li>
                                     <li>
-                                        <a href="" ng-click="initiateExtension(data)" data-toggle="modal" data-target="#addVNF">Add VNF</a>
+                                        <a href="" ng-click="initiateExtension(data)" data-toggle="modal" data-target="#addVNF">Add
+                                            VNF</a>
                                     </li>
                                     <li class="divider"></li>
                                     <li>
@@ -146,7 +148,8 @@
                                 </label>
 
                                 <div class="col-sm-5">
-                                    <input type="text" class="form-control" id="Name" name="Name" ng-model="data.name" placeholder="Topology" value="" required>
+                                    <input type="text" class="form-control" id="Name" name="Name" ng-model="data.name"
+                                        placeholder="Topology" value="" required>
 
                                     <p ng-show="formForm.Name.$invalid" class="help-block">Name is required.</p>
                                 </div>
@@ -158,7 +161,8 @@
                                     <div class="col-sm-8 input-group">
                                         <div class="checkbox" ng-repeat="location in locations track by $index">
                                             <label>
-                                                <input type="checkbox" value="{{location}}" ng-model="locationChecked[location]" ng-change="selectedLocations(location)"> {{location}}
+                                                <input type="checkbox" value="{{location}}" ng-model="locationChecked[location]"
+                                                    ng-change="selectedLocations(location)"> {{location}}
                                             </label>
                                         </div>
                                     </div>
@@ -166,7 +170,8 @@
                                 <p ng-show="selectedOneLocation" class="help-block help-block col-sm-6 control-label">
                                     One Location is required.</p>
                             </div>
-                            <button class="btn btn-default" ng-class="{'disabled': selectedOneLocation}" data-toggle="modal" data-target="#addContainerModal">Add Container
+                            <button class="btn btn-default" ng-class="{'disabled': selectedOneLocation}" data-toggle="modal"
+                                data-target="#addContainerModal">Add Container
                             </button>
                             <hr>
                             <div collapse="">
@@ -182,7 +187,7 @@
                                             <b>min:</b> {{serviceContainer.minNumInst}} ::
                                             <b>max:</b> {{serviceContainer.maxNumInst}} ::
                                             <b>flavour:</b> {{serviceContainer.flavour}}
-                                            <br/>
+                                            <br />
 
                                             <div>
                                                 <b>images:</b>
@@ -205,7 +210,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <br/>
+                                    <br />
                                     <table id="tableServices" class="table">
                                         <thead>
                                             <th>Service Name</th>
@@ -237,8 +242,8 @@
                                 </label>
 
                                 <div class="col-sm-5">
-                                    <input type="text" class="form-control" id="nameTemplate1" name="nameTemplate" ng-model="template.name" placeholder="Name Template"
-                                        value="">
+                                    <input type="text" class="form-control" id="nameTemplate1" name="nameTemplate"
+                                        ng-model="template.name" placeholder="Name Template" value="">
 
                                 </div>
                             </div>
@@ -247,7 +252,8 @@
 
                         <div class="checkbox pull-right">
                             <label>
-                                <input id="checkTemplate" type="checkbox" ng-model="toggle" ng-click="toggleF()"> Create Template?
+                                <input id="checkTemplate" type="checkbox" ng-model="toggle" ng-click="toggleF()">
+                                Create Template?
                             </label>
                         </div>
 
@@ -257,8 +263,8 @@
                             <div class="form-group">
                                 <br>
                                 <label for="jsonInputArea">Insert Your Json</label>
-                                <textarea name="textTopologyJson" ng-model="textTopologyJson" ng-change="changeText(textTopologyJson)" id="jsonInputArea"
-                                    class="form-control" rows="5" placeholder="{ }"></textarea>
+                                <textarea name="textTopologyJson" ng-model="textTopologyJson" ng-change="changeText(textTopologyJson)"
+                                    id="jsonInputArea" class="form-control" rows="5" placeholder="{ }"></textarea>
                             </div>
                             <div class="form-group">
                                 <label for="jsonInputFile">File input</label>
@@ -273,19 +279,18 @@
                                     <div id="inputTemplateJson" class="col-sm-12 inputTemplate" style="display: none;">
                                         <div class="form-group ">
                                             <label for="nameTemplate2">Name Template</label>
-                                            <input type="text" class="form-control" id="nameTemplate2"
-                                                placeholder="Template">
+                                            <input type="text" class="form-control" id="nameTemplate2" placeholder="Template">
                                         </div>
                                         <div class="form-group">
                                             <label for="inputFlavorTemplate1">flavour</label>
-                                            <input type="text" class="form-control" id="inputFlavorTemplate1"
-                                                value="m1.small" placeholder="m1.small">
+                                            <input type="text" class="form-control" id="inputFlavorTemplate1" value="m1.small"
+                                                placeholder="m1.small">
                                         </div>
 
                                     </div>
-                                    <td></td>
-                                    <div class="checkbox pull-right">
-                                    </div>
+                                <td></td>
+                                <div class="checkbox pull-right">
+                                </div>
                             </tr>
                             </td>
                         </table>
@@ -295,8 +300,8 @@
                             <div class="form-group">
                                 <br>
                                 <label for="xmlInputArea">Insert Your XML</label>
-                                <textarea ng-model="xmlInputArea" ng-change="changeTextXML(xmlInputArea)" id="xmlInputArea" class="form-control" rows="5"
-                                    placeholder="<Definitions></Definitions>"></textarea>
+                                <textarea ng-model="xmlInputArea" ng-change="changeTextXML(xmlInputArea)" id="xmlInputArea"
+                                    class="form-control" rows="5" placeholder="<Definitions></Definitions>"></textarea>
                             </div>
                             <div class="form-group">
                                 <label for="xmlInputFile">File input</label>
@@ -311,20 +316,19 @@
                                     <div id="inputTemplateXML" class="col-sm-12 inputTemplate" style="display: none;">
                                         <div class="form-group ">
                                             <label for="nameTemplate">Name Template</label>
-                                            <input type="text" class="form-control" id="nameTemplate"
-                                                placeholder="Template">
+                                            <input type="text" class="form-control" id="nameTemplate" placeholder="Template">
                                         </div>
                                         <div class="form-group">
                                             <label for="inputFlavorTemplate">flavour</label>
-                                            <input type="text" class="form-control" id="inputFlavorTemplate"
-                                                value="m1.small" placeholder="m1.small">
+                                            <input type="text" class="form-control" id="inputFlavorTemplate" value="m1.small"
+                                                placeholder="m1.small">
                                         </div>
 
                                     </div>
-                                    <td></td>
-                                    <div class="checkbox pull-right">
+                                <td></td>
+                                <div class="checkbox pull-right">
 
-                                    </div>
+                                </div>
 
                             </tr>
                             </td>
@@ -362,8 +366,8 @@
                                     <label for="{{key}}" class="col-sm-4 control-label">{{key}}</label>
 
                                     <div class="col-sm-5">
-                                        <input type="text" class="form-control" id="{{key}}" name="{{key}}" ng-model="serviceContainer[key]" placeholder="{{value}}"
-                                        />
+                                        <input type="text" class="form-control" id="{{key}}" name="{{key}}" ng-model="serviceContainer[key]"
+                                            placeholder="{{value}}" />
                                     </div>
                                 </div>
                             </div>
@@ -375,7 +379,8 @@
                                     <div class="col-sm-8 input-group">
                                         <div class="checkbox" ng-repeat="locationS in locationsS">
                                             <label>
-                                                <input type="checkbox" value="{{locationS}}" ng-model="locationCheckedS[locationS]" ng-change="selectedLocations2(locationS)"> {{locationS}}
+                                                <input type="checkbox" value="{{locationS}}" ng-model="locationCheckedS[locationS]"
+                                                    ng-change="selectedLocations2(locationS)"> {{locationS}}
                                             </label>
                                         </div>
                                     </div>
@@ -392,7 +397,8 @@
                             <div ng-show="datacenters" class="form-group well well-lg" ng-repeat="datacenter in datacenters track by datacenter.id">
                                 <div class="col-sm-6 input-group col-lg-offset-3">
                                     <label class="">Image for: {{datacenter.name}}</label>
-                                    <select name="typeSelect" class="modal-select form-control" ng-model="imageId[datacenter.name]" ng-options="v as k for (k,v) in datacenter.serviceImageId"></select>
+                                    <select name="typeSelect" class="modal-select form-control" ng-model="imageId[datacenter.name]"
+                                        ng-options="v as k for (k,v) in datacenter.serviceImageId"></select>
                                 </div>
                             </div>
                         </form>
@@ -401,8 +407,10 @@
                         <br>
 
                         <form class="form-horizontal" role="form" name="formContainer" novalidate>
-                            <div ng-show="datacenters" class="form-group well well-lg" style="background: #fdfdfb" ng-repeat="datacenter in datacenters track by datacenter.id">
-                                <p ng-init="expose[datacenter.name] = {}; ">Choose the Networks for datacenter: {{datacenter.name}}
+                            <div ng-show="datacenters" class="form-group well well-lg" style="background: #fdfdfb"
+                                ng-repeat="datacenter in datacenters track by datacenter.id">
+                                <p ng-init="expose[datacenter.name] = {}; ">Choose the Networks for datacenter:
+                                    {{datacenter.name}}
                                 </p>
                                 <!--<label for="checkboxDiv" class="col-sm-4 control-label" ng-init="expose[datacenter.name] = {}; ">Networks</label>-->
                                 <div id="checkboxDiv">
@@ -413,10 +421,12 @@
                                                     <div class="row">
                                                         <div class="col-md-12">
                                                             <div class=" form-group" ng-class="{ 'has-error' : mgmt == '' }">
-                                                                <label for="typeSelect" class="col-sm-4 control-label">Please select the mgmt network</label>
+                                                                <label for="typeSelect" class="col-sm-4 control-label">Please
+                                                                    select the mgmt network</label>
 
                                                                 <div class="input-group col-sm-5">
-                                                                    <select name="typeSelect" class="form-control " ng-model="mgmt" ng-options="net.name as net.name for net in datacenter.subnets"
+                                                                    <select name="typeSelect" class="form-control "
+                                                                        ng-model="mgmt" ng-options="net.name as net.name for net in datacenter.subnets"
                                                                         ng-change="selectMgmt(mgmt)">
                                                                     </select>
                                                                 </div>
@@ -429,15 +439,19 @@
 
                                                         <div class="checkbox ">
                                                             <label ng-init="expose[datacenter.name][subnets.name] = {};">
-                                                                <input type="checkbox" ng-model="subnets[datacenter.name]" name="subnets" id="{{$index}}" value="{{subnets.name}}" ng-change="selectSubnets(subnets)"> {{subnets.name}}
+                                                                <input type="checkbox" ng-model="subnets[datacenter.name]"
+                                                                    name="subnets" id="{{$index}}" value="{{subnets.name}}"
+                                                                    ng-change="selectSubnets(subnets)">
+                                                                {{subnets.name}}
                                                             </label>
                                                         </div>
-                                                        <div class="" ng-class="{'has-error':!checkIP(fixedip[datacenter.name][subnets.name]) }" ng-show="subnets[datacenter.name]">
+                                                        <div class="" ng-class="{'has-error':!checkIP(fixedip[datacenter.name][subnets.name]) }"
+                                                            ng-show="subnets[datacenter.name]">
                                                             <label class="control-label">Fixed IP</label>
 
-                                                            <input type="text" class="form-control" name="{{fixedip[datacenter.name]}} " ng-model="fixedip[datacenter.name][subnets.name]"
-                                                                ng-init="fixedip[datacenter.name] = {}" placeholder="{{subnets.cidr}}"
-                                                            />
+                                                            <input type="text" class="form-control" name="{{fixedip[datacenter.name]}} "
+                                                                ng-model="fixedip[datacenter.name][subnets.name]"
+                                                                ng-init="fixedip[datacenter.name] = {}" placeholder="{{subnets.cidr}}" />
                                                             <span class="help-block">In this range {{subnets.cidr}}</span>
                                                         </div>
 
@@ -449,18 +463,25 @@
                                                         </div>
                                                         <div ng-show="!noMoreFloatingIp" class="checkbox" ng-show="subnets[datacenter.name]">
                                                             <label>
-                                                                <input type="checkbox" ng-model="expose[datacenter.name][subnets.name].expose" ng-init="expose[datacenter.name][subnets.name].expose = false"
-                                                                    id="{{datacenter.name}}-{{subnets.name}}" name="expose" ng-change="selectExpose(datacenter, expose[datacenter.name][subnets.name].expose, expose[datacenter.name][subnets.name].floatingIP)"> expose: {{subnets.name}}
-                                                                <br/>
+                                                                <input type="checkbox" ng-model="expose[datacenter.name][subnets.name].expose"
+                                                                    ng-init="expose[datacenter.name][subnets.name].expose = false"
+                                                                    id="{{datacenter.name}}-{{subnets.name}}" name="expose"
+                                                                    ng-change="selectExpose(datacenter, expose[datacenter.name][subnets.name].expose, expose[datacenter.name][subnets.name].floatingIP)">
+                                                                expose: {{subnets.name}}
+                                                                <br />
                                                                 <!--{{expose}}-->
                                                             </label>
                                                         </div>
                                                         <div class="" ng-if="expose[datacenter.name][subnets.name].expose">
-                                                            <label class="control-label" ng-init="expose[datacenter.name][subnets.name].floatingIP = floatingIPsNET[0]">Floating IP
+                                                            <label class="control-label" ng-init="expose[datacenter.name][subnets.name].floatingIP = floatingIPsNET[0]">Floating
+                                                                IP
                                                             </label>
-                                                            <select name="typeSelect" class="form-control modal-select" ng-model="expose[datacenter.name][subnets.name].floatingIP" ng-options="ip for ip in floatingIPsNET | orderBy:'ip':false"
+                                                            <select name="typeSelect" class="form-control modal-select"
+                                                                ng-model="expose[datacenter.name][subnets.name].floatingIP"
+                                                                ng-options="ip for ip in floatingIPsNET | orderBy:'ip':false"
                                                                 ng-change="updateFloatingIPs(datacenter, expose[datacenter.name][subnets.name].floatingIP)"></select>
-                                                            <span ng-if="expose[datacenter.name][subnets.name].floatingIP" class="help-block">Selected Floating IP:
+                                                            <span ng-if="expose[datacenter.name][subnets.name].floatingIP"
+                                                                class="help-block">Selected Floating IP:
                                                                 <b>{{expose[datacenter.name][subnets.name].floatingIP}}</b>
                                                             </span>
 
@@ -480,9 +501,11 @@
                 </tabset>
             </div>
             <div class="modal-footer">
-                <button type="button" id="closeModal" class="btn btn-default" class="close" aria-hidden="true" data-dismiss="modal">Close
+                <button type="button" id="closeModal" class="btn btn-default" class="close" aria-hidden="true"
+                    data-dismiss="modal">Close
                 </button>
-                <button type="button" id="sendTopology" ng-class="{'disabled': !netCheck}" ng-click="addContainer(serviceContainer)" class="btn btn-primary">Add Container
+                <button type="button" id="sendTopology" ng-class="{'disabled': !netCheck}" ng-click="addContainer(serviceContainer)"
+                    class="btn btn-primary">Add Container
                 </button>
             </div>
         </div>
@@ -510,7 +533,8 @@
                                 <td class="col-md-6 row">
                                     <div id="left-box">
                                         <label class=" ">Select Instance</label>
-                                        <select name="typeSelect" class="form-control modal-select" ng-model="selection" ng-options="services as services.serviceType for services in services| orderBy:'serviceType':false"
+                                        <select name="typeSelect" class="form-control modal-select" ng-model="selection"
+                                            ng-options="services as services.serviceType for services in services| orderBy:'serviceType':false"
                                             ng-change="changeSelection(selection)"></select>
                                     </div>
                                     <br>
@@ -548,7 +572,8 @@
                                                     <div class="col-sm-8 input-group">
                                                         <div class="checkbox" ng-repeat="require in requires track by $index">
                                                             <label>
-                                                                <input type="checkbox" value="{{require}}" ng-model="requireChecked[require]" ng-change="selectedRequires(require)"> {{require}}
+                                                                <input type="checkbox" value="{{require}}" ng-model="requireChecked[require]"
+                                                                    ng-change="selectedRequires(require)"> {{require}}
                                                             </label>
                                                         </div>
                                                     </div>
@@ -566,15 +591,17 @@
                     <div class="row">
                         <div class="col-md-12 ">
                             <div ng-repeat="poli in policies track by $index">
-                                <i class="fa fa-bell-o"></i> {{poli.alarm.expression.item}} {{poli.alarm.expression.operation}} {{poli.alarm.expression.value}}
+                                <i class="fa fa-bell-o"></i> {{poli.alarm.expression.item}}
+                                {{poli.alarm.expression.operation}} {{poli.alarm.expression.value}}
                                 period: {{poli.alarm.period}} &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-                                <i class="fa fa-magic"></i> {{poli.action.actionType}} num. of unit: {{poli.action.num}} period: {{poli.action.period}}
+                                <i class="fa fa-magic"></i> {{poli.action.actionType}} num. of unit:
+                                {{poli.action.num}} period: {{poli.action.period}}
                                 <div class="pull-right">
                                     <a href="" title="Delete Policy" ng-click="deletePolicy($index)">
                                         <i class="fa fa-trash-o"> Delete </i>
                                     </a>
                                 </div>
-                                <hr/>
+                                <hr />
                             </div>
                             <div class="pull-right">
 
@@ -590,7 +617,8 @@
             <div class="modal-footer">
                 <button type="button" id="closeModal" class="btn btn-default" data-dismiss="modal">Close
                 </button>
-                <button type="button" id="addInstance" ng-disabled="formIsEmpity()" ng-click="saveService(serviceEdit)" class="btn btn-primary">Add Instance
+                <button type="button" id="addInstance" ng-disabled="formIsEmpity()" ng-click="saveService(serviceEdit)"
+                    class="btn btn-primary">Add Instance
                 </button>
             </div>
         </div>
@@ -607,7 +635,8 @@
                 <h4 class="modal-title" id="serviceFormLabel">Add Service Container</h4>
             </div>
             <div class="modal-body">
-                <button ng-if="data.serviceContainers.length == 0" class="btn btn-default" data-toggle="modal" data-target="#addContainerModal">Add Container
+                <button ng-if="data.serviceContainers.length == 0" class="btn btn-default" data-toggle="modal"
+                    data-target="#addContainerModal">Add Container
                 </button>
                 <form class="form-horizontal" role="form" id="formAddService">
                     <div class="well well-lg" ng-show="data.serviceContainers[$index]" ng-repeat="container in data.serviceContainers track by $index">
@@ -622,7 +651,7 @@
                                 <b>min:</b> {{container.minNumInst}} ::
                                 <b>max:</b> {{container.maxNumInst}} ::
                                 <b>flavour: </b>{{container.flavour}}
-                                <br/>
+                                <br />
 
                                 <div ng-show="container.images">
                                     <b>images:</b>
@@ -647,7 +676,7 @@
                                 </div>
                             </div>
                         </div>
-                        <br/>
+                        <br />
                         <table id="tableServices" class="table">
                             <thead>
                                 <th>Service Name</th>
@@ -675,7 +704,8 @@
             <div class="modal-footer">
                 <button type="button" id="closeModal" class="btn btn-default" data-dismiss="modal">Close
                 </button>
-                <button ng-class="{'disabled': !containerSelected}" type="button" id="addService" class="btn btn-primary" ng-click="sendServiceToAdd(serviceContainer)">Add Services Container
+                <button ng-class="{'disabled': !containerSelected}" type="button" id="addService" class="btn btn-primary"
+                    ng-click="sendServiceToAdd(serviceContainer)">Add Services Container
                 </button>
             </div>
         </div>
@@ -697,15 +727,15 @@
                 <div class="row">
                     <div class="col-sm-4">
                         <label class=" ">Item</label>
-                        <select name="typeSelect" class="form-control modal-select" ng-model="policy.alert.item" ng-options="items as items.itemKey for items in items| orderBy:'itemKey':false"
-                            ng-init="policy.alert.item = items[0]"></select>
+                        <select name="typeSelect" class="form-control modal-select" ng-model="policy.alert.item"
+                            ng-options="items as items.itemKey for items in items| orderBy:'itemKey':false" ng-init="policy.alert.item = items[0]"></select>
                         <span class="help-block" ng-show="policy.alert.item">{{policy.alert.item.name}}</span>
                     </div>
 
                     <div class=" col-sm-2">
                         <label class="">sign</label>
-                        <select name="typeSelect" class="form-control modal-select" ng-init="policy.alert.sign = signs[0]" ng-model="policy.alert.sign"
-                            ng-options="signs as signs for signs in signs| orderBy:'signs':false"></select>
+                        <select name="typeSelect" class="form-control modal-select" ng-init="policy.alert.sign = signs[0]"
+                            ng-model="policy.alert.sign" ng-options="signs as signs for signs in signs| orderBy:'signs':false"></select>
                     </div>
                     <div class="col-sm-2">
                         <label class=" ">Value</label>
@@ -713,32 +743,32 @@
                     </div>
                     <div class="col-sm-2 pull-right" style="margin-right: 50px">
                         <label class="">Period</label> {{policy.alert.period}}
-                        <input class="" type="range" min="0" max="100" ng-model="policy.alert.period" ng-init="policy.alert.period = '60'" size="20"
-                            id="periodAlert" />
+                        <input class="" type="range" min="0" max="100" ng-model="policy.alert.period" ng-init="policy.alert.period = '60'"
+                            size="20" id="periodAlert" />
 
                         <!--                        <input type="number" class="form-control"  ng-model="policy.alert.period" >-->
                     </div>
                 </div>
-                <hr/>
+                <hr />
                 <h3 class="">Action</h3>
 
                 <div class="row">
                     <div class="col-sm-4">
                         <label class=" ">Type</label>
-                        <select name="typeSelect" class="form-control modal-select" ng-init="policy.action.actionType = types[0]" ng-model="policy.action.actionType"
-                            ng-options="types as types for types in types| orderBy:'types':false"></select>
+                        <select name="typeSelect" class="form-control modal-select" ng-init="policy.action.actionType = types[0]"
+                            ng-model="policy.action.actionType" ng-options="types as types for types in types| orderBy:'types':false"></select>
                     </div>
 
                     <div class=" col-sm-2">
                         <label class="">Num. unit</label> {{policy.action.unit}}
                         <!--<input type="number" class="form-control"  ng-model="policy.action.unit" >-->
-                        <input type="range" min="0" max="10" ng-model="policy.action.unit" ng-init="policy.action.unit = '1'" size="10" id="unitAction"
-                        />
+                        <input type="range" min="0" max="10" ng-model="policy.action.unit" ng-init="policy.action.unit = '1'"
+                            size="10" id="unitAction" />
                     </div>
                     <div class="col-sm-2 pull-right" style="margin-right: 50px">
                         <label class=" ">Period</label> {{policy.action.period}}
-                        <input class="" type="range" min="0" max="100" ng-model="policy.action.period" ng-init="policy.action.period = '60'" size="20"
-                            id="periodAction" />
+                        <input class="" type="range" min="0" max="100" ng-model="policy.action.period" ng-init="policy.action.period = '60'"
+                            size="20" id="periodAction" />
                         <!--<input type="number" class="form-control"  ng-model="policy.action.period" >-->
                     </div>
                 </div>
@@ -746,7 +776,8 @@
             <div class="modal-footer">
                 <button type="button" id="closeModal" class="btn btn-default" data-dismiss="modal">Close
                 </button>
-                <button type="button" id="addPolicy" class="btn btn-primary" ng-click="addPolicy(serviceContainer)">Add Policy
+                <button type="button" id="addPolicy" class="btn btn-primary" ng-click="addPolicy(serviceContainer)">Add
+                    Policy
                 </button>
             </div>
         </div>
@@ -799,8 +830,8 @@
                         </div>
 
                         <div class="col-sm-7">
-                            <select name="vnfdSelect" class="form-control modal-select" id="vnfdselect" ng-model="vnfdToAdd" ng-options="vnf as vnf.name + '/' + vnf.id for vnf in allVnfdescriptors"
-                                ng-change="setConfs()">
+                            <select name="vnfdSelect" class="form-control modal-select" id="vnfdselect" ng-model="vnfdToAdd"
+                                ng-options="vnf as vnf.name + '/' + vnf.id for vnf in allVnfdescriptors" ng-change="setConfs()">
                             </select>
                         </div>
                     </div>
@@ -813,39 +844,36 @@
                                         <br>The following list shows which PoPs are available.
                                         <br>
                                         <br>
-                                       <br>
+                                        <br>
                                         <table class="table table-bordered table-striped table-hover tablesorter">
                                             <thead>
                                                 <tr>
-                                                    <th colspan="3">Name</th>                                                   
+                                                    <th colspan="3">Name</th>
                                                 </tr>
-                                                <tbody>
-                                                        <tr ng-if="vimInstances.length < 1">
-                                                                <td colspan="3">No PoPs left</td>
-                                                                </tr>  
-                                                    <tr ng-if="vimInstances.length > 0" ng-repeat="vim in vimInstances">
-                                                        <td>{{vim.name}}</td>
-                                                        <td class="col-md-4">
-                                                            <select name="testId" class="form-control input-sm" ng-if="vim.zones !== undefined"
-                                                                ng-init="azVimInstance[vim.name] = 'random'" ng-model="azVimInstance[vim.name]">
-                                                                <option value="random" label="random">random
-                                                                </option>
-                                                                <option ng-repeat="az in vim.zones">
-                                                                    {{az.name}}
-                                                                </option>
-                                                            </select>
-                                                        </td>
-                                                        <td class="col-md-2"
-                                                        style="text-align: center;">
-                                                        <button ng-if="vim.name.length"
-                                                                type="button"
-                                                                class="btn  btn-primary btn-sm"
-                                                                ng-click="addPopToLaunch(vim)">
+                                            <tbody>
+                                                <tr ng-if="vimInstances.length < 1">
+                                                    <td colspan="3">No PoPs left</td>
+                                                </tr>
+                                                <tr ng-if="vimInstances.length > 0" ng-repeat="vim in vimInstances">
+                                                    <td>{{vim.name}}</td>
+                                                    <td class="col-md-4">
+                                                        <select name="testId" class="form-control input-sm" ng-if="vim.zones !== undefined"
+                                                            ng-init="azVimInstance[vim.name] = 'random'" ng-model="azVimInstance[vim.name]">
+                                                            <option value="random" label="random">random
+                                                            </option>
+                                                            <option ng-repeat="az in vim.zones">
+                                                                {{az.name}}
+                                                            </option>
+                                                        </select>
+                                                    </td>
+                                                    <td class="col-md-2" style="text-align: center;">
+                                                        <button ng-if="vim.name.length" type="button" class="btn  btn-primary btn-sm"
+                                                            ng-click="addPopToLaunch(vim)">
                                                             +
                                                         </button>
                                                     </td>
-                                                    </tr>
-                                                </tbody>
+                                                </tr>
+                                            </tbody>
                                             </thead>
                                         </table>
 
@@ -860,28 +888,25 @@
                                         <table class="table table-bordered table-striped table-hover tablesorter">
                                             <thead>
                                                 <tr>
-                                                    <th colspan="3">Name</th>  
+                                                    <th colspan="3">Name</th>
                                                 </tr>
-                                                <tbody>
+                                            <tbody>
                                                 <tr ng-if="popsForLaunch.length < 1">
-                                                 <td colspan="3">No PoPs were chosen yet</td>
-                                                 </tr>  
-                                                 <tr ng-if="popsForLaunch.length > 0"ng-repeat="vim in popsForLaunch">
-                                                        <td>{{vim.name}}</td>
-                                                        <td class="col-md-4">
-                                                           {{azVimInstance[vim.name]}}
-                                                        </td>
-                                                        <td class="col-md-2"
-                                                        style="text-align: center;">
-                                                        <button ng-if="vim.name.length"
-                                                                type="button"
-                                                                class="btn  btn-danger btn-sm"
-                                                                ng-click="removePopToLaunch(vim)">
+                                                    <td colspan="3">No PoPs were chosen yet</td>
+                                                </tr>
+                                                <tr ng-if="popsForLaunch.length > 0" ng-repeat="vim in popsForLaunch">
+                                                    <td>{{vim.name}}</td>
+                                                    <td class="col-md-4">
+                                                        {{azVimInstance[vim.name]}}
+                                                    </td>
+                                                    <td class="col-md-2" style="text-align: center;">
+                                                        <button ng-if="vim.name.length" type="button" class="btn  btn-danger btn-sm"
+                                                            ng-click="removePopToLaunch(vim)">
                                                             -
                                                         </button>
                                                     </td>
-                                                    </tr>  
-                                                </tbody>
+                                                </tr>
+                                            </tbody>
                                             </thead>
                                         </table>
 
@@ -889,266 +914,231 @@
                                 </div>
                             </tab>
                             <tab heading="Keys">
-                                    <div class="col-sm-6">
-                                            <p>
-                                                    <br> The following list shows all the Keys that are available to put into
-                                                    the VNF Component Instances.
-                                                </p>
-                                            <div class="table-responsive">
-                                                <br>
-                                                
-                                                <table class="table table-bordered table-striped table-hover tablesorter">
-                                                    <thead>
-                                                        <tr>
-                                                            <th colspan="3">Key Name</th>                                                   
-                                                        </tr>
-                                                        <tbody>
-                                                                <tr ng-if="keys.length < 1">
-                                                                        <td colspan="3">No more keys were chosen yet</td>
-                                                                        </tr>  
-                                                            <tr ng-if="keys.length > 0"ng-repeat="key in keys">
-                                                                <td>{{key.name}}</td>
-                                                                <td style="max-width:100px;overflow:hidden;word-wrap:normal;text-overflow:ellipsis" class="col-md-4">
-                                                                    {{key.fingerprint}}
-                                                                </td>
-                                                                <td class="col-md-2"
-                                                                style="text-align: center;">
-                                                                <button 
-                                                                        type="button"
-                                                                        class="btn  btn-primary btn-sm"
-                                                                        ng-click="addKey(key)">
-                                                                    +
-                                                                </button>
-                                                            </td>
-                                                            </tr>
-                                                        </tbody>
-                                                    </thead>
-                                                </table>
-        
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-6">
-                                                <p>
-                                                        <br> The following list shows all the Keys that will be imported to the VNF
-                                                        Component Instances.
-                                                    </p>
-                                            <div class="table-responsive">
-                                                <br>
-                                                <table class="table table-bordered table-striped table-hover tablesorter">
-                                                    <thead>
-                                                        <tr>
-                                                            <th colspan="3">Key Name</th>  
-                                                        </tr>
-                                                        <tbody>
-                                                        <tr ng-if="keysForLaunch.length < 1">
-                                                         <td colspan="3">No keys were chosen yet</td>
-                                                         </tr>  
-                                                         <tr ng-if="keysForLaunch.length > 0" ng-repeat="key in keysForLaunch">
-                            
-                                                                        <td>{{key.name}}</td>
-                                                                        <td  style="max-width:100px;overflow:hidden;word-wrap:normal;text-overflow:ellipsis" class="col-md-4">
-                                                                            {{key.fingerprint}}
-                                                                        </td>
-                                                                        <td class="col-md-2"
-                                                                        style="text-align: center;">
-                                                                        <button 
-                                                                                type="button"
-                                                                                class="btn  btn-danger btn-sm"
-                                                                                ng-click="removeKey(key)">
-                                                                            -
-                                                                        </button>
-                                                            </td>
-                                                            </tr>  
-                                                        </tbody>
-                                                    </thead>
-                                                </table>
-        
-                                            </div>
-                                        </div>
-                            </tab>
-                            <tab heading="Configuration Parameters">
+                                <div class="col-sm-6">
                                     <p>
-                                            <br>
-                                            Configuration parameters are the dynamic parameters and would be used during
-                                            lifecycle events
-                                        </p>
-                                            <br>
-                                            <table class="col-md-12">
-                                                <tr ng-repeat="conf in launchConfs track by $index">
-                                                    <td class="row"
-                                                        style="padding: 7px !important; border-top: none !important; border-bottom: none !important; border-right: none !important; border-left: none !important;width: 20%;">
-    
-                                                        <div class="col-md-10 row">
-                                                            <b for="keyName">{{conf.confKey}}
-                                                                <a style="color: black;" data-toggle="tooltip"
-                                                                   title="{{conf.description}}"><i
-                                                                        class="fa fa-question-circle"
-                                                                        aria-hidden="true"></i></a>:
-                                                            </b>
-                                                        </div>
+                                        <br> The following list shows all the Keys that are available to put into
+                                        the VNF Component Instances.
+                                    </p>
+                                    <div class="table-responsive">
+                                        <br>
+
+                                        <table class="table table-bordered table-striped table-hover tablesorter">
+                                            <thead>
+                                                <tr>
+                                                    <th colspan="3">Key Name</th>
+                                                </tr>
+                                            <tbody>
+                                                <tr ng-if="keys.length < 1">
+                                                    <td colspan="3">No more keys were chosen yet</td>
+                                                </tr>
+                                                <tr ng-if="keys.length > 0" ng-repeat="key in keys">
+                                                    <td>{{key.name}}</td>
+                                                    <td style="max-width:100px;overflow:hidden;word-wrap:normal;text-overflow:ellipsis"
+                                                        class="col-md-4">
+                                                        {{key.fingerprint}}
                                                     </td>
-                                                    <div>
-                                                        <td class="row"
-                                                            style="padding: 7px !important; border-top: none !important; border-bottom: none !important; border-right: none !important; border-left: none !important; width: 70%;">
-                                                            <input style="border: 1px solid #ccc; border-radius: 3px; padding: 5px;width: 90%;"
-                                                                   id="Configuration Name"
-                                                                   ng-model="conf.value"
-                                                            />
-                                                    </div>
-                                                    </td>
-                                                    <td class="row"
-                                                        style="padding: 7px !important; border-top: none !important; border-bottom: none !important; border-right: none !important; border-left: none !important;width: 10%;">
-                                                        <div class="col-md-2">
-                                                            <button data-toggle="tooltip" title='Delete'
-                                                                    class="btn btn-danger right"
-                                                                    ng-hide="conf.id.length > 0" type="button"
-                                                                    ng-click="removeConf($index)">
-                                                                -
-                                                            </button>
-                                                        </div>
+                                                    <td class="col-md-2" style="text-align: center;">
+                                                        <button type="button" class="btn  btn-primary btn-sm" ng-click="addKey(key)">
+                                                            +
+                                                        </button>
                                                     </td>
                                                 </tr>
-                                            </table>
-                                            <table class="table table-bordered"
-                                                   id="vduTabletable">
-                                                <tbody>
-                                                <form id="myFormKey">
-                                                    <tr>
-                                                        <td>
-                                                            <table class="col-md-12">
-                                                                <tr>
-                                                                    <br>
-                                                                    <td style="padding-top: 0px !important; border: none !important; padding-bottom: 0px !important;">
-                                                                        <table class="col-md-12">
-                                                                            <tr>
-                                                                                <td class="col-md-4"
-                                                                                    style="padding-top: 0px !important; border: none !important; padding-bottom: 0px !important;">
-    
-    
-                                                                                    <label>Configuration Key</label>
-                                                                                </td>
-                                                                                <td class="col-md-8"
-                                                                                    style="padding-top: 0px !important; border: none !important; padding-bottom: 0px !important;">
-                                                                                    <input
-                                                                                            type="text"
-                                                                                            class="form-control"
-                                                                                            id="ConfigKey"
-                                                                                            ng-model="basicConf.confKey"
-                                                                                    /></td>
-    
-                                                                            </tr>
-                                                                            <tr>
-                                                                                <td style="border: none !important;padding: 0px !important;"
-                                                                                    colspan="2">
-                                                                                    &nbsp;
-                                                                                </td>
-                                                                            </tr>
-                                                                            <tr>
-                                                                                <td class="col-md-4"
-                                                                                    style="padding-top: 0px !important; border: none !important; padding-bottom: 0px !important;">
-                                                                                    <label>Configuration Key Value</label>
-                                                                                </td>
-                                                                                <td class="col-md-8"
-                                                                                    style="padding-top: 0px !important; border: none !important; padding-bottom: 0px !important;">
-                                                                                    <input
-                                                                                            class="form-control"
-                                                                                            id="ConfigVal"
-                                                                                            ng-model="basicConf.value"
-                                                                                    />
-    
-                                                                                </td>
-    
-                                                                            </tr>
-                                                                            <tr>
-                                                                                <td style="border: none !important;"
-                                                                                    colspan="2">
-                                                                                    <label>Description </label>
-                                                                                    <textarea
-                                                                                            ng-disabled="conf.id.length > 0"
-                                                                                            style="width:100%; resize:vertical;"
-                                                                                            name="Description"
-                                                                                            ng-model="basicConf.description"
-                                                                                            id="basicConf.description"
-                                                                                            placeholder="Description"
-                                                                                            class="form-control">
-                                                                                    </textarea>
-                                                                                    <br>
-                                                                                    <a ng-disabled="basicConf.value.length < 1 || basicConf.confKey.length < 1" type="button"
-                                                                                       class="btn btn-primary right"
-                                                                                       ng-click="addConf()">Add
-                                                                                        Parameter</a>
-                                                                                </td>
-                                                                            </tr>
-                                                                        </table>
-                                                                    </td>
-                                                                </tr>
-                                                                <tr>
-                                                                    <td style="border: none !important;padding-left: 20px !important;padding-right: 20px !important;">
-                                                                    </td>
-                                                                </tr>
-                                                            </table>
-                                                        </td>
-                                                    </tr>
-                                                </form>
-                                                </tbody>
-                                            </table>
-                                        </tab>
-                            <tab heading="Monitoring IP">
-                                    <br>
-                                    <p>Specify the IP of the monitoring server to which the VNFs should register. Open Baton
-                                        supports only Zabbix by default.
-                                        Please refer to the documentation for understanding how to use a different monitoring
-                                        system</p>
-        
-                                    <form name="monForm">
-                                        <table>
-                                            <tr>
-                                                <td style="width:30%">
-                                                    <b>Monitoring IP: &nbsp;</b>
-                                                </td>
-                                                <td style="width:70%">
-        
-                                                    <input style="width: 100%;display: inline;"
-                                                           class="form-control"
-                                                           type="text"
-                                                           name="monIp"
-                                                           ng-change="changeIp(monitoringIp)" ng-model="monitoringIp"
-                                                           ng-pattern="/^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/">
-        
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td style="width:30%">
-                                                    <b>Monitoring Port: &nbsp;</b>
-                                                </td>
-                                                <td style="width:30%">
-                                                    <input style="width: 100%;display: inline;"
-                                                           class="form-control"
-                                                           type="number"
-                                                           step="1"
-                                                           name="monPort"
-                                                           ng-change="changePort(monitoringPort)"
-                                                           ng-model="monitoringPort">
-                                                </td>
-                                            </tr>
+                                            </tbody>
+                                            </thead>
                                         </table>
-        
-                                        <div role="alert">
-                                            <span class="error" ng-show="monForm.monIp.$touched && monForm.monIp.$invalid">
-                                                    Entered ip is not valid!
-                                            </span>
-                                            <span class="error"
-                                                  ng-show="monForm.monPort.$touched && !isValidPort(monitoringPort)">
-                                               Entered port is not valid!
-                                            </span>
+
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <p>
+                                        <br> The following list shows all the Keys that will be imported to the VNF
+                                        Component Instances.
+                                    </p>
+                                    <div class="table-responsive">
+                                        <br>
+                                        <table class="table table-bordered table-striped table-hover tablesorter">
+                                            <thead>
+                                                <tr>
+                                                    <th colspan="3">Key Name</th>
+                                                </tr>
+                                            <tbody>
+                                                <tr ng-if="keysForLaunch.length < 1">
+                                                    <td colspan="3">No keys were chosen yet</td>
+                                                </tr>
+                                                <tr ng-if="keysForLaunch.length > 0" ng-repeat="key in keysForLaunch">
+
+                                                    <td>{{key.name}}</td>
+                                                    <td style="max-width:100px;overflow:hidden;word-wrap:normal;text-overflow:ellipsis"
+                                                        class="col-md-4">
+                                                        {{key.fingerprint}}
+                                                    </td>
+                                                    <td class="col-md-2" style="text-align: center;">
+                                                        <button type="button" class="btn  btn-danger btn-sm" ng-click="removeKey(key)">
+                                                            -
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                            </thead>
+                                        </table>
+
+                                    </div>
+                                </div>
+                            </tab>
+                            <tab heading="Configuration Parameters">
+                                <p>
+                                    <br>
+                                    Configuration parameters are the dynamic parameters and would be used during
+                                    lifecycle events
+                                </p>
+                                <br>
+                                <table class="col-md-12">
+                                    <tr ng-repeat="conf in launchConfs track by $index">
+                                        <td class="row" style="padding: 7px !important; border-top: none !important; border-bottom: none !important; border-right: none !important; border-left: none !important;width: 20%;">
+
+                                            <div class="col-md-10 row">
+                                                <b for="keyName">{{conf.confKey}}
+                                                    <a style="color: black;" data-toggle="tooltip" title="{{conf.description}}"><i
+                                                            class="fa fa-question-circle" aria-hidden="true"></i></a>:
+                                                </b>
+                                            </div>
+                                        </td>
+                                        <div>
+                                            <td class="row" style="padding: 7px !important; border-top: none !important; border-bottom: none !important; border-right: none !important; border-left: none !important; width: 70%;">
+                                                <input style="border: 1px solid #ccc; border-radius: 3px; padding: 5px;width: 90%;"
+                                                    id="Configuration Name" ng-model="conf.value" />
                                         </div>
-                                    </form>
+                                        </td>
+                                        <td class="row" style="padding: 7px !important; border-top: none !important; border-bottom: none !important; border-right: none !important; border-left: none !important;width: 10%;">
+                                            <div class="col-md-2">
+                                                <button data-toggle="tooltip" title='Delete' class="btn btn-danger right"
+                                                    ng-hide="conf.id.length > 0" type="button" ng-click="removeConf($index)">
+                                                    -
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </table>
+                                <table class="table table-bordered" id="vduTabletable">
+                                    <tbody>
+                                        <form id="myFormKey">
+                                            <tr>
+                                                <td>
+                                                    <table class="col-md-12">
+                                                        <tr>
+                                                            <br>
+                                                            <td style="padding-top: 0px !important; border: none !important; padding-bottom: 0px !important;">
+                                                                <table class="col-md-12">
+                                                                    <tr>
+                                                                        <td class="col-md-4" style="padding-top: 0px !important; border: none !important; padding-bottom: 0px !important;">
+
+
+                                                                            <label>Configuration Key</label>
+                                                                        </td>
+                                                                        <td class="col-md-8" style="padding-top: 0px !important; border: none !important; padding-bottom: 0px !important;">
+                                                                            <input type="text" class="form-control" id="ConfigKey"
+                                                                                ng-model="basicConf.confKey" /></td>
+
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td style="border: none !important;padding: 0px !important;"
+                                                                            colspan="2">
+                                                                            &nbsp;
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td class="col-md-4" style="padding-top: 0px !important; border: none !important; padding-bottom: 0px !important;">
+                                                                            <label>Configuration Key Value</label>
+                                                                        </td>
+                                                                        <td class="col-md-8" style="padding-top: 0px !important; border: none !important; padding-bottom: 0px !important;">
+                                                                            <input class="form-control" id="ConfigVal"
+                                                                                ng-model="basicConf.value" />
+
+                                                                        </td>
+
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td style="border: none !important;" colspan="2">
+                                                                            <label>Description </label>
+                                                                            <textarea ng-disabled="conf.id.length > 0"
+                                                                                style="width:100%; resize:vertical;"
+                                                                                name="Description" ng-model="basicConf.description"
+                                                                                id="basicConf.description" placeholder="Description"
+                                                                                class="form-control">
+
+                                                                                    </textarea>
+                                                                            <br>
+                                                                            <a ng-disabled="basicConf.value.length < 1 || basicConf.confKey.length < 1"
+                                                                                type="button" class="btn btn-primary right"
+                                                                                ng-click="addConf()">Add
+                                                                                Parameter</a>
+                                                                        </td>
+                                                                    </tr>
+                                                                </table>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="border: none !important;padding-left: 20px !important;padding-right: 20px !important;">
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                        </form>
+                                    </tbody>
+                                </table>
+                            </tab>
+                            <tab heading="Monitoring IP">
+                                <br>
+                                <p>Specify the IP of the monitoring server to which the VNFs should register. Open
+                                    Baton
+                                    supports only Zabbix by default.
+                                    Please refer to the documentation for understanding how to use a different
+                                    monitoring
+                                    system</p>
+
+                                <form name="monForm">
+                                    <table>
+                                        <tr>
+                                            <td style="width:30%">
+                                                <b>Monitoring IP: &nbsp;</b>
+                                            </td>
+                                            <td style="width:70%">
+
+                                                <input style="width: 100%;display: inline;" class="form-control" type="text"
+                                                    name="monIp" ng-change="changeIp(monitoringIp)" ng-model="monitoringIp"
+                                                    ng-pattern="/^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/">
+
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="width:30%">
+                                                <b>Monitoring Port: &nbsp;</b>
+                                            </td>
+                                            <td style="width:30%">
+                                                <input style="width: 100%;display: inline;" class="form-control" type="number"
+                                                    step="1" name="monPort" ng-change="changePort(monitoringPort)"
+                                                    ng-model="monitoringPort">
+                                            </td>
+                                        </tr>
+                                    </table>
+
+                                    <div role="alert">
+                                        <span class="error" ng-show="monForm.monIp.$touched && monForm.monIp.$invalid">
+                                            Entered ip is not valid!
+                                        </span>
+                                        <span class="error" ng-show="monForm.monPort.$touched && !isValidPort(monitoringPort)">
+                                            Entered port is not valid!
+                                        </span>
+                                    </div>
+                                </form>
                             </tab>
                         </tabset>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary" ng-disabled="vnfdToAdd === '' || vnfdToAdd === undefined" ng-click="queryAddToNSR()">Add VNFR
+                        <button type="button" class="btn btn-primary" ng-disabled="vnfdToAdd === '' || vnfdToAdd === undefined"
+                            ng-click="queryAddToNSR()">Add VNFR
                         </button>
                     </div>
                 </div>

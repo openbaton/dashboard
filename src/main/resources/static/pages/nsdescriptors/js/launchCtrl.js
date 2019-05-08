@@ -35,13 +35,11 @@ app.controller('LaunchCtrl', function (http, $scope, passedNsd, passedKeys, pass
   $scope.LastTabNSDLaunch = '';
   $scope.basicConf = { description: "", confKey: "", value: "" };
   $scope.launchPopVPAs = {};
-  console.log("This is absolutely new controller");
-  console.log($scope.nsd);
 
 
 
   $scope.close = function () {
-    $uibModalInstance.close();
+    $uibModalInstance.dismiss();
   };
 
   //Launch Model components
@@ -353,7 +351,7 @@ app.controller('LaunchCtrl', function (http, $scope, passedNsd, passedKeys, pass
     });
     //console.log($scope.launchConfiguration.configurations);
     console.log($scope.vnfdnames);
-    loadKeys();
+
     $scope.launchPops = {};
     $scope.vnfdPopAzListAssigned = []
     $scope.vnfdToVIM.splice(0);
@@ -427,7 +425,7 @@ app.controller('LaunchCtrl', function (http, $scope, passedNsd, passedKeys, pass
     //console.log($scope.projectObj);
     http.postPlainKeyGeneration(urlForKeys + 'generate', generateKeyName)
       .success(function (response) {
-        setTimeout(loadTable(), 250);
+        setTimeout(loadKeys(), 250);
         var key = document.createElement("a");
         key.download = generateKeyName + '.pem';
         key.href = 'data:application/x-pem-file,' + encodeURIComponent(response);
@@ -507,25 +505,45 @@ app.controller('LaunchCtrl', function (http, $scope, passedNsd, passedKeys, pass
     $scope.launchObj.configurations = {};
     $scope.launchObj.configurations = $scope.launchConfiguration.configurations;
     console.log(JSON.stringify($scope.launchObj));
+    ret_object = {};
+    ret_object.success = false;
+    ret_object.message = "";
+    ret_object.data_return = undefined;
+    ret_object.status_return = undefined;
+    
     http.post(urlRecord + $scope.nsdToSend.id, $scope.launchObj)
       .success(function (response) {
-        showOk("Created Network Service Record from Descriptor with id: \<a href=\'\#nsrecords\'>" + $scope.nsdToSend.id + "<\/a>");
+        ret_object.success = true;
+        ret_object.message = "Created Network Service Record from Descriptor with id: \<a href=\'\#nsrecords\'>" + $scope.nsdToSend.id + "<\/a>";
+        post_clean();
+        $('.modal').modal('hide');
+        $uibModalInstance.close(ret_object);
+
       })
       .error(function (data, status) {
-        showError(data, status);
+        post_clean();
+        ret_object.success = false;
+        ret_object.data_return = data;
+        ret_object.status_return = status
+        $('.modal').modal('hide');
+        $uibModalInstance.close(ret_object);
+
       });
 
-    $scope.launchKeys = [];
-    $scope.launchObj = {};
-    $scope.launchPops = {};
-    $scope.vnfdToVIM.splice(0);
-    $scope.launchConfiguration = { "configurations": {} };
-    $scope.vnfdnames = [];
-    $scope.monitoringIp = undefined;
-    $scope.vnfdPopAzListAssigned = []
-    $scope.vnfdPopAzList = [];
   };
 
+
+function post_clean() {
+  $scope.launchKeys = [];
+  $scope.launchObj = {};
+  $scope.launchPops = {};
+  $scope.vnfdToVIM.splice(0);
+  $scope.launchConfiguration = { "configurations": {} };
+  $scope.vnfdnames = [];
+  $scope.monitoringIp = undefined;
+  $scope.vnfdPopAzListAssigned = []
+  $scope.vnfdPopAzList = [];
+}
 
   function prepareVIMs() {
     vimForLaunch = {};
@@ -649,38 +667,5 @@ app.controller('LaunchCtrl', function (http, $scope, passedNsd, passedKeys, pass
 
 
   };
-
-  $('.btnNext').click(function () {
-    $('.nav-pills > .active').next('li').find('a').trigger('click');
-  });
-
-  $('.btnPrevious').click(function () {
-    $('.nav-pills > .active').prev('li').find('a').trigger('click');
-  });
-  $(document).ready(function () {
-    $(".nav-pills a").click(function () {
-      $(this).tab('show');
-    });
-    $('.nav-pills a').on('shown.bs.tab', function (event) {
-      $scope.LastTabNSDLaunch = $(event.target).text();         // active tab
-      // console.log($scope.LastTabNSDLaunch);
-    });
-  });
-  $('.btnNextCompNSD').click(function () {
-    $('.CompsNSD > .active').next('li').find('a').trigger('click');
-  });
-
-  $('.btnPreviousCompsNSD').click(function () {
-    $('.CompsNSD > .active').prev('li').find('a').trigger('click');
-  });
-  $(document).ready(function () {
-    $(".CompsNSD  a").click(function () {
-      $(this).tab('show');
-    });
-    $('.CompsNSD a').on('shown.bs.tab', function (event) {
-      $scope.LastTabCompsNSD = $(event.target).text();         // active tab
-      // console.log($scope.LastTabCompsNSD);
-    });
-  });
 
 });

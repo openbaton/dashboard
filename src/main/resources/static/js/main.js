@@ -43,27 +43,26 @@ require({
         authService: "services/authService",
         servicesServices: "services/servicesServices",
         topologyServices: "services/topologyServices",
-        packageController: "controllers/packageController",
-        eventController: "controllers/eventController",
-        serviceController: "controllers/serviceController",
-        projectController: "controllers/projectController",
-        userController: "controllers/userController",
-        vimInstanceController: "controllers/vimInstanceController",
+        packageController: "../pages/packages/js/packageController",
+        eventController: "../pages/events/js/eventController",
+        serviceController: "../pages/services/js/serviceController",
+        projectController: "../pages/projects/js/projectController",
+        userController: "../pages/users/js/userController",
+        vimInstanceController: "../pages/vim-instances/js/vimInstanceController",
         nsdController: "../pages/nsdescriptors/js/nsdController",
         launchCtrl: "../pages/nsdescriptors/js/launchCtrl",
-        nsrController: "controllers/nsrController",
+        nsrController: "../pages/nsrecords/js/nsrController",
         jquery_jsPlumb: "libs/jquery/jquery.jsPlumb-1.5.3-min",
         dropzone: "libs/dropzone",
-        indexController: "controllers/indexController",
+        indexController: "../pages/index-js/indexController",
         vnfcomponentController: "controllers/vnfcomponentController",
-        vnfmanagerController: "controllers/vnfmanagerController",
-        vnfdController: "controllers/vnfdController",
-        keyPairsController: "controllers/keyPairsController",
-        marketCtrl:"controllers/marketCtrl",
-        driverCtrl:"controllers/driverCtrl",
-        historyController: "controllers/historyController",
-        imagerepoctrl: "../pages/imagerepo/js/imagerepoctrl",
-        test:"../pages/vimdrivers/test"
+        vnfmanagerController: "../pages/vnfmanagers/js/vnfmanagerController",
+        vnfdController: "../pages/nsdescriptors/vnfdescriptors/js/vnfdController",
+        keyPairsController: "../pages/keypairs/js/keyPairsController",
+        marketCtrl:"../pages/marketplace/js/marketCtrl",
+        driverCtrl:"../pages/vimdrivers/js/driverCtrl",
+        historyController: "../pages/history/js/historyController",
+        imagerepoctrl: "../pages/imagerepo/js/imagerepoctrl"
     },
     shim: {
         jquery: {
@@ -189,15 +188,11 @@ require({
         marketCtrl: {
             deps: ['app', 'servicesServices', 'httpService', 'angular_cookies','authService']
         },
-        test: {
-            deps: ['app', 'servicesServices', 'httpService', 'angular_cookies','authService'],
-            exports: 'TestCtrl'
-        },
         launchCtrl: {
             deps: ['app', 'servicesServices', 'httpService', 'angular_cookies','authService'],
         },
         driverCtrl: {
-            deps: ['app', 'servicesServices', 'httpService', 'angular_cookies','authService', 'test', 'ui_bootstrap']
+            deps: ['app', 'servicesServices', 'httpService', 'angular_cookies','authService', 'ui_bootstrap']
         },
         imagerepoctrl: {
             deps: ['app', 'servicesServices', 'httpService', 'angular_cookies','authService', 'dropzone']
@@ -232,7 +227,6 @@ require({
     'driverCtrl',
     'historyController',
     'imagerepoctrl',
-    'test',
     'launchCtrl'
 ], function (require) {
     return require(['bootstrap']);

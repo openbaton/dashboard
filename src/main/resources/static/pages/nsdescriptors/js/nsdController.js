@@ -551,7 +551,6 @@ app.controller('NsdCtrl', function ($scope, $compile, $cookieStore, $routeParams
 
        
     };*/
-    $scope.noVIMchoicePossible = false;
 
 
     env();
@@ -955,8 +954,12 @@ app.controller('NsdCtrl', function ($scope, $compile, $cookieStore, $routeParams
           }
         });
     
-        modalInstance.result.then(function (selectedItem) {
-          //$ctrl.selected = selectedItem;
+        modalInstance.result.then(function (ret_object) {
+            if (ret_object.success) {
+                showOk(ret_object.message);
+            } else {
+                showError(ret_object.data, ret_object.status);
+            }
         }, function () {
           //$log.info('Modal dismissed at: ' + new Date());
         });

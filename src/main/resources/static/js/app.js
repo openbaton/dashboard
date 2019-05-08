@@ -25,7 +25,7 @@ angular.module('app', ['ngTable', 'ngRoute', 'ngSanitize', 'ui.bootstrap', 'ngCo
             templateUrl: 'pages/contents.html',
             controller: 'IndexCtrl'
         }).when('/projects', {
-            templateUrl: 'pages/projects.html',
+            templateUrl: 'pages/projects/projects.html',
             controller: 'ProjectCtrl'
         }).when('/users', {
             templateUrl: 'pages/users/users.html',

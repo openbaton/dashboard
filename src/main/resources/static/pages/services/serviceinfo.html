@@ -32,10 +32,9 @@
 <!-- /.row -->
 <div class="row top-buffer">
     <div class="col-lg-12" ng-show="service">
-        <alert ng-repeat="alert in alerts" type="alert.type" close="closeAlert($index)">
-            <div ng-bind-html="alert.msg"></div>
-        </alert>
-
+            <div uib-alert ng-repeat="alert in alerts" type="{{alert.type}}"  close="closeAlert($index)">
+                    <div ng-bind-html="alert.msg"></div>
+                </div >
 
         <div class="col-lg-6">
             <div class="row"><a href="#" data-toggle="modal" data-target="#jsonInfo">Show JSON</a></div>

@@ -37,10 +37,11 @@
 </div>
 <div class="row">
     <div class="col-lg-12 top-buffer" ng-show="nsrinfo">
-        <alert ng-repeat="alert in alerts" type="alert.type" close="closeAlert($index)">
-            <div ng-bind-html="alert.msg"></div>
-        </alert>
-        <div class="col-lg-12">
+            <div uib-alert ng-repeat="alert in alerts" type="{{alert.type}}"  close="closeAlert($index)">
+                    <div ng-bind-html="alert.msg"></div>
+                </div >
+        <div class="col
+        -lg-12">
             <span ng-repeat="vnfr in nsrinfo.vnfr" ng-show="vnfr.id==vnfrecordId">
               <div class="col-lg-6">
                    <a href="#" data-toggle="modal" ng-click="copyJson(vnfr)" data-target="#jsonInfoVNFR">Show JSON</a>

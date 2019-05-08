@@ -20,7 +20,7 @@
         </h1>
         <ol class="breadcrumb">
             <li><a href="#main"><i class="fa fa-dashboard"></i>
-                Overview</a></li>
+                    Overview</a></li>
             <li class="active"><i class="fa fa-calendar"></i> Events</li>
         </ol>
     </div>
@@ -30,17 +30,18 @@
     <div class="col-lg-12">
         <button id="deleteMultiple" href="#" ng-disabled="multipleDelete" class="btn btn-danger pull-right" ng-style="{'margin-left':'25px'}"
             title="Delete all the items selected" data-target="#deleteModal" data-toggle="modal">Delete
-            </button>
-            <button id="btn_create_nsd" href="#" class="btn btn-primary pull-right" title="" data-toggle="modal" data-target="#createEvent">Add a new Event
+        </button>
+        <button id="btn_create_nsd" href="#" class="btn btn-primary pull-right" title="" data-toggle="modal"
+            data-target="#createEvent">Add a new Event
         </button>
 
     </div>
 </div>
 <div class="row top-buffer">
     <div class="col-lg-12">
-        <alert ng-repeat="alert in alerts" type="alert.type" close="closeAlert($index)">
+        <div uib-alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">
             <div ng-bind-html="alert.msg"></div>
-        </alert>
+        </div>
         <div class="table-responsive" ng-show="events.length>0">
 
             <table class="table table-bordered table-striped table-hover tablesorter">
@@ -64,8 +65,9 @@
                         <td>{{data.event}}</td>
                         <td>
                             <div class="btn-group">
-                                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown"> Action
-                                <span class="caret"></span></button>
+                                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+                                    Action
+                                    <span class="caret"></span></button>
                                 <ul class="dropdown-menu" role="menu">
                                     <li ng-if="data.name!==projectSelected.name"><a href="" ng-click="deleteEvent(data)">Delete</a></li>
                                 </ul>
@@ -84,8 +86,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                        aria-hidden="true">&times;</span></button>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title">Create a new EventEndpoint</h4>
             </div>
             <div class="modal-body">
@@ -105,7 +106,7 @@
                         <label for="name" class="col-sm-4 control-label">Name</label>
 
                         <div class="col-sm-6">
-                            <input type="text" class="form-control"  ng-model="eventObj.name" />
+                            <input type="text" class="form-control" ng-model="eventObj.name" />
                         </div>
                     </div>
                     <div class="form-group">
@@ -113,14 +114,15 @@
                         <label for="name" class="col-sm-4 control-label">Endpoint</label>
 
                         <div class="col-sm-6">
-                            <input type="text" class="form-control"  ng-model="eventObj.endpoint" />
+                            <input type="text" class="form-control" ng-model="eventObj.endpoint" />
                         </div>
                     </div>
-                    <div data-toggle="tooltip" title="Network Service Record(NSR) ID is internal unique Database Identifier.  The event can't support the NSR ID AND VNF ID at the same time." class="form-group">
+                    <div data-toggle="tooltip" title="Network Service Record(NSR) ID is internal unique Database Identifier.  The event can't support the NSR ID AND VNF ID at the same time."
+                        class="form-group">
                         <label for="nsr" class="col-sm-4 control-label">NSR ID</label>
 
                         <div class="col-sm-6">
-                            <input type="text" class="form-control"  ng-model="eventObj.networkServiceId" />
+                            <input type="text" class="form-control" ng-model="eventObj.networkServiceId" />
                         </div>
                     </div>
                     <div class="form-group" data-toggle="tooltip" title="Unique internal database identifier for Virtual Network Function Record which is a part of NSR.  The event can't support the NSR ID AND VNF ID at the same time.">
@@ -132,24 +134,25 @@
                     <div class="form-group">
                         <label for="action" class="col-sm-4 control-label">Event</label>
                         <div class="col-sm-6">
-                            <select name="typeSelect" class="form-control modal-select" id="action" ng-model="eventObj.event" ng-options="action for action in actions | orderBy:'action':false"
-                                ng-change="">
-                                </select>
+                            <select name="typeSelect" class="form-control modal-select" id="action" ng-model="eventObj.event"
+                                ng-options="action for action in actions | orderBy:'action':false" ng-change="">
+                            </select>
                         </div>
                     </div>
                     <div class="form-group">
                         <label for="type" class="col-sm-4 control-label">Type</label>
                         <div class="col-sm-6">
-                            <select name="typeSelect" class="form-control modal-select" id="type" ng-model="eventObj.type" ng-options="type for type in types | orderBy:'type':false"
-                                ng-change="">
-                                </select>
+                            <select name="typeSelect" class="form-control modal-select" id="type" ng-model="eventObj.type"
+                                ng-options="type for type in types | orderBy:'type':false" ng-change="">
+                            </select>
                         </div>
                     </div>
                 </form>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" data-dismiss="modal" ng-disabled="(eventObj.virtualNetworkFunctionId  && eventObj.networkServiceId)"ng-click="save()">Save</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal" ng-disabled="(eventObj.virtualNetworkFunctionId  && eventObj.networkServiceId)"
+                    ng-click="save()">Save</button>
             </div>
         </div>
         <!-- /.modal-content -->
@@ -162,8 +165,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                        aria-hidden="true">&times;</span></button>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title">Delete Alert</h4>
             </div>
             <div class="modal-body">

@@ -25,8 +25,8 @@ var app = angular.module('app');
 
 app.controller('LoginController', function ($scope, AuthService, Session, $rootScope, $location, $cookieStore, $http, http) {
     $scope.currentUser = null;
-    //$scope.URL = 'http://localhost:8080';
-    $scope.URL = '';
+    $scope.URL = 'http://localhost:8080';
+    //$scope.URL = '';
     $scope.alerts = [];
     $scope.NFVOVersion = "";
     // to avoid the order of tables while it refresh in the background

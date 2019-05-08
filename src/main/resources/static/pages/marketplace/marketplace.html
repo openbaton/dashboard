@@ -27,13 +27,13 @@
 	</div>
 </div>
 <div class="row">
-	<alert ng-repeat="alert in alerts" type="alert.type" close="closeAlert($index)">
-		<div ng-bind-html="alert.msg"></div>
-	</alert>
+		<div uib-alert ng-repeat="alert in alerts" type="{{alert.type}}"  close="closeAlert($index)">
+				<div ng-bind-html="alert.msg"></div>
+			</div >
 </div>
 <div class="row top-buffer">
-	<tabset>
-		<tab heading="VNFPackages">
+	<uib-tabset>
+		<uib-tab heading="VNFPackages">
 			<div class="table-responsive">
 				<table class="table table-bordered table-striped table-hover tablesorter" ng-show="publicpackages.length > 0">
 					<thead>
@@ -76,8 +76,8 @@
 				</table>
 			</div>
 			
-		</tab>
-		<tab heading="NSDs">
+		</uib-tab>
+		<uib-tab heading="NSDs">
 			<div class="table-responsive">
 				<table class="table table-bordered table-striped table-hover tablesorter" ng-show="publicNSDs.length > 0">
 					<thead>
@@ -120,6 +120,6 @@
 				</table>
 				
 				
-		</tab>
-	</tabset>
+		</uib-tab>
+	</uib-tabset>
 </div>
