@@ -140,6 +140,7 @@ app.controller('NsdCtrl', function ($scope, $compile, $cookieStore, $routeParams
     };
 
     function generateVPATuples() {
+        $scope.vnfdPopAzList = [];
         vnfds = angular.copy($scope.nsdToSend.vnfd);
         console.log(vnfds);
         vims = angular.copy($scope.vimInstances);
@@ -830,7 +831,7 @@ app.controller('NsdCtrl', function ($scope, $compile, $cookieStore, $routeParams
         env();
         $scope.launchConfiguration = null;
         $scope.launchConfiguration = {"configurations": {}};
-        
+
 
         $scope.vnfdnames = [];
         $scope.nsdToSend = data;
@@ -845,13 +846,18 @@ app.controller('NsdCtrl', function ($scope, $compile, $cookieStore, $routeParams
         });
         //console.log($scope.launchConfiguration.configurations);
         console.log($scope.vnfdnames);
-        //loadKeys();
+        loadKeys();
         $scope.launchPops = {};
         $scope.vnfdToVIM.splice(0);
         $scope.vimForLaunch = {};
-        $scope.vnfdLevelVim = false;
         $scope.vduWithName = 0;
         $scope.launchNsdVim.splice(0);
+                
+        $scope.tableParamsFilteredKeys.reload();
+        $scope.tableParamsFilteredLaunchKeys.reload();
+
+        $scope.tableParamsFilteredPops.reload();
+        $scope.tableParamsFilteredLaunchPops.reload();
 
         $scope.loadVnfdTabs();
         console.log($scope.nsdToSend)
@@ -924,16 +930,15 @@ app.controller('NsdCtrl', function ($scope, $compile, $cookieStore, $routeParams
                 showError(data, status);
             });
 
-        //$scope.launchKeys = [];
+        $scope.launchKeys = [];
         $scope.launchObj = {};
         $scope.launchPops = {};
         $scope.vnfdToVIM.splice(0);
         $scope.launchConfiguration = {"configurations": {}};
         $scope.vnfdnames = [];
-        $scope.monitoringIp = [];
-        $scope.vnfdPopAzListAssigned = [];
-
-
+        $scope.monitoringIp = undefined;
+        $scope.vnfdPopAzListAssigned = []
+        $scope.vnfdPopAzList = [];
     };
 
 
