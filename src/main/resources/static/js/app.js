@@ -141,6 +141,12 @@ angular.module('app', ['ngTable', 'ngRoute', 'ngSanitize', 'ui.bootstrap', 'ngCo
         }).when('/history', {
             templateUrl: 'pages/history/history.html',
             controller: 'historyCtrl'
+        }).when('/imagerepo', {
+            templateUrl: 'pages/imagerepo/imagerepo.html',
+            controller: 'imagerepoctrl',
+        }).when('/imagerepo/:imageId', {
+            templateUrl: 'pages/imagerepo/imageinfo.html',
+            controller: 'imagerepoctrl'
         }).otherwise({
             redirectTo: '/main'
         });

@@ -848,6 +848,7 @@ app.controller('NsdCtrl', function ($scope, $compile, $cookieStore, $routeParams
         console.log($scope.vnfdnames);
         loadKeys();
         $scope.launchPops = {};
+        $scope.vnfdPopAzListAssigned = []
         $scope.vnfdToVIM.splice(0);
         $scope.vimForLaunch = {};
         $scope.vduWithName = 0;
