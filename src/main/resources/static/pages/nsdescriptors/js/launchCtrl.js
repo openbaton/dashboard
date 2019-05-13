@@ -36,7 +36,7 @@ app.controller('LaunchCtrl', function (http, $scope, passedNsd, passedKeys, pass
   $scope.basicConf = { description: "", confKey: "", value: "" };
   $scope.launchPopVPAs = {};
 
-
+  initAz();
 
   $scope.close = function () {
     $uibModalInstance.dismiss();
@@ -129,13 +129,17 @@ app.controller('LaunchCtrl', function (http, $scope, passedNsd, passedKeys, pass
     console.log($scope.vnfdPopAzList);
   };
 
-  $scope.initAz = function (vimName, vnfdName) {
+  function initAz () {
 
-    if (angular.isUndefined($scope.azVimInstance[vimName])) {
-      $scope.azVimInstance[vimName] = {};
-    }
-    $scope.azVimInstance[vimName][vnfdName] = "random";
-
+    $scope.vimInstances.forEach(function(vim) {
+      $scope.nsdToSend.vnfd.forEach(function(vnfd) {
+        if (angular.isUndefined($scope.azVimInstance[vim.name])) {
+          $scope.azVimInstance[vim.name] = {};
+        }
+        $scope.azVimInstance[vim.name][vnfd.name] = 'random';
+      });
+      $scope.azVimInstance[vim.name]['General'] = 'random';
+    });      
     console.log($scope.azVimInstance);
   };
 
@@ -157,14 +161,13 @@ app.controller('LaunchCtrl', function (http, $scope, passedNsd, passedKeys, pass
     }
     $scope.tableParamsFilteredLaunchPops.reload();
     $scope.tableParamsFilteredPops.reload();
-    $scope.initAz(pop.name, vnfd.name);
+
   }
 
   $scope.addPopToNsd = function (pop) {
 
     console.log($scope.azVimInstance);
     $scope.nsdToSend.vnfd.forEach(function (vnfd) {
-      $scope.initAz(pop.name, vnfd.name);
       if (angular.isUndefined($scope.azVimInstance[pop.name]) || $scope.azVimInstance[pop.name]['General'] == "" || angular.isUndefined($scope.azVimInstance[pop.name]['General']) || $scope.azVimInstance[pop.name]['General'].trim() === "random") {
         $scope.azVimInstance[pop.name][vnfd.name] = "random";
       } else {
@@ -174,7 +177,6 @@ app.controller('LaunchCtrl', function (http, $scope, passedNsd, passedKeys, pass
     });
     $scope.tableParamsFilteredLaunchPops.reload();
     $scope.tableParamsFilteredPops.reload();
-    $scope.initAz(pop.name, 'General');
   }
 
 
@@ -540,7 +542,7 @@ function post_clean() {
   $scope.vnfdToVIM.splice(0);
   $scope.launchConfiguration = { "configurations": {} };
   $scope.vnfdnames = [];
-  $scope.monitoringIp = undefined;
+  $scope.monitoringIp = ''
   $scope.vnfdPopAzListAssigned = []
   $scope.vnfdPopAzList = [];
 }
@@ -551,6 +553,12 @@ function post_clean() {
       vnfd.vdu.forEach(function (vdu) {
         vnfdFiltered = $scope.vnfdPopAzListAssigned.filter(pop => pop.vnfd === vnfd.name);
         vimForLaunch[vdu.name] = [];
+        vnfdFiltered = vnfdFiltered.map(function(pop) {
+          if (pop.az === '') {
+            pop.az = 'random'
+          }
+          return pop;
+        });
         vnfdFiltered.map(pop => vimForLaunch[vdu.name].push(pop.vim + ":" + pop.az));
       });
     });

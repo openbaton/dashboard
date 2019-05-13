@@ -82,8 +82,8 @@
         <br />
         <br />
         <div class="col-lg-12" ng-show="nsrinfo">
-            <tabset>
-                <tab heading="VNF Records">
+            <uib-tabset>
+                <uib-tab heading="VNF Records">
                     <div class="table-responsive" ng-if="nsrinfo.vnfr.length > 0">
                         <h3>VNF Records</h3>
                         <table class="table table-bordered table-striped table-hover tablesorter" id="vnfrTabletable">
@@ -141,8 +141,8 @@
                             </tbody>
                         </table>
                     </div>
-                </tab>
-                <tab heading="VNF Forward Graph Descriptor" ng-if="nsrinfo.vnffgd.length>0">
+                </uib-tab>
+                <uib-tab heading="VNF Forward Graph Descriptor" ng-if="nsrinfo.vnffgd.length>0">
                     <div ng-show="nsrinfo.vnffgd>0">
                         <dt>VNF Forward Graph Descriptor:</dt>
                         <dd>
@@ -154,8 +154,8 @@
                         </dd>
                     </div>
 
-                </tab>
-                <tab heading="VNF Dependencies" ng-if="nsrinfo.vnf_dependency.length > 0">
+                </uib-tab>
+                <uib-tab heading="VNF Dependencies" ng-if="nsrinfo.vnf_dependency.length > 0">
                     <div class="table-responsive">
                         <h3>VNF Dependencies</h3>
                         <table class="table table-bordered table-striped table-hover tablesorter" id="vnfrepTabletable">
@@ -206,8 +206,8 @@
                             </tbody>
                         </table>
                     </div>
-                </tab>
-            </tabset>
+                </uib-tab>
+            </uib-tabset>
         </div>
     </div>
 
