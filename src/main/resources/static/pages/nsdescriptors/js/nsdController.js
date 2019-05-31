@@ -18,7 +18,7 @@ var app = angular.module('app');
 
 app.controller('NsdCtrl', function ($scope, $compile, $cookieStore, $routeParams, $filter, http, serviceAPI, $window, $route, $interval, $http, topologiesAPI, AuthService, NgTableParams, http, $uibModal) {
     var baseURL = $cookieStore.get('URL') + "/api/v1";
-    var monitoringIp = [];
+    var monitoringIp = "";
     var url = baseURL + '/ns-descriptors/';
     var urlRecord = baseURL + '/ns-records/';
     var urlVim = baseURL + '/datacenters/';
@@ -33,8 +33,6 @@ app.controller('NsdCtrl', function ($scope, $compile, $cookieStore, $routeParams
     $scope.alerts = [];
     $scope.vimInstances = [];
     $scope.keys = [];
-    $scope.launchKeys = [];
-    $scope.launchObj = {"keys": [], configurations: {}};
     $scope.launchNsdVim = [];
     $scope.launchPops = {};
     $scope.launchPopsAvailable = {};
@@ -49,10 +47,7 @@ app.controller('NsdCtrl', function ($scope, $compile, $cookieStore, $routeParams
     $scope.vnfdPopAzListAssigned = [];
     $scope.tmpVnfd = [];
     $scope.elementName = "";
-    $scope.basicConfiguration = {name: "", config: {name: "", configurationParameters: []}};
     $scope.LastTabNSDLaunch = '';
-    $scope.basicConf = {description: "", confKey: "", value: ""};
-    $scope.launchPopVPAs = {};
     // to avoid the order of tables while it refresh in the background
     $scope.predicate = 'id';
     loadTable();
@@ -499,58 +494,9 @@ app.controller('NsdCtrl', function ($scope, $compile, $cookieStore, $routeParams
     $scope.deletePoPfromVDU = function (parentparentindex, parentindex, index) {
         $scope.vnfdToVIM[parentparentindex].vdu[parentindex].vim.splice(index, 1);
     };
-    $scope.launchConfiguration = {"configurations": {}};
     $scope.vnfdnames = [];
-    $scope.addConftoLaunch = function (vnfdname) {
-
-        $scope.launchConfiguration.configurations[vnfdname].configurationParameters.push({
-            description: "",
-            confKey: "",
-            value: ""
-        });
-
-
-    };
-
    
-    /*$scope.launchOption = function (data) {
-        env();
-        $scope.launchConfiguration = null;
-        $scope.launchConfiguration = {"configurations": {}};
 
-
-        $scope.vnfdnames = [];
-        $scope.nsdToSend = data;
-        generateVPATuples();
-        $scope.nsdToSend.vnfd.map(function (vnfd) {
-            $scope.vnfdnames.push(vnfd.name);
-            if (vnfd.configurations === undefined || vnfd.configurations.length < 1) {
-                $scope.launchConfiguration.configurations[vnfd.name] = {name: "", configurationParameters: []};
-            } else {
-                $scope.launchConfiguration.configurations[vnfd.name] = angular.copy(vnfd.configurations);
-            }
-        });
-        //console.log($scope.launchConfiguration.configurations);
-        console.log($scope.vnfdnames);
-        loadKeys();
-        $scope.launchPops = {};
-        $scope.vnfdPopAzListAssigned = []
-        $scope.vnfdToVIM.splice(0);
-        $scope.vimForLaunch = {};
-        $scope.vduWithName = 0;
-        $scope.launchNsdVim.splice(0);
-                
-        $scope.tableParamsFilteredKeys.reload();
-        $scope.tableParamsFilteredLaunchKeys.reload();
-
-        $scope.tableParamsFilteredPops.reload();
-        $scope.tableParamsFilteredLaunchPops.reload();
-
-        $scope.loadVnfdTabs();
-        console.log($scope.nsdToSend)
-
-       
-    };*/
 
 
     env();
@@ -558,7 +504,8 @@ app.controller('NsdCtrl', function ($scope, $compile, $cookieStore, $routeParams
     function env() {
         http.get($cookieStore.get('URL') + '/env')
             .success(function (response) {
-                monitoringIp = response['applicationConfig: [file:/etc/openbaton/openbaton-nfvo.properties]']['nfvo.monitoring.ip'];
+                console.log(response)
+                monitoringIp = response['applicationConfig: [classpath:/application.properties]']['nfvo.monitoring.ip'];
                 if (monitoringIp !== undefined && monitoringIp.indexOf(':') > -1) {
                     $scope.monitoringIp = monitoringIp.split(":")[0];
                     $scope.monitoringPort = monitoringIp.split(":")[1];
@@ -572,17 +519,9 @@ app.controller('NsdCtrl', function ($scope, $compile, $cookieStore, $routeParams
             });
     }
 
-    $scope.isInt = function (value) {
-        return !isNaN(value) && (function(x) { return (x | 0) === x; })(parseFloat(value))
-    };
 
-    $scope.isValidPort = function (value) {
-      return value === null || value === "" || ($scope.isInt(value) && (parseInt(value) > 0 && parseInt(value) < 65536));
-    };
 
     
-    
-
     $scope.Jsplumb = function () {
         http.get(url + $routeParams.nsdescriptorId)
             .success(function (response, status) {

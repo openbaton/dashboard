@@ -337,7 +337,6 @@ app.controller('LaunchCtrl', function (http, $scope, passedNsd, passedKeys, pass
   };
   function launchOption() {
     env();
-    $scope.launchConfiguration = null;
     $scope.launchConfiguration = { "configurations": {} };
 
 
@@ -350,7 +349,9 @@ app.controller('LaunchCtrl', function (http, $scope, passedNsd, passedKeys, pass
       } else {
         $scope.launchConfiguration.configurations[vnfd.name] = angular.copy(vnfd.configurations);
       }
+      
     });
+    console.log($scope.launchConfiguration);
     //console.log($scope.launchConfiguration.configurations);
     console.log($scope.vnfdnames);
 
@@ -487,6 +488,15 @@ app.controller('LaunchCtrl', function (http, $scope, passedNsd, passedKeys, pass
   });
 
 
+
+  $scope.isInt = function (value) {
+    return !isNaN(value) && (function(x) { return (x | 0) === x; })(parseFloat(value))
+  };
+
+  $scope.isValidPort = function (value) {
+    return value === null || value === "" || ($scope.isInt(value) && (parseInt(value) > 0 && parseInt(value) < 65536));
+  };
+
   $scope.launch = function () {
     removeEmptyConfs();
     vimForLaunch = prepareVIMs();
@@ -525,8 +535,8 @@ app.controller('LaunchCtrl', function (http, $scope, passedNsd, passedKeys, pass
       .error(function (data, status) {
         post_clean();
         ret_object.success = false;
-        ret_object.data_return = data;
-        ret_object.status_return = status
+        ret_object.data = data;
+        ret_object.status = status
         $('.modal').modal('hide');
         $uibModalInstance.close(ret_object);
 
@@ -576,11 +586,11 @@ function post_clean() {
   }
 
 
-
+  env();
   function env() {
     http.get($cookieStore.get('URL') + '/env')
       .success(function (response) {
-        monitoringIp = response['applicationConfig: [file:/etc/openbaton/openbaton-nfvo.properties]']['nfvo.monitoring.ip'];
+        monitoringIp = response['applicationConfig: [classpath:/application.properties]']['nfvo.monitoring.ip'];
         if (monitoringIp !== undefined && monitoringIp.indexOf(':') > -1) {
           $scope.monitoringIp = monitoringIp.split(":")[0];
           $scope.monitoringPort = monitoringIp.split(":")[1];
@@ -623,14 +633,15 @@ function post_clean() {
   }
 
 
+
   $scope.addConftoLaunchTmp = function (vnfdname, conf) {
 
+    console.log($scope.launchConfiguration);
     $scope.launchConfiguration.configurations[vnfdname].configurationParameters.push({
       description: conf.description,
       confKey: conf.confKey,
       value: conf.value
     });
-    $scope.basicConf = { description: "", confKey: "", value: "" };
 
   };
 
@@ -663,7 +674,7 @@ function post_clean() {
   $scope.deletePoPfromVDU = function (parentparentindex, parentindex, index) {
     $scope.vnfdToVIM[parentparentindex].vdu[parentindex].vim.splice(index, 1);
   };
-  $scope.launchConfiguration = { "configurations": {} };
+
 
   $scope.addConftoLaunch = function (vnfdname) {
 
